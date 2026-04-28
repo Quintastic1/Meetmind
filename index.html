@@ -6,908 +6,510 @@
 <title>Callforge — AI Meeting Intelligence for Sales Teams</title>
 <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-:root {
-  --ink: #0a0e1a;
-  --paper: #f4f1ea;
-  --cream: #faf7f0;
-  --forge: #ff6b1a;
-  --forge-dark: #e55a0d;
-  --forge-glow: #ffb088;
-  --ember: #ffd166;
-  --charcoal: #14192a;
-  --gray: #7a7a8c;
-  --light-gray: #e6e3dc;
-  --white: #ffffff;
-  --red: #ff4545;
-  --success: #22c55e;
-}
-
-body {
-  font-family: 'Cabinet Grotesk', sans-serif;
-  background: var(--cream);
-  color: var(--ink);
-  overflow-x: hidden;
-}
-
-.screen { display: none; min-height: 100vh; }
-.screen.active { display: block; }
-
-#landing { background: var(--ink); color: var(--paper); position: relative; }
-
-#landing::before {
-  content: '';
-  position: absolute;
-  top: -200px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 800px;
-  height: 600px;
-  background: radial-gradient(ellipse at center, rgba(255,107,26,0.15), transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-#landing > * { position: relative; z-index: 1; }
-
-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 24px 48px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-}
-
-.nav-logo {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.logo-mark {
-  width: 28px;
-  height: 28px;
-  background: linear-gradient(135deg, var(--forge), var(--ember));
-  border-radius: 7px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  position: relative;
-  box-shadow: 0 0 20px rgba(255,107,26,0.4);
-}
-
-.logo-mark::before {
-  content: '';
-  position: absolute;
-  inset: 2px;
-  border-radius: 5px;
-  background: linear-gradient(135deg, var(--forge), var(--forge-dark));
-}
-
-.logo-mark::after {
-  content: '⚒';
-  position: relative;
-  font-size: 14px;
-  color: white;
-  z-index: 1;
-}
-
-.nav-logo .accent { color: var(--forge); }
-
-.nav-links { display: flex; gap: 32px; align-items: center; }
-.nav-links a {
-  color: rgba(244,241,234,0.5);
-  text-decoration: none;
-  font-size: 14px;
-  transition: color 0.2s;
-}
-.nav-links a:hover { color: var(--paper); }
-
-.btn-primary {
-  background: var(--forge);
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-family: 'Cabinet Grotesk', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  letter-spacing: 0.2px;
-  box-shadow: 0 4px 20px rgba(255,107,26,0.3);
-}
-
-.btn-primary:hover {
-  background: var(--forge-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 24px rgba(255,107,26,0.4);
-}
-
-.btn-secondary {
-  background: transparent;
-  color: var(--paper);
-  border: 1px solid rgba(255,255,255,0.2);
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-family: 'Cabinet Grotesk', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-secondary:hover { border-color: rgba(255,255,255,0.5); }
-
-.hero {
-  padding: 100px 48px 80px;
-  max-width: 1100px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255,107,26,0.1);
-  border: 1px solid rgba(255,107,26,0.25);
-  border-radius: 100px;
-  padding: 6px 14px;
-  font-size: 12px;
-  color: var(--forge);
-  margin-bottom: 32px;
-  letter-spacing: 0.5px;
-}
-
-.hero-badge-dot {
-  width: 6px; height: 6px;
-  background: var(--forge);
-  border-radius: 50%;
-  animation: blink 2s infinite;
-  box-shadow: 0 0 8px var(--forge);
-}
-
-@keyframes blink {
-  0%,100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.8); }
-}
-
-.hero h1 {
-  font-family: 'Clash Display', sans-serif;
-  font-size: clamp(42px, 7vw, 84px);
-  font-weight: 700;
-  line-height: 1.0;
-  letter-spacing: -2px;
-  margin-bottom: 24px;
-}
-
-.hero h1 em {
-  font-style: normal;
-  background: linear-gradient(135deg, var(--forge), var(--ember));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  position: relative;
-}
-
-.hero p {
-  font-size: 18px;
-  color: rgba(244,241,234,0.55);
-  line-height: 1.7;
-  max-width: 580px;
-  margin: 0 auto 40px;
-  font-weight: 300;
-}
-
-.hero-cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: center; }
-
-.hero-cta .btn-primary { padding: 16px 32px; font-size: 15px; border-radius: 10px; }
-.hero-cta .btn-secondary { padding: 16px 32px; font-size: 15px; border-radius: 10px; }
-
-.hero-note { font-size: 12px; color: rgba(244,241,234,0.3); margin-top: 14px; }
-
-.stats-bar {
-  border-top: 1px solid rgba(255,255,255,0.07);
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  padding: 32px 48px;
-  display: flex;
-  gap: 0;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.stat {
-  flex: 1;
-  text-align: center;
-  padding: 0 24px;
-  border-right: 1px solid rgba(255,255,255,0.07);
-}
-
-.stat:last-child { border-right: none; }
-
-.stat-num {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 36px;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--forge), var(--ember));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-
-.stat-label { font-size: 12px; color: rgba(244,241,234,0.4); letter-spacing: 0.5px; }
-
-.features {
-  padding: 80px 48px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.features-label {
-  font-size: 11px;
-  letter-spacing: 3px;
-  color: rgba(244,241,234,0.3);
-  text-transform: uppercase;
-  margin-bottom: 48px;
-  text-align: center;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.feature {
-  background: var(--charcoal);
-  padding: 32px;
-  transition: background 0.2s;
-}
-
-.feature:hover { background: #1a2038; }
-
-.feature-icon {
-  width: 44px;
-  height: 44px;
-  background: rgba(255,107,26,0.1);
-  border: 1px solid rgba(255,107,26,0.2);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  margin-bottom: 16px;
-}
-
-.feature h3 {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 17px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  letter-spacing: -0.3px;
-}
-
-.feature p { font-size: 13px; color: rgba(244,241,234,0.45); line-height: 1.6; font-weight: 300; }
-
-.pricing {
-  padding: 80px 48px;
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.pricing h2 {
-  font-family: 'Clash Display', sans-serif;
-  font-size: clamp(32px, 5vw, 48px);
-  font-weight: 700;
-  letter-spacing: -1px;
-  margin-bottom: 12px;
-}
-
-.pricing > p { font-size: 16px; color: rgba(244,241,234,0.45); margin-bottom: 48px; font-weight: 300; }
-
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-  text-align: left;
-}
-
-.pricing-card {
-  background: var(--charcoal);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 32px;
-  transition: all 0.2s;
-}
-
-.pricing-card.featured {
-  background: linear-gradient(135deg, var(--forge), var(--forge-dark));
-  color: white;
-  border-color: var(--forge);
-  box-shadow: 0 10px 40px rgba(255,107,26,0.3);
-}
-
-.pricing-card:not(.featured):hover { border-color: rgba(255,255,255,0.25); transform: translateY(-2px); }
-
-.plan-name { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; opacity: 0.6; }
-.plan-price {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 48px;
-  font-weight: 700;
-  letter-spacing: -2px;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.plan-price span { font-size: 16px; font-weight: 400; opacity: 0.6; letter-spacing: 0; }
-.plan-desc { font-size: 13px; opacity: 0.5; margin-bottom: 24px; font-weight: 300; }
-
-.plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
-.plan-features li { font-size: 13px; display: flex; align-items: center; gap: 8px; }
-.plan-features li::before { content: '✓'; font-weight: 700; color: var(--forge); }
-.pricing-card.featured .plan-features li::before { color: white; }
-
-.plan-btn {
-  width: 100%;
-  padding: 14px;
-  border-radius: 8px;
-  font-family: 'Cabinet Grotesk', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-}
-
-.plan-btn-outline {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.2);
-  color: var(--paper);
-}
-.plan-btn-outline:hover { border-color: rgba(255,255,255,0.5); }
-
-.plan-btn-light {
-  background: white;
-  color: var(--forge-dark);
-}
-.plan-btn-light:hover { background: var(--cream); }
-
-footer {
-  border-top: 1px solid rgba(255,255,255,0.07);
-  padding: 32px 48px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  color: rgba(244,241,234,0.3);
-}
-
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(8px);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-overlay.open { display: flex; }
-
-.modal {
-  background: var(--white);
-  border-radius: 20px;
-  padding: 40px;
-  width: 100%;
-  max-width: 420px;
-  margin: 20px;
-  animation: modalIn 0.3s ease;
-  position: relative;
-}
-
-@keyframes modalIn {
-  from { opacity: 0; transform: scale(0.95) translateY(10px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-.modal-logo {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.modal-logo .accent { color: var(--forge); }
-
-.modal h2 {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: -0.5px;
-  margin-bottom: 6px;
-}
-
-.modal p { font-size: 13px; color: var(--gray); margin-bottom: 28px; }
-
-.form-group { margin-bottom: 16px; }
-
-.form-group label {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 6px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 13px 16px;
-  border: 1.5px solid var(--light-gray);
-  border-radius: 10px;
-  font-family: 'Cabinet Grotesk', sans-serif;
-  font-size: 14px;
-  color: var(--ink);
-  background: var(--cream);
-  transition: border-color 0.2s;
-  outline: none;
-}
-
-.form-group input:focus { border-color: var(--forge); background: white; }
-
-.modal .btn-primary {
-  width: 100%;
-  padding: 14px;
-  font-size: 15px;
-  border-radius: 10px;
-  margin-top: 4px;
-}
-
-.modal-switch { text-align: center; margin-top: 16px; font-size: 13px; color: var(--gray); }
-.modal-switch a { color: var(--forge); font-weight: 700; cursor: pointer; text-decoration: none; }
-.modal-close {
-  position: absolute;
-  top: 16px; right: 16px;
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: var(--light-gray);
-  cursor: pointer;
-  font-size: 16px;
-  display: flex; align-items: center; justify-content: center;
-}
-
-#dashboard { background: var(--cream); display: none; }
-#dashboard.active { display: flex; }
-
-.sidebar {
-  width: 240px;
-  background: var(--ink);
-  min-height: 100vh;
-  padding: 28px 20px;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-}
-
-.sidebar-logo {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--paper);
-  margin-bottom: 40px;
-  padding: 0 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.sidebar-logo .accent { color: var(--forge); }
-
-.sidebar-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 12px;
-  border-radius: 8px;
-  color: rgba(244,241,234,0.45);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s;
-  text-decoration: none;
-}
-
-.nav-item:hover { background: rgba(255,255,255,0.06); color: var(--paper); }
-.nav-item.active { background: rgba(255,107,26,0.12); color: var(--forge); }
-.nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
-
-.sidebar-user {
-  border-top: 1px solid rgba(255,255,255,0.08);
-  padding-top: 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.user-avatar {
-  width: 34px; height: 34px;
-  background: linear-gradient(135deg, var(--forge), var(--ember));
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 13px;
-  color: white;
-  flex-shrink: 0;
-}
-
-.user-info { flex: 1; overflow: hidden; }
-.user-name { font-size: 13px; color: var(--paper); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.user-plan { font-size: 10px; color: rgba(244,241,234,0.3); letter-spacing: 1px; text-transform: uppercase; }
-
-.main { flex: 1; overflow-y: auto; }
-
-.main-header {
-  background: white;
-  padding: 20px 36px;
-  border-bottom: 1px solid var(--light-gray);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.main-header h1 {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.header-actions { display: flex; gap: 10px; }
-
-.btn-upload {
-  background: var(--forge);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-family: 'Cabinet Grotesk', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 2px 12px rgba(255,107,26,0.25);
-}
-
-.btn-upload:hover { background: var(--forge-dark); transform: translateY(-1px); }
-
-.tab-pages { padding: 0; }
-.tab-page { display: none; }
-.tab-page.active { display: block; }
-
-.overview-content { padding: 32px 36px; }
-
-.metrics-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 32px;
-}
-
-.metric-card {
-  background: white;
-  border: 1px solid var(--light-gray);
-  border-radius: 14px;
-  padding: 22px;
-}
-
-.metric-label { font-size: 11px; color: var(--gray); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
-
-.metric-value {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: -1px;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-
-.metric-change { font-size: 11px; display: flex; align-items: center; gap: 4px; }
-.metric-up { color: var(--success); }
-.metric-down { color: var(--red); }
-
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.section-title {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
-}
-
-.view-all { font-size: 12px; color: var(--gray); cursor: pointer; text-decoration: none; }
-.view-all:hover { color: var(--forge); }
-
-.meetings-list { display: flex; flex-direction: column; gap: 10px; }
-
-.meeting-card {
-  background: white;
-  border: 1px solid var(--light-gray);
-  border-radius: 12px;
-  padding: 18px 22px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.meeting-card:hover { border-color: var(--forge); box-shadow: 0 2px 12px rgba(255,107,26,0.08); }
-
-.meeting-type {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
-}
-
-.meeting-info { flex: 1; min-width: 0; }
-.meeting-title { font-size: 14px; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
-.meeting-meta { font-size: 11px; color: var(--gray); }
-
-.meeting-score { text-align: right; flex-shrink: 0; }
-
-.score-val {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.score-label { font-size: 10px; color: var(--gray); letter-spacing: 0.5px; }
-
-.score-high { color: var(--success); }
-.score-med { color: #f59e0b; }
-.score-low { color: var(--red); }
-
-.meeting-status {
-  padding: 4px 10px;
-  border-radius: 100px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  flex-shrink: 0;
-}
-
-.status-done { background: #dcfce7; color: #166534; }
-.status-processing { background: #fef9c3; color: #854d0e; }
-
-.upload-tab { padding: 32px 36px; }
-
-.upload-zone {
-  border: 2px dashed var(--light-gray);
-  border-radius: 16px;
-  padding: 60px 40px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: white;
-  margin-bottom: 24px;
-}
-
-.upload-zone:hover, .upload-zone.dragover {
-  border-color: var(--forge);
-  background: #fff7f1;
-}
-
-.upload-icon { font-size: 48px; margin-bottom: 16px; }
-
-.upload-zone h3 {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  letter-spacing: -0.3px;
-}
-
-.upload-zone p { font-size: 13px; color: var(--gray); margin-bottom: 20px; }
-.upload-formats { font-size: 11px; color: var(--gray); margin-top: 12px; }
-
-.processing-card {
-  background: white;
-  border: 1px solid var(--light-gray);
-  border-radius: 14px;
-  padding: 24px;
-  display: none;
-}
-
-.processing-card.show { display: block; }
-
-.processing-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-.processing-icon { font-size: 24px; animation: spin 2s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.processing-title { font-family: 'Clash Display', sans-serif; font-size: 16px; font-weight: 700; }
-.processing-sub { font-size: 12px; color: var(--gray); }
-
-.progress-steps { display: flex; flex-direction: column; gap: 10px; }
-
-.progress-step {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: 10px;
-  font-size: 13px;
-  color: var(--gray);
-  background: var(--cream);
-}
-
-.progress-step.done { color: var(--success); background: #f0fdf4; }
-.progress-step.active { color: var(--ink); background: #fff7f1; font-weight: 500; }
-
-.step-check { width: 20px; height: 20px; border-radius: 50%; background: var(--light-gray); display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
-.progress-step.done .step-check { background: var(--success); color: white; }
-.progress-step.active .step-check { background: var(--forge); color: white; font-size: 8px; animation: blink 1s infinite; }
-
-.meeting-detail { padding: 32px 36px; display: none; }
-.meeting-detail.show { display: block; }
-
-.back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--gray);
-  cursor: pointer;
-  margin-bottom: 24px;
-  background: none;
-  border: none;
-  font-family: 'Cabinet Grotesk', sans-serif;
-  padding: 0;
-}
-
-.back-btn:hover { color: var(--forge); }
-
-.detail-header {
-  background: white;
-  border: 1px solid var(--light-gray);
-  border-radius: 16px;
-  padding: 28px;
-  margin-bottom: 20px;
-}
-
-.detail-title {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  margin-bottom: 8px;
-}
-
-.detail-meta { font-size: 12px; color: var(--gray); margin-bottom: 20px; }
-
-.detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-
-.detail-stat {
-  background: var(--cream);
-  border-radius: 10px;
-  padding: 14px 16px;
-  text-align: center;
-}
-
-.detail-stat-val {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.detail-stat-label { font-size: 10px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
-
-.detail-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-.detail-section {
-  background: white;
-  border: 1px solid var(--light-gray);
-  border-radius: 14px;
-  padding: 22px;
-}
-
-.detail-section h3 {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.action-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--light-gray);
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.action-item:last-child { border-bottom: none; }
-
-.action-check {
-  width: 18px; height: 18px;
-  border: 2px solid var(--light-gray);
-  border-radius: 4px;
-  flex-shrink: 0;
-  margin-top: 1px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.action-check:hover { border-color: var(--forge); }
-
-.summary-text { font-size: 13px; color: var(--gray); line-height: 1.7; font-weight: 300; }
-
-@media (max-width: 768px) {
-  nav { padding: 16px 20px; }
-  .nav-links { display: none; }
-  .hero { padding: 60px 20px 48px; }
-  .stats-bar { padding: 24px 20px; flex-wrap: wrap; gap: 16px; }
-  .stat { flex: 1 1 40%; border-right: none; }
-  .features { padding: 48px 20px; }
-  .features-grid { grid-template-columns: 1fr; }
-  .pricing { padding: 48px 20px; }
-  footer { padding: 24px 20px; flex-direction: column; gap: 8px; text-align: center; }
-
-  #dashboard { flex-direction: column; }
-  .sidebar { width: 100%; min-height: auto; padding: 16px; flex-direction: row; align-items: center; }
-  .sidebar-nav { flex-direction: row; flex: 1; gap: 4px; overflow-x: auto; }
-  .nav-item span:not(.icon) { display: none; }
-  .sidebar-user { border-top: none; border-left: 1px solid rgba(255,255,255,0.08); padding-top: 0; padding-left: 12px; }
-  .user-info { display: none; }
-  .sidebar-logo { display: none; }
-
-  .main-header { padding: 16px 20px; }
-  .overview-content, .upload-tab, .meeting-detail { padding: 20px 16px; }
-  .metrics-row { grid-template-columns: repeat(2, 1fr); }
-  .detail-sections { grid-template-columns: 1fr; }
-  .detail-grid { grid-template-columns: repeat(3, 1fr); }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#0a0e1a;--paper:#f4f1ea;--cream:#faf7f0;--forge:#ff6b1a;--forge-dark:#e55a0d;--ember:#ffd166;--charcoal:#14192a;--gray:#7a7a8c;--light-gray:#e6e3dc;--white:#fff;--red:#ff4545;--success:#22c55e}
+body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
+.screen{display:none;min-height:100vh}
+.screen.active{display:block}
+#landing{background:var(--ink);color:var(--paper);position:relative}
+#landing::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse at center,rgba(255,107,26,0.15),transparent 70%);pointer-events:none;z-index:0}
+#landing>*{position:relative;z-index:1}
+
+/* ===== TITO THE MASCOT ===== */
+.tito-container{
+  position:absolute;
+  right:48px;
+  top:140px;
+  width:180px;
+  height:220px;
+  z-index:2;
+  animation:titoFloat 4s ease-in-out infinite;
+  cursor:pointer;
+}
+@keyframes titoFloat{
+  0%,100%{transform:translateY(0) rotate(-2deg)}
+  50%{transform:translateY(-12px) rotate(2deg)}
+}
+.tito-speech{
+  position:absolute;
+  top:-40px;
+  left:-90px;
+  background:#fff;
+  color:var(--ink);
+  padding:10px 16px;
+  border-radius:14px;
+  font-size:12px;
+  font-weight:600;
+  white-space:nowrap;
+  box-shadow:0 6px 20px rgba(0,0,0,0.15);
+  opacity:0;
+  transform:translateY(10px);
+  transition:all 0.3s;
+}
+.tito-speech::after{
+  content:'';
+  position:absolute;
+  bottom:-8px;
+  right:24px;
+  width:0;height:0;
+  border-left:8px solid transparent;
+  border-right:8px solid transparent;
+  border-top:10px solid #fff;
+}
+.tito-container:hover .tito-speech{opacity:1;transform:translateY(0)}
+
+/* Tito body — pure CSS cartoon */
+.tito-body{position:relative;width:100%;height:100%}
+/* Body */
+.tito-torso{
+  position:absolute;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%);
+  width:90px;
+  height:110px;
+  background:linear-gradient(180deg,#5b4636,#3d2f23);
+  border-radius:30px 30px 18px 18px;
+}
+/* Apron */
+.tito-apron{
+  position:absolute;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%);
+  width:75px;
+  height:90px;
+  background:linear-gradient(180deg,#8b5a2b,#6b4423);
+  border-radius:8px;
+  border:3px solid #4a2f17;
+}
+/* Apron buckle */
+.tito-apron::before{
+  content:'';
+  position:absolute;
+  top:8px;
+  left:50%;
+  transform:translateX(-50%);
+  width:14px;
+  height:14px;
+  background:var(--ember);
+  border-radius:3px;
+  box-shadow:0 0 6px rgba(255,209,102,0.6);
+}
+/* Head */
+.tito-head{
+  position:absolute;
+  top:35px;
+  left:50%;
+  transform:translateX(-50%);
+  width:78px;
+  height:78px;
+  background:#f4c590;
+  border-radius:50%;
+  border:3px solid #d4a070;
+  z-index:2;
+}
+/* Cap (backwards) */
+.tito-cap{
+  position:absolute;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  width:84px;
+  height:38px;
+  background:linear-gradient(180deg,var(--forge),var(--forge-dark));
+  border-radius:42px 42px 8px 8px;
+  z-index:3;
+  box-shadow:0 2px 8px rgba(255,107,26,0.4);
+}
+/* Cap brim (in back since it's backwards) */
+.tito-cap::after{
+  content:'';
+  position:absolute;
+  bottom:-6px;
+  left:-8px;
+  width:30px;
+  height:14px;
+  background:var(--forge-dark);
+  border-radius:0 0 0 12px;
+}
+/* Cap button on top */
+.tito-cap::before{
+  content:'';
+  position:absolute;
+  top:6px;
+  left:50%;
+  transform:translateX(-50%);
+  width:8px;
+  height:8px;
+  background:var(--ember);
+  border-radius:50%;
+}
+/* Eyes */
+.tito-eye{
+  position:absolute;
+  top:62px;
+  width:9px;
+  height:11px;
+  background:#1a1a1a;
+  border-radius:50%;
+  z-index:4;
+  animation:titoBlink 5s infinite;
+}
+.tito-eye.left{left:50%;margin-left:-22px}
+.tito-eye.right{left:50%;margin-left:13px}
+.tito-eye::after{
+  content:'';
+  position:absolute;
+  top:1px;
+  right:1px;
+  width:3px;
+  height:3px;
+  background:#fff;
+  border-radius:50%;
+}
+@keyframes titoBlink{
+  0%,90%,100%{height:11px}
+  93%{height:2px}
+}
+/* Smile */
+.tito-smile{
+  position:absolute;
+  top:80px;
+  left:50%;
+  transform:translateX(-50%);
+  width:24px;
+  height:14px;
+  border:2.5px solid #1a1a1a;
+  border-top:none;
+  border-radius:0 0 24px 24px;
+  z-index:4;
+}
+/* Cheeks */
+.tito-cheek{
+  position:absolute;
+  top:78px;
+  width:10px;
+  height:7px;
+  background:rgba(255,107,26,0.4);
+  border-radius:50%;
+  z-index:3;
+}
+.tito-cheek.left{left:50%;margin-left:-32px}
+.tito-cheek.right{left:50%;margin-left:22px}
+
+/* Hammer (oversized, in waving arm position) */
+.tito-hammer{
+  position:absolute;
+  top:60px;
+  right:-15px;
+  width:14px;
+  height:80px;
+  background:linear-gradient(180deg,#8b5a2b,#5a3a1b);
+  border-radius:6px;
+  z-index:5;
+  transform-origin:bottom center;
+  animation:titoWave 2s ease-in-out infinite;
+}
+.tito-hammer::before{
+  content:'';
+  position:absolute;
+  top:-18px;
+  left:-22px;
+  width:60px;
+  height:35px;
+  background:linear-gradient(180deg,#6b6b75,#3d3d45);
+  border-radius:8px;
+  border:2.5px solid #2a2a30;
+  box-shadow:inset -3px -3px 0 rgba(0,0,0,0.2);
+}
+@keyframes titoWave{
+  0%,100%{transform:rotate(-15deg)}
+  50%{transform:rotate(15deg)}
+}
+/* Arms (visible behind torso) */
+.tito-arm{
+  position:absolute;
+  top:118px;
+  width:18px;
+  height:38px;
+  background:#f4c590;
+  border:2px solid #d4a070;
+  border-radius:9px;
+  z-index:1;
+}
+.tito-arm.left{left:50%;margin-left:-50px;transform:rotate(20deg)}
+.tito-arm.right{right:50%;margin-right:-50px;transform:rotate(-30deg)}
+
+/* Sparks around hammer */
+.tito-spark{
+  position:absolute;
+  width:6px;
+  height:6px;
+  background:var(--ember);
+  border-radius:50%;
+  box-shadow:0 0 8px var(--ember);
+  animation:sparkle 1.5s ease-in-out infinite;
+}
+.tito-spark:nth-child(1){top:50px;right:0;animation-delay:0s}
+.tito-spark:nth-child(2){top:30px;right:20px;animation-delay:0.3s}
+.tito-spark:nth-child(3){top:70px;right:30px;animation-delay:0.6s}
+@keyframes sparkle{
+  0%,100%{opacity:0;transform:scale(0.5)}
+  50%{opacity:1;transform:scale(1.2)}
+}
+
+/* ===== NAV ===== */
+nav{display:flex;align-items:center;justify-content:space-between;padding:24px 48px;border-bottom:1px solid rgba(255,255,255,0.07)}
+.nav-logo{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;display:flex;align-items:center;gap:8px}
+.logo-mark{width:28px;height:28px;background:linear-gradient(135deg,var(--forge),var(--ember));border-radius:7px;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 0 20px rgba(255,107,26,0.4)}
+.logo-mark::before{content:'';position:absolute;inset:2px;border-radius:5px;background:linear-gradient(135deg,var(--forge),var(--forge-dark))}
+.logo-mark::after{content:'⚒';position:relative;font-size:14px;color:#fff;z-index:1}
+.nav-logo .accent{color:var(--forge)}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{color:rgba(244,241,234,0.5);text-decoration:none;font-size:14px;cursor:pointer}
+.nav-links a:hover{color:var(--paper)}
+.lang-switcher{display:flex;gap:2px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:3px}
+.lang-btn{background:transparent;border:none;color:rgba(244,241,234,0.5);padding:5px 10px;font-family:'Cabinet Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.5px;cursor:pointer;border-radius:5px}
+.lang-btn.active{background:var(--forge);color:#fff}
+.btn-primary{background:var(--forge);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(255,107,26,0.3)}
+.btn-primary:hover{background:var(--forge-dark);transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:var(--paper);border:1px solid rgba(255,255,255,0.2);padding:12px 24px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:500;cursor:pointer}
+.btn-secondary:hover{border-color:rgba(255,255,255,0.5)}
+
+/* HERO */
+.hero{padding:100px 48px 80px;max-width:1100px;margin:0 auto;text-align:center;position:relative}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,26,0.1);border:1px solid rgba(255,107,26,0.25);border-radius:100px;padding:6px 14px;font-size:12px;color:var(--forge);margin-bottom:32px;letter-spacing:0.5px}
+.hero-badge-dot{width:6px;height:6px;background:var(--forge);border-radius:50%;animation:blink 2s infinite;box-shadow:0 0 8px var(--forge)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
+.hero h1{font-family:'Clash Display',sans-serif;font-size:clamp(42px,7vw,84px);font-weight:700;line-height:1;letter-spacing:-2px;margin-bottom:24px}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--forge),var(--ember));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:18px;color:rgba(244,241,234,0.55);line-height:1.7;max-width:580px;margin:0 auto 40px;font-weight:300}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.hero-cta .btn-primary,.hero-cta .btn-secondary{padding:16px 32px;font-size:15px;border-radius:10px}
+.hero-note{font-size:12px;color:rgba(244,241,234,0.3);margin-top:14px}
+.stats-bar{border-top:1px solid rgba(255,255,255,0.07);border-bottom:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:flex;max-width:1100px;margin:0 auto}
+.stat{flex:1;text-align:center;padding:0 24px;border-right:1px solid rgba(255,255,255,0.07)}
+.stat:last-child{border-right:none}
+.stat-num{font-family:'Clash Display',sans-serif;font-size:36px;font-weight:700;background:linear-gradient(135deg,var(--forge),var(--ember));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:6px}
+.stat-label{font-size:12px;color:rgba(244,241,234,0.4)}
+
+/* MEET THE FORGED SECTION */
+.forged-section{padding:80px 48px;max-width:1100px;margin:0 auto;text-align:center}
+.section-eyebrow{font-size:11px;letter-spacing:3px;color:var(--forge);text-transform:uppercase;margin-bottom:16px;font-weight:700}
+.forged-section h2{font-family:'Clash Display',sans-serif;font-size:clamp(32px,5vw,48px);font-weight:700;letter-spacing:-1px;margin-bottom:12px}
+.forged-section .subheading{font-size:16px;color:rgba(244,241,234,0.55);margin-bottom:48px;font-weight:300;max-width:560px;margin-left:auto;margin-right:auto}
+
+.forged-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;text-align:left}
+.forged-card{background:linear-gradient(180deg,var(--charcoal),#0e1320);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:24px;transition:all 0.3s;position:relative;overflow:hidden}
+.forged-card:hover{border-color:rgba(255,107,26,0.4);transform:translateY(-6px);box-shadow:0 16px 40px rgba(255,107,26,0.15)}
+.forged-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--forge),var(--ember))}
+
+/* Cartoon character avatars */
+.char-avatar{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:38px;margin-bottom:16px;position:relative;animation:charBob 3s ease-in-out infinite}
+.char-avatar.maya{background:linear-gradient(135deg,#fef3c7,#fde047);box-shadow:0 6px 20px rgba(253,224,71,0.4)}
+.char-avatar.sam{background:linear-gradient(135deg,#bfdbfe,#60a5fa);box-shadow:0 6px 20px rgba(96,165,250,0.4);animation-delay:0.5s}
+.char-avatar.finn{background:linear-gradient(135deg,#bbf7d0,#4ade80);box-shadow:0 6px 20px rgba(74,222,128,0.4);animation-delay:1s}
+.char-avatar.aria{background:linear-gradient(135deg,#fecaca,#f87171);box-shadow:0 6px 20px rgba(248,113,113,0.4);animation-delay:1.5s}
+@keyframes charBob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
+
+.char-name{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:700;margin-bottom:4px}
+.char-title{font-size:11px;letter-spacing:1.5px;color:var(--forge);text-transform:uppercase;margin-bottom:12px;font-weight:700}
+.char-desc{font-size:13px;color:rgba(244,241,234,0.55);line-height:1.6;font-weight:300;margin-bottom:14px}
+.char-quote{font-size:11px;color:var(--ember);font-style:italic;border-left:2px solid var(--forge);padding-left:10px;line-height:1.5}
+
+/* FEATURES */
+.features{padding:80px 48px;max-width:1100px;margin:0 auto}
+.features-label{font-size:11px;letter-spacing:3px;color:rgba(244,241,234,0.3);text-transform:uppercase;margin-bottom:48px;text-align:center}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden}
+.feature{background:var(--charcoal);padding:32px}
+.feature.bilingual{background:linear-gradient(135deg,rgba(255,107,26,0.08),rgba(255,209,102,0.04));border-left:2px solid var(--forge)}
+.feature-icon{width:44px;height:44px;background:rgba(255,107,26,0.1);border:1px solid rgba(255,107,26,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px}
+.feature h3{font-family:'Clash Display',sans-serif;font-size:17px;font-weight:600;margin-bottom:8px}
+.feature p{font-size:13px;color:rgba(244,241,234,0.45);line-height:1.6;font-weight:300}
+.bilingual-badge{display:inline-block;background:var(--forge);color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle}
+
+/* PRICING */
+.pricing{padding:80px 48px;max-width:900px;margin:0 auto;text-align:center}
+.pricing h2{font-family:'Clash Display',sans-serif;font-size:clamp(32px,5vw,48px);font-weight:700;letter-spacing:-1px;margin-bottom:12px}
+.pricing>p{font-size:16px;color:rgba(244,241,234,0.45);margin-bottom:48px;font-weight:300}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;text-align:left}
+.pricing-card{background:var(--charcoal);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px;position:relative}
+.pricing-card.featured{background:linear-gradient(135deg,var(--forge),var(--forge-dark));color:#fff;border-color:var(--forge);box-shadow:0 10px 40px rgba(255,107,26,0.3)}
+.plan-name{font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;opacity:0.6}
+.plan-price{font-family:'Clash Display',sans-serif;font-size:48px;font-weight:700;letter-spacing:-2px;line-height:1;margin-bottom:4px}
+.plan-price span{font-size:16px;font-weight:400;opacity:0.6;letter-spacing:0}
+.plan-desc{font-size:13px;opacity:0.5;margin-bottom:24px;font-weight:300}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.plan-features li{font-size:13px;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.plan-features li::before{content:'✓';font-weight:700;color:var(--forge);flex-shrink:0;margin-top:1px}
+.pricing-card.featured .plan-features li::before{color:#fff}
+.plan-extra{font-size:11px;color:rgba(244,241,234,0.4);margin-bottom:16px;font-style:italic}
+.pricing-card.featured .plan-extra{color:rgba(255,255,255,0.7)}
+.plan-btn{width:100%;padding:14px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none}
+.plan-btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.2);color:var(--paper)}
+.plan-btn-light{background:#fff;color:var(--forge-dark)}
+footer{border-top:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:flex;justify-content:space-between;font-size:12px;color:rgba(244,241,234,0.3)}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:20px;padding:40px;width:100%;max-width:420px;margin:20px;position:relative}
+.modal-logo{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.modal-logo .accent{color:var(--forge)}
+.modal h2{font-family:'Clash Display',sans-serif;font-size:26px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.modal p{font-size:13px;color:var(--gray);margin-bottom:28px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase}
+.form-group input{width:100%;padding:13px 16px;border:1.5px solid var(--light-gray);border-radius:10px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;color:var(--ink);background:var(--cream);outline:none}
+.form-group input:focus{border-color:var(--forge);background:#fff}
+.modal .btn-primary{width:100%;padding:14px;font-size:15px;border-radius:10px}
+.modal-switch{text-align:center;margin-top:16px;font-size:13px;color:var(--gray)}
+.modal-switch a{color:var(--forge);font-weight:700;cursor:pointer}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;border:none;background:var(--light-gray);cursor:pointer}
+
+/* DASHBOARD */
+#dashboard{background:var(--cream);display:none}
+#dashboard.active{display:flex}
+.sidebar{width:240px;background:var(--ink);min-height:100vh;padding:28px 20px;display:flex;flex-direction:column;flex-shrink:0}
+.sidebar-logo{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;color:var(--paper);margin-bottom:40px;padding:0 8px;display:flex;align-items:center;gap:8px}
+.sidebar-logo .accent{color:var(--forge)}
+.sidebar-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.nav-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;color:rgba(244,241,234,0.45);font-size:13px;font-weight:500;cursor:pointer}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:var(--paper)}
+.nav-item.active{background:rgba(255,107,26,0.12);color:var(--forge)}
+.nav-item .icon{font-size:16px;width:20px;text-align:center}
+.sidebar-lang{display:flex;gap:2px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:2px;margin-bottom:14px}
+.sidebar-lang .lang-btn{flex:1;text-align:center;font-size:10px;padding:4px 6px}
+.sidebar-user{border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;display:flex;align-items:center;gap:10px}
+.user-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--forge),var(--ember));border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff}
+.user-info{flex:1;overflow:hidden}
+.user-name{font-size:13px;color:var(--paper);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-plan{font-size:10px;color:rgba(244,241,234,0.3);letter-spacing:1px;text-transform:uppercase}
+.main{flex:1;overflow-y:auto}
+.main-header{background:#fff;padding:20px 36px;border-bottom:1px solid var(--light-gray);display:flex;align-items:center;justify-content:space-between}
+.main-header h1{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700}
+.btn-upload{background:var(--forge);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 2px 12px rgba(255,107,26,0.25)}
+.tab-page{display:none}
+.tab-page.active{display:block}
+.overview-content{padding:32px 36px}
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.metric-card{background:#fff;border:1px solid var(--light-gray);border-radius:14px;padding:22px}
+.metric-label{font-size:11px;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.metric-value{font-family:'Clash Display',sans-serif;font-size:32px;font-weight:700;letter-spacing:-1px;line-height:1;margin-bottom:6px}
+.metric-change{font-size:11px}
+.metric-up{color:var(--success)}
+.section-header{display:flex;justify-content:space-between;margin-bottom:16px}
+.section-title{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700}
+.view-all{font-size:12px;color:var(--gray);cursor:pointer}
+.meetings-list{display:flex;flex-direction:column;gap:10px}
+.meeting-card{background:#fff;border:1px solid var(--light-gray);border-radius:12px;padding:18px 22px;display:flex;align-items:center;gap:16px;cursor:pointer}
+.meeting-card:hover{border-color:var(--forge);box-shadow:0 2px 12px rgba(255,107,26,0.08)}
+.meeting-type{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.meeting-info{flex:1;min-width:0}
+.meeting-title{font-size:14px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+.meeting-meta{font-size:11px;color:var(--gray)}
+.meeting-lang-flag{font-size:14px;margin-left:4px}
+.meeting-score{text-align:right;flex-shrink:0}
+.score-val{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;line-height:1}
+.score-label{font-size:10px;color:var(--gray)}
+.score-high{color:var(--success)}
+.score-low{color:var(--red)}
+.meeting-status{padding:4px 10px;border-radius:100px;font-size:10px;font-weight:700;flex-shrink:0}
+.status-done{background:#dcfce7;color:#166534}
+.status-processing{background:#fef9c3;color:#854d0e}
+
+/* THE FORGED DASHBOARD TAB */
+.forged-dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:8px}
+.forged-dash-card{background:#fff;border:1px solid var(--light-gray);border-radius:18px;padding:24px;position:relative;overflow:hidden;transition:all 0.2s}
+.forged-dash-card:hover{border-color:var(--forge);transform:translateY(-3px);box-shadow:0 10px 30px rgba(255,107,26,0.1)}
+.forged-dash-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--forge),var(--ember))}
+.forged-dash-header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.forged-dash-avatar{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0;animation:charBob 3s ease-in-out infinite}
+.forged-dash-avatar.maya{background:linear-gradient(135deg,#fef3c7,#fde047)}
+.forged-dash-avatar.sam{background:linear-gradient(135deg,#bfdbfe,#60a5fa);animation-delay:0.5s}
+.forged-dash-avatar.finn{background:linear-gradient(135deg,#bbf7d0,#4ade80);animation-delay:1s}
+.forged-dash-avatar.aria{background:linear-gradient(135deg,#fecaca,#f87171);animation-delay:1.5s}
+.forged-dash-name{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.forged-dash-title{font-size:10px;letter-spacing:1.5px;color:var(--forge);text-transform:uppercase;font-weight:700}
+.forged-dash-desc{font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:14px}
+.forged-dash-action{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--cream);border-radius:10px;font-size:12px;color:var(--ink);font-weight:600;cursor:pointer;border:1px solid transparent;transition:all 0.15s}
+.forged-dash-action:hover{border-color:var(--forge);color:var(--forge)}
+.forged-dash-action::before{content:'⚒';color:var(--forge)}
+.forged-status{position:absolute;top:18px;right:18px;display:flex;align-items:center;gap:6px;background:#dcfce7;border-radius:100px;padding:4px 10px;font-size:9px;font-weight:700;color:#166534;letter-spacing:0.5px}
+.forged-status::before{content:'';width:6px;height:6px;background:#22c55e;border-radius:50%;animation:blink 2s infinite}
+
+/* UPLOAD */
+.upload-tab{padding:32px 36px}
+.lang-detection-info{background:rgba(255,107,26,0.05);border:1px solid rgba(255,107,26,0.15);border-radius:10px;padding:12px 16px;font-size:12px;color:var(--ink);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.lang-detection-info strong{color:var(--forge)}
+.upload-zone{border:2px dashed var(--light-gray);border-radius:16px;padding:60px 40px;text-align:center;cursor:pointer;background:#fff;margin-bottom:24px}
+.upload-zone:hover{border-color:var(--forge);background:#fff7f1}
+.upload-icon{font-size:48px;margin-bottom:16px}
+.upload-zone h3{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;margin-bottom:8px}
+.upload-zone p{font-size:13px;color:var(--gray);margin-bottom:20px}
+.upload-formats{font-size:11px;color:var(--gray);margin-top:12px}
+.processing-card{background:#fff;border:1px solid var(--light-gray);border-radius:14px;padding:24px;display:none}
+.processing-card.show{display:block}
+.processing-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.processing-icon{font-size:24px;animation:spin 2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.processing-title{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700}
+.processing-sub{font-size:12px;color:var(--gray)}
+.progress-step{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;font-size:13px;color:var(--gray);background:var(--cream);margin-bottom:10px}
+.progress-step.done{color:var(--success);background:#f0fdf4}
+.progress-step.active{color:var(--ink);background:#fff7f1;font-weight:500}
+.step-check{width:20px;height:20px;border-radius:50%;background:var(--light-gray);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.progress-step.done .step-check{background:var(--success);color:#fff}
+.progress-step.active .step-check{background:var(--forge);color:#fff}
+
+/* MEETING DETAIL */
+.meeting-detail{padding:32px 36px;display:none}
+.meeting-detail.show{display:block}
+.back-btn{background:none;border:none;font-size:13px;color:var(--gray);cursor:pointer;margin-bottom:24px;font-family:'Cabinet Grotesk',sans-serif}
+.detail-header{background:#fff;border:1px solid var(--light-gray);border-radius:16px;padding:28px;margin-bottom:20px}
+.detail-title{font-family:'Clash Display',sans-serif;font-size:24px;font-weight:700;margin-bottom:8px}
+.detail-meta{font-size:12px;color:var(--gray);margin-bottom:20px}
+.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.detail-stat{background:var(--cream);border-radius:10px;padding:14px 16px;text-align:center}
+.detail-stat-val{font-family:'Clash Display',sans-serif;font-size:24px;font-weight:700}
+.detail-stat-label{font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.detail-sections{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.detail-section{background:#fff;border:1px solid var(--light-gray);border-radius:14px;padding:22px}
+.detail-section h3{font-family:'Clash Display',sans-serif;font-size:14px;font-weight:700;margin-bottom:14px}
+.action-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--light-gray);font-size:13px;line-height:1.5}
+.action-item:last-child{border-bottom:none}
+.action-check{width:18px;height:18px;border:2px solid var(--light-gray);border-radius:4px;flex-shrink:0;margin-top:1px;cursor:pointer}
+.summary-text{font-size:13px;color:var(--gray);line-height:1.7;font-weight:300}
+
+@media (max-width:900px){
+  .tito-container{position:relative;right:auto;top:auto;margin:0 auto 30px;width:140px;height:170px}
+  .hero{padding:60px 20px 48px}
+}
+@media (max-width:768px){
+  nav{padding:16px 20px;flex-wrap:wrap;gap:8px}
+  .nav-links{gap:12px;flex-wrap:wrap}
+  .nav-links a{display:none}
+  .stats-bar{padding:24px 20px;flex-wrap:wrap;gap:16px}
+  .stat{flex:1 1 40%;border-right:none}
+  .features{padding:48px 20px}
+  .features-grid{grid-template-columns:1fr}
+  .forged-section{padding:48px 20px}
+  .forged-grid{grid-template-columns:1fr 1fr;gap:12px}
+  .pricing{padding:48px 20px}
+  footer{padding:24px 20px;flex-direction:column;gap:8px;text-align:center}
+  #dashboard{flex-direction:column}
+  .sidebar{width:100%;min-height:auto;padding:16px;flex-direction:row;align-items:center}
+  .sidebar-nav{flex-direction:row;flex:1;gap:4px;overflow-x:auto}
+  .nav-item span:not(.icon){display:none}
+  .sidebar-user,.sidebar-logo,.sidebar-lang{display:none}
+  .main-header{padding:16px 20px}
+  .overview-content,.upload-tab,.meeting-detail{padding:20px 16px}
+  .metrics-row{grid-template-columns:repeat(2,1fr)}
+  .detail-sections{grid-template-columns:1fr}
+}
+@media (max-width:480px){
+  .forged-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -915,122 +517,165 @@ footer {
 
 <div id="landing" class="screen active">
   <nav>
-    <div class="nav-logo">
-      <div class="logo-mark"></div>
-      Call<span class="accent">forge</span>
-    </div>
+    <div class="nav-logo"><div class="logo-mark"></div>Call<span class="accent">forge</span></div>
     <div class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#">For Sales Teams</a>
-      <button class="btn-secondary" onclick="openModal('login')">Sign in</button>
-      <button class="btn-primary" onclick="openModal('signup')">Start free trial</button>
+      <a data-i18n="nav.features">Features</a>
+      <a data-i18n="nav.forged">The Forged</a>
+      <a data-i18n="nav.pricing">Pricing</a>
+      <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLang('en')" data-lang="en">EN</button>
+        <button class="lang-btn" onclick="setLang('es')" data-lang="es">ES</button>
+      </div>
+      <button class="btn-secondary" onclick="openModal('login')" data-i18n="nav.signIn">Sign in</button>
+      <button class="btn-primary" onclick="openModal('signup')" data-i18n="nav.startTrial">Start free trial</button>
     </div>
   </nav>
 
   <section class="hero">
-    <div class="hero-badge"><div class="hero-badge-dot"></div> NOW WITH DEAL SCORING AI</div>
-    <h1>Forge every call<br>into a <em>closed deal.</em></h1>
-    <p>Callforge records your sales calls, writes the summary, extracts action items, and drafts the follow-up email — before your prospect even closes the tab.</p>
-    <div class="hero-cta">
-      <button class="btn-primary" onclick="openModal('signup')">Start free — no card needed</button>
-      <button class="btn-secondary" onclick="showDashboard()">See a demo →</button>
+    <!-- TITO THE MASCOT -->
+    <div class="tito-container" title="Hey, I'm Tito!">
+      <div class="tito-speech" data-i18n="tito.greeting">¡Hola! I'm Tito 👋</div>
+      <div class="tito-body">
+        <div class="tito-arm left"></div>
+        <div class="tito-arm right"></div>
+        <div class="tito-torso"></div>
+        <div class="tito-apron"></div>
+        <div class="tito-head"></div>
+        <div class="tito-cap"></div>
+        <div class="tito-eye left"></div>
+        <div class="tito-eye right"></div>
+        <div class="tito-cheek left"></div>
+        <div class="tito-cheek right"></div>
+        <div class="tito-smile"></div>
+        <div class="tito-hammer">
+          <div class="tito-spark"></div>
+          <div class="tito-spark"></div>
+          <div class="tito-spark"></div>
+        </div>
+      </div>
     </div>
-    <p class="hero-note">14-day free trial · Cancel anytime · Works with Zoom, Meet, Teams</p>
+
+    <div class="hero-badge"><div class="hero-badge-dot"></div> <span data-i18n="hero.badge">NOW IN ENGLISH & ESPAÑOL</span></div>
+    <h1 data-i18n-html="hero.title">Forge every call<br>into a <em>closed deal.</em></h1>
+    <p data-i18n="hero.subtitle">Callforge records your sales calls in English or Spanish, writes the summary, extracts action items, and drafts the follow-up email — before your prospect even closes the tab.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="openModal('signup')" data-i18n="hero.ctaPrimary">Start free — no card needed</button>
+      <button class="btn-secondary" onclick="showDashboard()" data-i18n="hero.ctaSecondary">See a demo →</button>
+    </div>
+    <p class="hero-note" data-i18n="hero.note">14-day free trial · Cancel anytime · Works with Zoom, Meet, Teams</p>
   </section>
 
   <div class="stats-bar">
-    <div class="stat"><div class="stat-num">2 min</div><div class="stat-label">Avg. summary time</div></div>
-    <div class="stat"><div class="stat-num">94%</div><div class="stat-label">Action item accuracy</div></div>
-    <div class="stat"><div class="stat-num">3.2×</div><div class="stat-label">Faster follow-up</div></div>
-    <div class="stat"><div class="stat-num">$0</div><div class="stat-label">To start today</div></div>
+    <div class="stat"><div class="stat-num">2 min</div><div class="stat-label" data-i18n="stats.summary">Avg. summary time</div></div>
+    <div class="stat"><div class="stat-num">94%</div><div class="stat-label" data-i18n="stats.accuracy">Action item accuracy</div></div>
+    <div class="stat"><div class="stat-num">2</div><div class="stat-label" data-i18n="stats.languages">Languages supported</div></div>
+    <div class="stat"><div class="stat-num">$0</div><div class="stat-label" data-i18n="stats.start">To start today</div></div>
   </div>
 
+  <!-- MEET THE FORGED -->
+  <section class="forged-section" id="forged">
+    <div class="section-eyebrow" data-i18n="forged.eyebrow">⚒ MEET YOUR AI COACH TEAM</div>
+    <h2 data-i18n="forged.title">The Forged.</h2>
+    <p class="subheading" data-i18n="forged.subtitle">Four AI specialists hammered into shape to help you close more deals. Built into every Pro and Team plan.</p>
+
+    <div class="forged-grid">
+      <div class="forged-card">
+        <div class="char-avatar maya">⚡</div>
+        <div class="char-name" data-i18n="forged.maya.name">Maya the Spark</div>
+        <div class="char-title" data-i18n="forged.maya.title">PITCH COACH</div>
+        <p class="char-desc" data-i18n="forged.maya.desc">Reviews your calls and tells you exactly which lines worked, which fell flat, and how to open stronger next time.</p>
+        <div class="char-quote" data-i18n="forged.maya.quote">"Your last pitch lost them at minute 12 — try this instead."</div>
+      </div>
+      <div class="forged-card">
+        <div class="char-avatar sam">🔨</div>
+        <div class="char-name" data-i18n="forged.sam.name">Sam the Anvil</div>
+        <div class="char-title" data-i18n="forged.sam.title">FOLLOW-UP COACH</div>
+        <p class="char-desc" data-i18n="forged.sam.desc">Drafts your follow-up emails the moment the call ends. Reads tone, picks the right close, signs off in your voice.</p>
+        <div class="char-quote" data-i18n="forged.sam.quote">"Send within 2 hours. I drafted it. Just hit send."</div>
+      </div>
+      <div class="forged-card">
+        <div class="char-avatar finn">🔧</div>
+        <div class="char-name" data-i18n="forged.finn.name">Finn the Tongs</div>
+        <div class="char-title" data-i18n="forged.finn.title">DEAL ANALYST</div>
+        <p class="char-desc" data-i18n="forged.finn.desc">Tracks every deal in your pipeline. Scores intent. Flags risks. Tells you which deals to push and which to drop.</p>
+        <div class="char-quote" data-i18n="forged.finn.quote">"Acme is heating up. Mendoza is cooling. Focus here."</div>
+      </div>
+      <div class="forged-card">
+        <div class="char-avatar aria">⚒</div>
+        <div class="char-name" data-i18n="forged.aria.name">Aria the Hammer</div>
+        <div class="char-title" data-i18n="forged.aria.title">OBJECTION COACH</div>
+        <p class="char-desc" data-i18n="forged.aria.desc">Detects every objection raised on your calls and rehearses the perfect comeback for next time. Like having a sales mentor on call.</p>
+        <div class="char-quote" data-i18n="forged.aria.quote">"They mentioned price 4 times. Here's how to reframe it."</div>
+      </div>
+    </div>
+  </section>
+
   <section class="features" id="features">
-    <div class="features-label">— WHAT CALLFORGE DOES —</div>
+    <div class="features-label" data-i18n="features.label">— WHAT CALLFORGE DOES —</div>
     <div class="features-grid">
-      <div class="feature">
-        <div class="feature-icon">🎙</div>
-        <h3>Transcribe any call</h3>
-        <p>Upload a recording or connect directly to Zoom, Google Meet, or Teams. We transcribe everything instantly.</p>
+      <div class="feature bilingual">
+        <div class="feature-icon">🌎</div>
+        <h3><span data-i18n="features.bilingual.title">Bilingual AI</span><span class="bilingual-badge" data-i18n="features.bilingual.badge">NEW</span></h3>
+        <p data-i18n="features.bilingual.desc">Process calls in English or Spanish. The AI auto-detects the language and delivers summaries, action items, and emails in the same language.</p>
       </div>
-      <div class="feature">
-        <div class="feature-icon">⚡</div>
-        <h3>AI summaries in 2 min</h3>
-        <p>Get a clean, structured summary with key points, objections raised, and next steps — automatically.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon">✅</div>
-        <h3>Action items extracted</h3>
-        <p>Never drop the ball again. Callforge pulls every commitment and task from the conversation.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon">📈</div>
-        <h3>Deal health scoring</h3>
-        <p>Our AI scores each deal from 0–100 based on tone, buying signals, and next steps clarity.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon">📧</div>
-        <h3>Auto follow-up drafts</h3>
-        <p>A personalized follow-up email, ready to send, generated the moment your call ends.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon">🔗</div>
-        <h3>CRM sync</h3>
-        <p>Push summaries, notes, and tasks directly to HubSpot or Salesforce with one click.</p>
-      </div>
+      <div class="feature"><div class="feature-icon">🎙</div><h3 data-i18n="features.transcribe.title">Transcribe any call</h3><p data-i18n="features.transcribe.desc">Upload a recording or connect directly to Zoom, Google Meet, or Teams. We transcribe everything instantly.</p></div>
+      <div class="feature"><div class="feature-icon">⚡</div><h3 data-i18n="features.summary.title">AI summaries in 2 min</h3><p data-i18n="features.summary.desc">Get a clean, structured summary with key points, objections raised, and next steps — automatically.</p></div>
+      <div class="feature"><div class="feature-icon">✅</div><h3 data-i18n="features.action.title">Action items extracted</h3><p data-i18n="features.action.desc">Never drop the ball again. Callforge pulls every commitment and task from the conversation.</p></div>
+      <div class="feature"><div class="feature-icon">📈</div><h3 data-i18n="features.scoring.title">Deal health scoring</h3><p data-i18n="features.scoring.desc">Our AI scores each deal from 0–100 based on tone, buying signals, and next steps clarity.</p></div>
+      <div class="feature"><div class="feature-icon">📧</div><h3 data-i18n="features.followup.title">Auto follow-up drafts</h3><p data-i18n="features.followup.desc">A personalized follow-up email, ready to send, generated the moment your call ends.</p></div>
     </div>
   </section>
 
   <section class="pricing" id="pricing">
-    <h2>Simple, honest pricing.</h2>
-    <p>Start free. Upgrade when you're ready. No surprise charges.</p>
+    <h2 data-i18n="pricing.title">Simple, honest pricing.</h2>
+    <p data-i18n="pricing.subtitle">Start free. Upgrade when you're ready. No surprise charges.</p>
     <div class="pricing-grid">
       <div class="pricing-card">
-        <div class="plan-name">Starter</div>
-        <div class="plan-price">$49<span>/mo</span></div>
-        <div class="plan-desc">Perfect for solo reps</div>
+        <div class="plan-name" data-i18n="pricing.starter.name">Starter</div>
+        <div class="plan-price">$49<span data-i18n="pricing.perMonth">/mo</span></div>
+        <div class="plan-desc" data-i18n="pricing.starter.desc">Perfect for solo reps</div>
         <ul class="plan-features">
-          <li>20 meetings / month</li>
-          <li>AI summaries & action items</li>
-          <li>Follow-up email drafts</li>
-          <li>Deal scoring</li>
-          <li>Email support</li>
+          <li data-i18n="pricing.starter.f1">20 meetings / month</li>
+          <li data-i18n="pricing.starter.f2">English & Spanish AI</li>
+          <li data-i18n="pricing.starter.f3">Follow-up email drafts</li>
+          <li data-i18n="pricing.starter.f4">Deal scoring</li>
+          <li data-i18n="pricing.starter.f5">Email support</li>
         </ul>
-        <button class="plan-btn plan-btn-outline" onclick="openModal('signup')">Start free trial</button>
+        <button class="plan-btn plan-btn-outline" onclick="openModal('signup')" data-i18n="pricing.tryFree">Start free trial</button>
       </div>
       <div class="pricing-card featured">
-        <div class="plan-name">Pro</div>
-        <div class="plan-price">$99<span>/mo</span></div>
-        <div class="plan-desc">Best for closing teams</div>
+        <div class="plan-name" data-i18n="pricing.pro.name">Pro</div>
+        <div class="plan-price">$99<span data-i18n="pricing.perMonth">/mo</span></div>
+        <div class="plan-desc" data-i18n="pricing.pro.desc">Best for closing teams</div>
         <ul class="plan-features">
-          <li>Unlimited meetings</li>
-          <li>CRM sync (HubSpot, SFDC)</li>
-          <li>Team dashboard</li>
-          <li>Call coaching insights</li>
-          <li>Priority support</li>
+          <li data-i18n="pricing.pro.f1">Unlimited meetings</li>
+          <li data-i18n="pricing.pro.f2">All 4 Forged AI Coaches</li>
+          <li data-i18n="pricing.pro.f3">CRM sync (HubSpot, SFDC)</li>
+          <li data-i18n="pricing.pro.f4">Call coaching insights</li>
+          <li data-i18n="pricing.pro.f5">Priority support</li>
         </ul>
-        <button class="plan-btn plan-btn-light" onclick="openModal('signup')">Start free trial</button>
+        <button class="plan-btn plan-btn-light" onclick="openModal('signup')" data-i18n="pricing.tryFree">Start free trial</button>
       </div>
       <div class="pricing-card">
-        <div class="plan-name">Team</div>
-        <div class="plan-price">$299<span>/mo</span></div>
-        <div class="plan-desc">For sales orgs of 5+</div>
+        <div class="plan-name" data-i18n="pricing.team.name">Team</div>
+        <div class="plan-price">$299<span data-i18n="pricing.perMonth">/mo</span></div>
+        <div class="plan-desc" data-i18n="pricing.team.desc">For growing sales teams</div>
         <ul class="plan-features">
-          <li>Everything in Pro</li>
-          <li>Up to 10 seats</li>
-          <li>Manager analytics</li>
-          <li>Custom AI personas</li>
-          <li>Dedicated onboarding</li>
+          <li data-i18n="pricing.team.f1">Everything in Pro</li>
+          <li data-i18n="pricing.team.f2">Up to 10 seats included</li>
+          <li data-i18n="pricing.team.f3">Manager analytics dashboard</li>
+          <li data-i18n="pricing.team.f4">Custom AI Coach personas</li>
+          <li data-i18n="pricing.team.f5">Dedicated onboarding</li>
         </ul>
-        <button class="plan-btn plan-btn-outline" onclick="openModal('signup')">Start free trial</button>
+        <div class="plan-extra" data-i18n="pricing.team.extra">+ $25/seat after 10</div>
+        <button class="plan-btn plan-btn-outline" onclick="openModal('signup')" data-i18n="pricing.tryFree">Start free trial</button>
       </div>
     </div>
   </section>
 
   <footer>
     <div>© 2026 Callforge Inc.</div>
-    <div>Privacy · Terms · support@callforge.to</div>
+    <div data-i18n="footer.links">Privacy · Terms · support@callforge.to</div>
   </footer>
 </div>
 
@@ -1038,39 +683,22 @@ footer {
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="modal-logo"><div class="logo-mark"></div>Call<span class="accent">forge</span></div>
-
     <div id="signupForm">
-      <h2>Start your free trial</h2>
-      <p>14 days free · No credit card required</p>
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" placeholder="Alex Johnson" id="signupName">
-      </div>
-      <div class="form-group">
-        <label>Work Email</label>
-        <input type="email" placeholder="alex@company.com" id="signupEmail">
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" placeholder="Min. 8 characters" id="signupPass">
-      </div>
-      <button class="btn-primary" onclick="handleSignup()">Create account →</button>
-      <div class="modal-switch">Already have an account? <a onclick="switchForm('login')">Sign in</a></div>
+      <h2 data-i18n="signup.title">Start your free trial</h2>
+      <p data-i18n="signup.subtitle">14 days free · No credit card required</p>
+      <div class="form-group"><label data-i18n="form.name">Full Name</label><input type="text" id="signupName"></div>
+      <div class="form-group"><label data-i18n="form.email">Work Email</label><input type="email" id="signupEmail" placeholder="alex@company.com"></div>
+      <div class="form-group"><label data-i18n="form.password">Password</label><input type="password" id="signupPass"></div>
+      <button class="btn-primary" onclick="handleSignup()" data-i18n="signup.create">Create account →</button>
+      <div class="modal-switch"><span data-i18n="signup.haveAccount">Already have an account?</span> <a onclick="switchForm('login')" data-i18n="signup.signInLink">Sign in</a></div>
     </div>
-
     <div id="loginForm" style="display:none">
-      <h2>Welcome back</h2>
-      <p>Sign in to your Callforge account</p>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" placeholder="alex@company.com" id="loginEmail">
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" placeholder="Your password" id="loginPass">
-      </div>
-      <button class="btn-primary" onclick="handleLogin()">Sign in →</button>
-      <div class="modal-switch">New to Callforge? <a onclick="switchForm('signup')">Start free trial</a></div>
+      <h2 data-i18n="login.title">Welcome back</h2>
+      <p data-i18n="login.subtitle">Sign in to your Callforge account</p>
+      <div class="form-group"><label data-i18n="form.email">Email</label><input type="email" id="loginEmail" placeholder="alex@company.com"></div>
+      <div class="form-group"><label data-i18n="form.password">Password</label><input type="password" id="loginPass"></div>
+      <button class="btn-primary" onclick="handleLogin()" data-i18n="login.signIn">Sign in →</button>
+      <div class="modal-switch"><span data-i18n="login.newHere">New to Callforge?</span> <a onclick="switchForm('signup')" data-i18n="login.startLink">Start free trial</a></div>
     </div>
   </div>
 </div>
@@ -1079,189 +707,106 @@ footer {
   <aside class="sidebar">
     <div class="sidebar-logo"><div class="logo-mark"></div>Call<span class="accent">forge</span></div>
     <nav class="sidebar-nav">
-      <a class="nav-item active" onclick="switchTab('overview')"><span class="icon">📊</span><span>Overview</span></a>
-      <a class="nav-item" onclick="switchTab('meetings')"><span class="icon">🎙</span><span>Meetings</span></a>
-      <a class="nav-item" onclick="switchTab('upload')"><span class="icon">⬆</span><span>Upload</span></a>
-      <a class="nav-item" onclick="switchTab('agents')"><span class="icon">🤖</span><span>AI Agents</span></a>
-      <a class="nav-item" onclick="switchTab('settings')"><span class="icon">⚙</span><span>Settings</span></a>
+      <a class="nav-item active" onclick="switchTab('overview')"><span class="icon">📊</span><span data-i18n="dash.overview">Overview</span></a>
+      <a class="nav-item" onclick="switchTab('meetings')"><span class="icon">🎙</span><span data-i18n="dash.meetings">Meetings</span></a>
+      <a class="nav-item" onclick="switchTab('upload')"><span class="icon">⬆</span><span data-i18n="dash.upload">Upload</span></a>
+      <a class="nav-item" onclick="switchTab('forged')"><span class="icon">⚒</span><span data-i18n="dash.forged">The Forged</span></a>
+      <a class="nav-item" onclick="switchTab('settings')"><span class="icon">⚙</span><span data-i18n="dash.settings">Settings</span></a>
     </nav>
+    <div class="sidebar-lang">
+      <button class="lang-btn active" onclick="setLang('en')" data-lang="en">EN</button>
+      <button class="lang-btn" onclick="setLang('es')" data-lang="es">ES</button>
+    </div>
     <div class="sidebar-user">
       <div class="user-avatar" id="userAvatar">A</div>
       <div class="user-info">
         <div class="user-name" id="userName">Alex Johnson</div>
-        <div class="user-plan">PRO TRIAL</div>
+        <div class="user-plan" data-i18n="dash.proTrial">PRO TRIAL</div>
       </div>
     </div>
   </aside>
-
   <main class="main">
     <div class="main-header">
-      <h1 id="pageTitle">Overview</h1>
-      <div class="header-actions">
-        <button class="btn-upload" onclick="switchTab('upload')">⬆ Upload Meeting</button>
-      </div>
+      <h1 id="pageTitle" data-i18n="dash.overview">Overview</h1>
+      <button class="btn-upload" onclick="switchTab('upload')">⬆ <span data-i18n="dash.uploadMeeting">Upload Meeting</span></button>
     </div>
-
     <div class="tab-pages">
       <div class="tab-page active" id="tab-overview">
         <div class="overview-content">
           <div class="metrics-row">
-            <div class="metric-card">
-              <div class="metric-label">Meetings This Month</div>
-              <div class="metric-value">12</div>
-              <div class="metric-change metric-up">↑ 4 vs last month</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Avg Deal Score</div>
-              <div class="metric-value" style="color:#22c55e">74</div>
-              <div class="metric-change metric-up">↑ 8pts vs last month</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Action Items</div>
-              <div class="metric-value">34</div>
-              <div class="metric-change" style="color:#f59e0b">8 still open</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Follow-ups Sent</div>
-              <div class="metric-value">11</div>
-              <div class="metric-change metric-up">↑ 91% auto-sent</div>
-            </div>
+            <div class="metric-card"><div class="metric-label" data-i18n="metric.meetings">Meetings This Month</div><div class="metric-value">12</div><div class="metric-change metric-up" data-i18n="metric.meetingsChange">↑ 4 vs last month</div></div>
+            <div class="metric-card"><div class="metric-label" data-i18n="metric.dealScore">Avg Deal Score</div><div class="metric-value" style="color:#22c55e">74</div><div class="metric-change metric-up" data-i18n="metric.dealChange">↑ 8pts vs last month</div></div>
+            <div class="metric-card"><div class="metric-label" data-i18n="metric.actions">Action Items</div><div class="metric-value">34</div><div class="metric-change" style="color:#f59e0b" data-i18n="metric.actionsOpen">8 still open</div></div>
+            <div class="metric-card"><div class="metric-label" data-i18n="metric.followups">Follow-ups Sent</div><div class="metric-value">11</div><div class="metric-change metric-up" data-i18n="metric.followupsAuto">↑ 91% auto-sent</div></div>
           </div>
-
-          <div class="section-header">
-            <span class="section-title">Recent Meetings</span>
-            <a class="view-all" onclick="switchTab('meetings')">View all →</a>
-          </div>
-
-          <div class="meetings-list">
-            <div class="meeting-card" onclick="openMeeting('1')">
-              <div class="meeting-type" style="background:#f0fdf4">🤝</div>
-              <div class="meeting-info">
-                <div class="meeting-title">Acme Corp — Q4 Renewal Discovery</div>
-                <div class="meeting-meta">Today · 47 min · Sarah Chen, Mike Park</div>
-              </div>
-              <span class="meeting-status status-done">Done</span>
-              <div class="meeting-score"><div class="score-val score-high">87</div><div class="score-label">DEAL SCORE</div></div>
-            </div>
-            <div class="meeting-card" onclick="openMeeting('2')">
-              <div class="meeting-type" style="background:#fefce8">📞</div>
-              <div class="meeting-info">
-                <div class="meeting-title">Globex Industries — Demo Call</div>
-                <div class="meeting-meta">Yesterday · 32 min · Tom Richards</div>
-              </div>
-              <span class="meeting-status status-done">Done</span>
-              <div class="meeting-score"><div class="score-val score-med">61</div><div class="score-label">DEAL SCORE</div></div>
-            </div>
-            <div class="meeting-card">
-              <div class="meeting-type" style="background:#fff1f2">🔄</div>
-              <div class="meeting-info">
-                <div class="meeting-title">Initech — Follow-up & Objection Handling</div>
-                <div class="meeting-meta">2 days ago · 28 min · Lisa Wang</div>
-              </div>
-              <span class="meeting-status status-processing">Processing</span>
-              <div class="meeting-score"><div class="score-val score-low">42</div><div class="score-label">DEAL SCORE</div></div>
-            </div>
-          </div>
+          <div class="section-header"><span class="section-title" data-i18n="dash.recentMeetings">Recent Meetings</span><a class="view-all" onclick="switchTab('meetings')" data-i18n="dash.viewAll">View all →</a></div>
+          <div class="meetings-list" id="recentMeetingsList"></div>
         </div>
       </div>
-
-      <div class="tab-page" id="tab-meetings">
-        <div class="overview-content">
-          <div class="section-header" style="margin-bottom:16px">
-            <span class="section-title">All Meetings</span>
-          </div>
-          <div class="meetings-list">
-            <div class="meeting-card" onclick="openMeeting('1')">
-              <div class="meeting-type" style="background:#f0fdf4">🤝</div>
-              <div class="meeting-info"><div class="meeting-title">Acme Corp — Q4 Renewal Discovery</div><div class="meeting-meta">Today · 47 min · Sarah Chen, Mike Park</div></div>
-              <span class="meeting-status status-done">Done</span>
-              <div class="meeting-score"><div class="score-val score-high">87</div><div class="score-label">DEAL SCORE</div></div>
-            </div>
-            <div class="meeting-card" onclick="openMeeting('2')">
-              <div class="meeting-type" style="background:#fefce8">📞</div>
-              <div class="meeting-info"><div class="meeting-title">Globex Industries — Demo Call</div><div class="meeting-meta">Yesterday · 32 min · Tom Richards</div></div>
-              <span class="meeting-status status-done">Done</span>
-              <div class="meeting-score"><div class="score-val score-med">61</div><div class="score-label">DEAL SCORE</div></div>
-            </div>
-            <div class="meeting-card">
-              <div class="meeting-type" style="background:#fff1f2">🔄</div>
-              <div class="meeting-info"><div class="meeting-title">Initech — Follow-up & Objection Handling</div><div class="meeting-meta">2 days ago · 28 min · Lisa Wang</div></div>
-              <span class="meeting-status status-processing">Processing</span>
-              <div class="meeting-score"><div class="score-val score-low">42</div><div class="score-label">DEAL SCORE</div></div>
-            </div>
-            <div class="meeting-card" onclick="openMeeting('1')">
-              <div class="meeting-type" style="background:#f0fdf4">🎯</div>
-              <div class="meeting-info"><div class="meeting-title">Umbrella Corp — Initial Discovery</div><div class="meeting-meta">4 days ago · 55 min · Dana Cruz</div></div>
-              <span class="meeting-status status-done">Done</span>
-              <div class="meeting-score"><div class="score-val score-high">79</div><div class="score-label">DEAL SCORE</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <div class="tab-page" id="tab-meetings"><div class="overview-content"><div class="section-header"><span class="section-title" data-i18n="dash.allMeetings">All Meetings</span></div><div class="meetings-list" id="allMeetingsList"></div></div></div>
       <div class="tab-page" id="tab-upload">
         <div class="upload-tab">
-          <div class="upload-zone" id="uploadZone" onclick="triggerUpload()" ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
+          <div class="lang-detection-info">🌎 <span><strong data-i18n="upload.autoDetect">Auto language detection.</strong> <span data-i18n="upload.autoDetectDesc">Upload a meeting in English or Spanish — our AI detects the language automatically.</span></span></div>
+          <div class="upload-zone" id="uploadZone" onclick="triggerUpload()">
             <div class="upload-icon">🎙</div>
-            <h3>Drop your meeting recording here</h3>
-            <p>Or click to browse your files</p>
-            <button class="btn-primary" style="display:inline-block; padding: 12px 28px;" onclick="triggerUpload()">Choose file</button>
-            <p class="upload-formats">Supports MP3, MP4, M4A, WAV, WebM · Max 500MB</p>
+            <h3 data-i18n="upload.dropZone">Drop your meeting recording here</h3>
+            <p data-i18n="upload.browse">Or click to browse your files</p>
+            <button class="btn-primary" style="padding:12px 28px" onclick="event.stopPropagation();triggerUpload()" data-i18n="upload.chooseFile">Choose file</button>
+            <p class="upload-formats" data-i18n="upload.formats">Supports MP3, MP4, M4A, WAV, WebM · Max 500MB</p>
           </div>
-          <input type="file" id="fileInput" style="display:none" accept=".mp3,.mp4,.m4a,.wav,.webm" onchange="handleFileSelect(event)">
-
+          <input type="file" id="fileInput" style="display:none" onchange="handleFileSelect(event)">
           <div class="processing-card" id="processingCard">
-            <div class="processing-header">
-              <div class="processing-icon">⚒</div>
-              <div>
-                <div class="processing-title">Forging your meeting...</div>
-                <div class="processing-sub" id="processingFileName">acme-discovery-call.mp3</div>
-              </div>
-            </div>
-            <div class="progress-steps">
-              <div class="progress-step done" id="step1"><div class="step-check">✓</div>File uploaded</div>
-              <div class="progress-step active" id="step2"><div class="step-check">•</div>Transcribing audio with Whisper AI...</div>
-              <div class="progress-step" id="step3"><div class="step-check"></div>Generating summary & action items</div>
-              <div class="progress-step" id="step4"><div class="step-check"></div>Scoring deal health</div>
-              <div class="progress-step" id="step5"><div class="step-check"></div>Drafting follow-up email</div>
-            </div>
+            <div class="processing-header"><div class="processing-icon">⚒</div><div><div class="processing-title" data-i18n="upload.forging">Forging your meeting...</div><div class="processing-sub" id="processingFileName">acme-call.mp3</div></div></div>
+            <div class="progress-step done" id="step1"><div class="step-check">✓</div><span data-i18n="upload.step1">File uploaded</span></div>
+            <div class="progress-step active" id="step2"><div class="step-check">•</div><span data-i18n="upload.step2">Detecting language & transcribing audio...</span></div>
+            <div class="progress-step" id="step3"><div class="step-check"></div><span data-i18n="upload.step3">Generating summary & action items</span></div>
+            <div class="progress-step" id="step4"><div class="step-check"></div><span data-i18n="upload.step4">Scoring deal health</span></div>
+            <div class="progress-step" id="step5"><div class="step-check"></div><span data-i18n="upload.step5">Drafting follow-up email</span></div>
           </div>
         </div>
       </div>
 
-      <div class="tab-page" id="tab-agents">
+      <!-- THE FORGED TAB -->
+      <div class="tab-page" id="tab-forged">
         <div class="overview-content">
-          <div class="section-header" style="margin-bottom:16px">
-            <span class="section-title">Your AI Agent Team</span>
-          </div>
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:14px">
-            <div style="background:white;border:1px solid var(--light-gray);border-radius:14px;padding:22px">
-              <div style="font-size:28px;margin-bottom:10px">📣</div>
-              <div style="font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px">Maya — Marketing</div>
-              <div style="font-size:11px;color:var(--gray);margin-bottom:12px;letter-spacing:1px">RUNS EVERY 24H</div>
-              <div style="font-size:12px;color:var(--gray);line-height:1.7">Publishes SEO blog posts, manages LinkedIn + Twitter, and A/B tests your landing page copy automatically.</div>
-              <div style="margin-top:14px;display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;background:#22c55e;border-radius:50%"></div><span style="font-size:11px;color:#22c55e;font-weight:700">ACTIVE</span></div>
+          <div class="section-header"><span class="section-title" data-i18n="dash.forgedTeam">⚒ The Forged — your AI coach team</span></div>
+          <p style="font-size:13px;color:var(--gray);margin-bottom:24px;line-height:1.6" data-i18n="dash.forgedSubtitle">Four AI specialists working in the background to help you close more deals. Tap any coach to see their latest insights.</p>
+          <div class="forged-dash-grid">
+            <div class="forged-dash-card">
+              <div class="forged-status" data-i18n="agent.active">ACTIVE</div>
+              <div class="forged-dash-header">
+                <div class="forged-dash-avatar maya">⚡</div>
+                <div><div class="forged-dash-name" data-i18n="forged.maya.name">Maya the Spark</div><div class="forged-dash-title" data-i18n="forged.maya.title">PITCH COACH</div></div>
+              </div>
+              <p class="forged-dash-desc" data-i18n="forged.maya.dashDesc">Reviewed your last 12 calls. Found 3 patterns to fix and 2 power phrases to keep using.</p>
+              <div class="forged-dash-action" data-i18n="forged.maya.action">View pitch insights</div>
             </div>
-            <div style="background:white;border:1px solid var(--light-gray);border-radius:14px;padding:22px">
-              <div style="font-size:28px;margin-bottom:10px">💼</div>
-              <div style="font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px">Sam — Sales</div>
-              <div style="font-size:11px;color:var(--gray);margin-bottom:12px;letter-spacing:1px">RUNS EVERY 6H</div>
-              <div style="font-size:12px;color:var(--gray);line-height:1.7">Sends personalized cold outreach, qualifies signups, and handles trial-to-paid follow-up sequences.</div>
-              <div style="margin-top:14px;display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;background:#22c55e;border-radius:50%"></div><span style="font-size:11px;color:#22c55e;font-weight:700">ACTIVE</span></div>
+            <div class="forged-dash-card">
+              <div class="forged-status" data-i18n="agent.active">ACTIVE</div>
+              <div class="forged-dash-header">
+                <div class="forged-dash-avatar sam">🔨</div>
+                <div><div class="forged-dash-name" data-i18n="forged.sam.name">Sam the Anvil</div><div class="forged-dash-title" data-i18n="forged.sam.title">FOLLOW-UP COACH</div></div>
+              </div>
+              <p class="forged-dash-desc" data-i18n="forged.sam.dashDesc">11 follow-ups drafted this month. 7 sent the same day. Your reply rate is up 34%.</p>
+              <div class="forged-dash-action" data-i18n="forged.sam.action">View drafted emails</div>
             </div>
-            <div style="background:white;border:1px solid var(--light-gray);border-radius:14px;padding:22px">
-              <div style="font-size:28px;margin-bottom:10px">📊</div>
-              <div style="font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px">Finn — Finance</div>
-              <div style="font-size:11px;color:var(--gray);margin-bottom:12px;letter-spacing:1px">WEEKLY DIGEST</div>
-              <div style="font-size:12px;color:var(--gray);line-height:1.7">Tracks MRR, churn, and CAC. Sends you a Sunday digest with your full P&L and growth metrics.</div>
-              <div style="margin-top:14px;display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;background:#22c55e;border-radius:50%"></div><span style="font-size:11px;color:#22c55e;font-weight:700">ACTIVE</span></div>
+            <div class="forged-dash-card">
+              <div class="forged-status" data-i18n="agent.active">ACTIVE</div>
+              <div class="forged-dash-header">
+                <div class="forged-dash-avatar finn">🔧</div>
+                <div><div class="forged-dash-name" data-i18n="forged.finn.name">Finn the Tongs</div><div class="forged-dash-title" data-i18n="forged.finn.title">DEAL ANALYST</div></div>
+              </div>
+              <p class="forged-dash-desc" data-i18n="forged.finn.dashDesc">Tracking 8 active deals. Acme Corp is heating up. Initech is at risk — needs attention.</p>
+              <div class="forged-dash-action" data-i18n="forged.finn.action">View pipeline analysis</div>
             </div>
-            <div style="background:white;border:1px solid var(--light-gray);border-radius:14px;padding:22px">
-              <div style="font-size:28px;margin-bottom:10px">🎯</div>
-              <div style="font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px">Aria — Ads</div>
-              <div style="font-size:11px;color:var(--gray);margin-bottom:12px;letter-spacing:1px">REAL-TIME</div>
-              <div style="font-size:12px;color:var(--gray);line-height:1.7">Generates ad copy variants, pauses low performers, and scales budget to winning creatives automatically.</div>
-              <div style="margin-top:14px;display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;background:#f59e0b;border-radius:50%"></div><span style="font-size:11px;color:#f59e0b;font-weight:700">SETUP NEEDED</span></div>
+            <div class="forged-dash-card">
+              <div class="forged-status" data-i18n="agent.active">ACTIVE</div>
+              <div class="forged-dash-header">
+                <div class="forged-dash-avatar aria">⚒</div>
+                <div><div class="forged-dash-name" data-i18n="forged.aria.name">Aria the Hammer</div><div class="forged-dash-title" data-i18n="forged.aria.title">OBJECTION COACH</div></div>
+              </div>
+              <p class="forged-dash-desc" data-i18n="forged.aria.dashDesc">Detected 14 objections this month. Top one: "too expensive." Practiced 3 reframes for you.</p>
+              <div class="forged-dash-action" data-i18n="forged.aria.action">View objection coaching</div>
             </div>
           </div>
         </div>
@@ -1269,86 +814,182 @@ footer {
 
       <div class="tab-page" id="tab-settings">
         <div class="overview-content">
-          <div class="section-header" style="margin-bottom:16px"><span class="section-title">Account Settings</span></div>
-          <div style="background:white;border:1px solid var(--light-gray);border-radius:14px;padding:28px;max-width:500px">
-            <div class="form-group"><label>Full Name</label><input type="text" id="settingsName" style="width:100%;padding:12px 14px;border:1.5px solid var(--light-gray);border-radius:10px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;outline:none"></div>
-            <div class="form-group"><label>Email</label><input type="email" id="settingsEmail" style="width:100%;padding:12px 14px;border:1.5px solid var(--light-gray);border-radius:10px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;outline:none"></div>
-            <button class="btn-upload" style="margin-top:8px" onclick="saveSettings(event)">Save changes</button>
-            <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--light-gray)">
-              <button onclick="logout()" style="background:none;border:none;color:var(--red);font-family:'Cabinet Grotesk',sans-serif;font-size:13px;cursor:pointer;font-weight:700">Sign out →</button>
-            </div>
+          <div class="section-header"><span class="section-title" data-i18n="dash.accountSettings">Account Settings</span></div>
+          <div style="background:#fff;border:1px solid var(--light-gray);border-radius:14px;padding:28px;max-width:500px">
+            <div class="form-group"><label data-i18n="form.name">Full Name</label><input type="text" id="settingsName"></div>
+            <div class="form-group"><label data-i18n="form.email">Email</label><input type="email" id="settingsEmail"></div>
+            <div class="form-group"><label data-i18n="form.preferredLang">Preferred Language</label><div style="display:flex;gap:8px"><button onclick="setLang('en')" style="background:#fff;color:var(--ink);border:1.5px solid var(--light-gray);padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Cabinet Grotesk';font-size:13px;font-weight:700">🇺🇸 English</button><button onclick="setLang('es')" style="background:#fff;color:var(--ink);border:1.5px solid var(--light-gray);padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Cabinet Grotesk';font-size:13px;font-weight:700">🇪🇸 Español</button></div></div>
+            <button class="btn-upload" onclick="saveSettings(event)" data-i18n="form.saveChanges">Save changes</button>
+            <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--light-gray)"><button onclick="logout()" style="background:none;border:none;color:var(--red);font-family:'Cabinet Grotesk';font-size:13px;cursor:pointer;font-weight:700" data-i18n="form.signOut">Sign out →</button></div>
           </div>
         </div>
       </div>
     </div>
-
     <div class="meeting-detail" id="meetingDetail">
-      <button class="back-btn" onclick="closeMeeting()">← Back to meetings</button>
+      <button class="back-btn" onclick="closeMeeting()" data-i18n="detail.back">← Back to meetings</button>
       <div class="detail-header">
-        <div class="detail-title" id="detailTitle">Acme Corp — Q4 Renewal Discovery</div>
-        <div class="detail-meta" id="detailMeta">Today · 47 minutes · Sarah Chen, Mike Park · Zoom</div>
+        <div class="detail-title" id="detailTitle"></div>
+        <div class="detail-meta" id="detailMeta"></div>
         <div class="detail-grid">
-          <div class="detail-stat"><div class="detail-stat-val" style="color:#22c55e">87</div><div class="detail-stat-label">Deal Score</div></div>
-          <div class="detail-stat"><div class="detail-stat-val">6</div><div class="detail-stat-label">Action Items</div></div>
-          <div class="detail-stat"><div class="detail-stat-val">47m</div><div class="detail-stat-label">Duration</div></div>
+          <div class="detail-stat"><div class="detail-stat-val" id="detailScore" style="color:#22c55e">87</div><div class="detail-stat-label" data-i18n="detail.dealScore">Deal Score</div></div>
+          <div class="detail-stat"><div class="detail-stat-val" id="detailActions">6</div><div class="detail-stat-label" data-i18n="detail.actionItems">Action Items</div></div>
+          <div class="detail-stat"><div class="detail-stat-val" id="detailDuration">47m</div><div class="detail-stat-label" data-i18n="detail.duration">Duration</div></div>
         </div>
       </div>
       <div class="detail-sections">
-        <div class="detail-section">
-          <h3>✅ Action Items</h3>
-          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--forge)';this.style.borderColor='var(--forge)'"></div>Send updated pricing deck to Sarah by EOD Friday</div>
-          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--forge)';this.style.borderColor='var(--forge)'"></div>Schedule technical demo with Mike's engineering team</div>
-          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--forge)';this.style.borderColor='var(--forge)'"></div>Share case study from similar-sized retail client</div>
-          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--forge)';this.style.borderColor='var(--forge)'"></div>Follow up on Q3 budget approval status</div>
-        </div>
-        <div class="detail-section">
-          <h3>📝 AI Summary</h3>
-          <p class="summary-text">Acme Corp is evaluating renewal with expanded scope. Sarah expressed strong interest in the enterprise tier but flagged budget approval is pending Q4 sign-off. Mike raised integration concerns with their legacy CRM — this is the primary blocker. Buying committee includes Sarah (champion), Mike (technical), and VP of Sales (economic buyer, not on call). Timeline: decision expected within 3 weeks. Overall sentiment was positive with high intent signals.</p>
-        </div>
-        <div class="detail-section" style="grid-column: 1 / -1">
-          <h3>📧 AI-Generated Follow-up Email</h3>
-          <div style="background:var(--cream);border-radius:10px;padding:16px;font-size:13px;color:var(--gray);line-height:1.7">
-            <strong style="color:var(--ink);display:block;margin-bottom:8px">Subject: Next steps from today's call — Acme × Callforge</strong>
-            Hi Sarah,<br><br>
-            Thank you for taking the time today — it was great to dig into your Q4 plans with you and Mike. A few things I'll be sending over:<br><br>
-            1. Updated pricing deck with the enterprise tier breakdown you asked about<br>
-            2. A case study from a comparable retail client (38% faster close cycles)<br>
-            3. A proposed technical session with Mike's team to walk through the CRM integration<br><br>
-            On the budget timeline — totally understand Q4 approvals are in motion. Happy to provide any supporting materials that would help make the case internally.<br><br>
-            Talk soon,<br>Alex
-          </div>
-          <button class="btn-upload" style="margin-top:14px;font-size:12px;padding:8px 16px">Copy email ↗</button>
-        </div>
+        <div class="detail-section"><h3>✅ <span data-i18n="detail.actionItemsTitle">Action Items</span></h3><div id="actionItemsList"></div></div>
+        <div class="detail-section"><h3>📝 <span data-i18n="detail.summaryTitle">AI Summary</span></h3><p class="summary-text" id="summaryText"></p></div>
+        <div class="detail-section" style="grid-column:1/-1"><h3>📧 <span data-i18n="detail.followupTitle">AI-Generated Follow-up Email</span></h3><div id="followupEmail" style="background:var(--cream);border-radius:10px;padding:16px;font-size:13px;color:var(--gray);line-height:1.7"></div><button class="btn-upload" style="margin-top:14px;font-size:12px;padding:8px 16px" data-i18n="detail.copyEmail">Copy email ↗</button></div>
       </div>
     </div>
   </main>
 </div>
 
 <script>
+const T = {
+  en: {
+    'nav.features':'Features','nav.forged':'The Forged','nav.pricing':'Pricing','nav.signIn':'Sign in','nav.startTrial':'Start free trial',
+    'tito.greeting':"¡Hola! I'm Tito 👋",
+    'hero.badge':'NOW IN ENGLISH & ESPAÑOL','hero.title':'Forge every call<br>into a <em>closed deal.</em>',
+    'hero.subtitle':'Callforge records your sales calls in English or Spanish, writes the summary, extracts action items, and drafts the follow-up email — before your prospect even closes the tab.',
+    'hero.ctaPrimary':'Start free — no card needed','hero.ctaSecondary':'See a demo →',
+    'hero.note':'14-day free trial · Cancel anytime · Works with Zoom, Meet, Teams',
+    'stats.summary':'Avg. summary time','stats.accuracy':'Action item accuracy','stats.languages':'Languages supported','stats.start':'To start today',
+    'forged.eyebrow':'⚒ MEET YOUR AI COACH TEAM','forged.title':'The Forged.','forged.subtitle':'Four AI specialists hammered into shape to help you close more deals. Built into every Pro and Team plan.',
+    'forged.maya.name':'Maya the Spark','forged.maya.title':'PITCH COACH','forged.maya.desc':'Reviews your calls and tells you exactly which lines worked, which fell flat, and how to open stronger next time.','forged.maya.quote':'"Your last pitch lost them at minute 12 — try this instead."','forged.maya.dashDesc':'Reviewed your last 12 calls. Found 3 patterns to fix and 2 power phrases to keep using.','forged.maya.action':'View pitch insights',
+    'forged.sam.name':'Sam the Anvil','forged.sam.title':'FOLLOW-UP COACH','forged.sam.desc':'Drafts your follow-up emails the moment the call ends. Reads tone, picks the right close, signs off in your voice.','forged.sam.quote':'"Send within 2 hours. I drafted it. Just hit send."','forged.sam.dashDesc':'11 follow-ups drafted this month. 7 sent the same day. Your reply rate is up 34%.','forged.sam.action':'View drafted emails',
+    'forged.finn.name':'Finn the Tongs','forged.finn.title':'DEAL ANALYST','forged.finn.desc':'Tracks every deal in your pipeline. Scores intent. Flags risks. Tells you which deals to push and which to drop.','forged.finn.quote':'"Acme is heating up. Mendoza is cooling. Focus here."','forged.finn.dashDesc':'Tracking 8 active deals. Acme Corp is heating up. Initech is at risk — needs attention.','forged.finn.action':'View pipeline analysis',
+    'forged.aria.name':'Aria the Hammer','forged.aria.title':'OBJECTION COACH','forged.aria.desc':'Detects every objection raised on your calls and rehearses the perfect comeback for next time. Like having a sales mentor on call.','forged.aria.quote':'"They mentioned price 4 times. Here\'s how to reframe it."','forged.aria.dashDesc':'Detected 14 objections this month. Top one: "too expensive." Practiced 3 reframes for you.','forged.aria.action':'View objection coaching',
+    'features.label':'— WHAT CALLFORGE DOES —',
+    'features.bilingual.title':'Bilingual AI','features.bilingual.badge':'NEW','features.bilingual.desc':'Process calls in English or Spanish. The AI auto-detects the language and delivers summaries, action items, and emails in the same language.',
+    'features.transcribe.title':'Transcribe any call','features.transcribe.desc':'Upload a recording or connect directly to Zoom, Google Meet, or Teams. We transcribe everything instantly.',
+    'features.summary.title':'AI summaries in 2 min','features.summary.desc':'Get a clean, structured summary with key points, objections raised, and next steps — automatically.',
+    'features.action.title':'Action items extracted','features.action.desc':'Never drop the ball again. Callforge pulls every commitment and task from the conversation.',
+    'features.scoring.title':'Deal health scoring','features.scoring.desc':'Our AI scores each deal from 0–100 based on tone, buying signals, and next steps clarity.',
+    'features.followup.title':'Auto follow-up drafts','features.followup.desc':'A personalized follow-up email, ready to send, generated the moment your call ends.',
+    'pricing.title':'Simple, honest pricing.','pricing.subtitle':"Start free. Upgrade when you're ready. No surprise charges.",
+    'pricing.perMonth':'/mo','pricing.tryFree':'Start free trial',
+    'pricing.starter.name':'Starter','pricing.starter.desc':'Perfect for solo reps','pricing.starter.f1':'20 meetings / month','pricing.starter.f2':'English & Spanish AI','pricing.starter.f3':'Follow-up email drafts','pricing.starter.f4':'Deal scoring','pricing.starter.f5':'Email support',
+    'pricing.pro.name':'Pro','pricing.pro.desc':'Best for closing teams','pricing.pro.f1':'Unlimited meetings','pricing.pro.f2':'All 4 Forged AI Coaches','pricing.pro.f3':'CRM sync (HubSpot, SFDC)','pricing.pro.f4':'Call coaching insights','pricing.pro.f5':'Priority support',
+    'pricing.team.name':'Team','pricing.team.desc':'For growing sales teams','pricing.team.f1':'Everything in Pro','pricing.team.f2':'Up to 10 seats included','pricing.team.f3':'Manager analytics dashboard','pricing.team.f4':'Custom AI Coach personas','pricing.team.f5':'Dedicated onboarding','pricing.team.extra':'+ $25/seat after 10',
+    'footer.links':'Privacy · Terms · support@callforge.to',
+    'signup.title':'Start your free trial','signup.subtitle':'14 days free · No credit card required','signup.create':'Create account →','signup.haveAccount':'Already have an account?','signup.signInLink':'Sign in',
+    'login.title':'Welcome back','login.subtitle':'Sign in to your Callforge account','login.signIn':'Sign in →','login.newHere':'New to Callforge?','login.startLink':'Start free trial',
+    'form.name':'Full Name','form.email':'Work Email','form.password':'Password','form.preferredLang':'Preferred Language','form.saveChanges':'Save changes','form.signOut':'Sign out →',
+    'dash.overview':'Overview','dash.meetings':'Meetings','dash.upload':'Upload','dash.forged':'The Forged','dash.settings':'Settings','dash.uploadMeeting':'Upload Meeting','dash.proTrial':'PRO TRIAL','dash.recentMeetings':'Recent Meetings','dash.allMeetings':'All Meetings','dash.viewAll':'View all →','dash.dealScore':'DEAL SCORE','dash.forgedTeam':'⚒ The Forged — your AI coach team','dash.forgedSubtitle':'Four AI specialists working in the background to help you close more deals. Tap any coach to see their latest insights.','dash.accountSettings':'Account Settings',
+    'metric.meetings':'Meetings This Month','metric.meetingsChange':'↑ 4 vs last month','metric.dealScore':'Avg Deal Score','metric.dealChange':'↑ 8pts vs last month','metric.actions':'Action Items','metric.actionsOpen':'8 still open','metric.followups':'Follow-ups Sent','metric.followupsAuto':'↑ 91% auto-sent',
+    'status.done':'Done','status.processing':'Processing',
+    'upload.autoDetect':'Auto language detection.','upload.autoDetectDesc':'Upload a meeting in English or Spanish — our AI detects the language automatically.',
+    'upload.dropZone':'Drop your meeting recording here','upload.browse':'Or click to browse your files','upload.chooseFile':'Choose file','upload.formats':'Supports MP3, MP4, M4A, WAV, WebM · Max 500MB',
+    'upload.forging':'Forging your meeting...','upload.step1':'File uploaded','upload.step2':'Detecting language & transcribing audio...','upload.step3':'Generating summary & action items','upload.step4':'Scoring deal health','upload.step5':'Drafting follow-up email',
+    'agent.active':'ACTIVE',
+    'detail.back':'← Back to meetings','detail.dealScore':'Deal Score','detail.actionItems':'Action Items','detail.duration':'Duration','detail.actionItemsTitle':'Action Items','detail.summaryTitle':'AI Summary','detail.followupTitle':'AI-Generated Follow-up Email','detail.copyEmail':'Copy email ↗'
+  },
+  es: {
+    'nav.features':'Características','nav.forged':'Los Forjados','nav.pricing':'Precios','nav.signIn':'Iniciar sesión','nav.startTrial':'Prueba gratis',
+    'tito.greeting':'¡Hola! Soy Tito 👋',
+    'hero.badge':'AHORA EN INGLÉS Y ESPAÑOL','hero.title':'Forja cada llamada<br>en un <em>trato cerrado.</em>',
+    'hero.subtitle':'Callforge graba tus llamadas de ventas en inglés o español, redacta el resumen, extrae las tareas pendientes y escribe el correo de seguimiento — antes de que tu prospecto cierre la pestaña.',
+    'hero.ctaPrimary':'Comienza gratis — sin tarjeta','hero.ctaSecondary':'Ver demostración →',
+    'hero.note':'Prueba de 14 días · Cancela cuando quieras · Funciona con Zoom, Meet, Teams',
+    'stats.summary':'Tiempo promedio de resumen','stats.accuracy':'Precisión de tareas','stats.languages':'Idiomas soportados','stats.start':'Para comenzar hoy',
+    'forged.eyebrow':'⚒ CONOCE A TU EQUIPO DE COACHES IA','forged.title':'Los Forjados.','forged.subtitle':'Cuatro especialistas IA forjados para ayudarte a cerrar más tratos. Incluidos en cada plan Pro y Equipo.',
+    'forged.maya.name':'Maya la Chispa','forged.maya.title':'COACH DE PITCH','forged.maya.desc':'Revisa tus llamadas y te dice exactamente qué frases funcionaron, cuáles fallaron, y cómo abrir más fuerte la próxima vez.','forged.maya.quote':'"Tu último pitch los perdió en el minuto 12 — prueba esto."','forged.maya.dashDesc':'Revisó tus últimas 12 llamadas. Encontró 3 patrones para mejorar y 2 frases ganadoras.','forged.maya.action':'Ver insights de pitch',
+    'forged.sam.name':'Sam el Yunque','forged.sam.title':'COACH DE SEGUIMIENTO','forged.sam.desc':'Redacta tus correos de seguimiento en cuanto termina la llamada. Lee el tono, elige el cierre correcto, firma con tu voz.','forged.sam.quote':'"Envía en 2 horas. Yo lo redacté. Solo dale enviar."','forged.sam.dashDesc':'11 seguimientos redactados este mes. 7 enviados el mismo día. Tu tasa de respuesta subió 34%.','forged.sam.action':'Ver correos redactados',
+    'forged.finn.name':'Finn las Pinzas','forged.finn.title':'ANALISTA DE TRATOS','forged.finn.desc':'Rastrea cada trato en tu pipeline. Califica intención. Marca riesgos. Te dice qué tratos empujar y cuáles soltar.','forged.finn.quote':'"Acme se está calentando. Mendoza se enfría. Enfócate aquí."','forged.finn.dashDesc':'Rastreando 8 tratos activos. Acme Corp se está calentando. Initech está en riesgo — necesita atención.','forged.finn.action':'Ver análisis de pipeline',
+    'forged.aria.name':'Aria el Martillo','forged.aria.title':'COACH DE OBJECIONES','forged.aria.desc':'Detecta cada objeción en tus llamadas y ensaya la respuesta perfecta para la próxima vez. Como tener un mentor de ventas a tu lado.','forged.aria.quote':'"Mencionaron precio 4 veces. Aquí está cómo reformularlo."','forged.aria.dashDesc':'Detectó 14 objeciones este mes. La principal: "muy caro." Practicó 3 reformulaciones para ti.','forged.aria.action':'Ver coaching de objeciones',
+    'features.label':'— LO QUE HACE CALLFORGE —',
+    'features.bilingual.title':'IA Bilingüe','features.bilingual.badge':'NUEVO','features.bilingual.desc':'Procesa llamadas en inglés o español. La IA detecta el idioma automáticamente y entrega resúmenes, tareas y correos en el mismo idioma.',
+    'features.transcribe.title':'Transcribe cualquier llamada','features.transcribe.desc':'Sube una grabación o conecta directamente a Zoom, Google Meet o Teams. Transcribimos todo al instante.',
+    'features.summary.title':'Resúmenes con IA en 2 min','features.summary.desc':'Obtén un resumen claro y estructurado con puntos clave, objeciones y siguientes pasos — automáticamente.',
+    'features.action.title':'Tareas extraídas','features.action.desc':'Nunca dejes pasar nada. Callforge extrae cada compromiso y tarea de la conversación.',
+    'features.scoring.title':'Puntuación del trato','features.scoring.desc':'Nuestra IA califica cada trato de 0 a 100 según el tono, señales de compra y claridad de los siguientes pasos.',
+    'features.followup.title':'Borradores de seguimiento','features.followup.desc':'Un correo de seguimiento personalizado, listo para enviar, generado en el momento que termina tu llamada.',
+    'pricing.title':'Precios simples y honestos.','pricing.subtitle':'Comienza gratis. Mejora cuando estés listo. Sin cargos sorpresa.',
+    'pricing.perMonth':'/mes','pricing.tryFree':'Prueba gratis',
+    'pricing.starter.name':'Inicial','pricing.starter.desc':'Perfecto para vendedores solos','pricing.starter.f1':'20 reuniones / mes','pricing.starter.f2':'IA en inglés y español','pricing.starter.f3':'Borradores de seguimiento','pricing.starter.f4':'Puntuación de tratos','pricing.starter.f5':'Soporte por correo',
+    'pricing.pro.name':'Pro','pricing.pro.desc':'Para equipos que cierran','pricing.pro.f1':'Reuniones ilimitadas','pricing.pro.f2':'Los 4 Coaches Forjados','pricing.pro.f3':'Sincronización CRM (HubSpot, SFDC)','pricing.pro.f4':'Insights de coaching','pricing.pro.f5':'Soporte prioritario',
+    'pricing.team.name':'Equipo','pricing.team.desc':'Para equipos de ventas','pricing.team.f1':'Todo lo de Pro','pricing.team.f2':'Hasta 10 usuarios incluidos','pricing.team.f3':'Panel de analíticas para gerentes','pricing.team.f4':'Personalidades IA personalizadas','pricing.team.f5':'Onboarding dedicado','pricing.team.extra':'+ $25/usuario después de 10',
+    'footer.links':'Privacidad · Términos · support@callforge.to',
+    'signup.title':'Comienza tu prueba gratis','signup.subtitle':'14 días gratis · No se requiere tarjeta','signup.create':'Crear cuenta →','signup.haveAccount':'¿Ya tienes cuenta?','signup.signInLink':'Iniciar sesión',
+    'login.title':'Bienvenido de vuelta','login.subtitle':'Inicia sesión en tu cuenta de Callforge','login.signIn':'Iniciar sesión →','login.newHere':'¿Nuevo en Callforge?','login.startLink':'Prueba gratis',
+    'form.name':'Nombre Completo','form.email':'Correo de Trabajo','form.password':'Contraseña','form.preferredLang':'Idioma Preferido','form.saveChanges':'Guardar cambios','form.signOut':'Cerrar sesión →',
+    'dash.overview':'Resumen','dash.meetings':'Reuniones','dash.upload':'Subir','dash.forged':'Los Forjados','dash.settings':'Configuración','dash.uploadMeeting':'Subir Reunión','dash.proTrial':'PRUEBA PRO','dash.recentMeetings':'Reuniones Recientes','dash.allMeetings':'Todas las Reuniones','dash.viewAll':'Ver todas →','dash.dealScore':'PUNTUACIÓN','dash.forgedTeam':'⚒ Los Forjados — tu equipo de coaches IA','dash.forgedSubtitle':'Cuatro especialistas IA trabajando en el fondo para ayudarte a cerrar más tratos. Toca cualquier coach para ver sus últimos insights.','dash.accountSettings':'Configuración de Cuenta',
+    'metric.meetings':'Reuniones Este Mes','metric.meetingsChange':'↑ 4 vs mes anterior','metric.dealScore':'Puntuación Promedio','metric.dealChange':'↑ 8pts vs mes anterior','metric.actions':'Tareas Pendientes','metric.actionsOpen':'8 aún abiertas','metric.followups':'Seguimientos Enviados','metric.followupsAuto':'↑ 91% automáticos',
+    'status.done':'Listo','status.processing':'Procesando',
+    'upload.autoDetect':'Detección automática de idioma.','upload.autoDetectDesc':'Sube una reunión en inglés o español — nuestra IA detecta el idioma automáticamente.',
+    'upload.dropZone':'Arrastra tu grabación aquí','upload.browse':'O haz clic para buscar tu archivo','upload.chooseFile':'Elegir archivo','upload.formats':'Soporta MP3, MP4, M4A, WAV, WebM · Máx. 500MB',
+    'upload.forging':'Forjando tu reunión...','upload.step1':'Archivo subido','upload.step2':'Detectando idioma y transcribiendo audio...','upload.step3':'Generando resumen y tareas','upload.step4':'Calificando salud del trato','upload.step5':'Redactando correo de seguimiento',
+    'agent.active':'ACTIVO',
+    'detail.back':'← Volver a reuniones','detail.dealScore':'Puntuación','detail.actionItems':'Tareas','detail.duration':'Duración','detail.actionItemsTitle':'Tareas Pendientes','detail.summaryTitle':'Resumen IA','detail.followupTitle':'Correo de Seguimiento Generado por IA','detail.copyEmail':'Copiar correo ↗'
+  }
+};
+
+const meetings = {
+  '1': {
+    en: { title:'Acme Corp — Q4 Renewal Discovery', meta:'Today · 47 min · Sarah Chen, Mike Park · Zoom', shortMeta:'Today · 47 min · Sarah Chen, Mike Park', score:87, scoreClass:'score-high', icon:'🤝', iconBg:'#f0fdf4', flag:'🇺🇸', status:'done', duration:'47m', actionItems:['Send updated pricing deck to Sarah by EOD Friday',"Schedule technical demo with Mike's engineering team",'Share case study from similar-sized retail client','Follow up on Q3 budget approval status'], summary:'Acme Corp is evaluating renewal with expanded scope. Sarah expressed strong interest in the enterprise tier but flagged budget approval is pending Q4 sign-off. Mike raised integration concerns with their legacy CRM — this is the primary blocker.', emailSubject:"Subject: Next steps from today's call — Acme × Callforge", emailBody:"Hi Sarah,<br><br>Thank you for taking the time today. A few things I'll be sending over:<br><br>1. Updated pricing deck<br>2. Case study from a comparable retail client<br>3. Technical session proposal with Mike's team<br><br>Talk soon,<br>Alex" },
+    es: { title:'Acme Corp — Renovación Q4', meta:'Hoy · 47 min · Sarah Chen, Mike Park · Zoom', shortMeta:'Hoy · 47 min · Sarah Chen, Mike Park', score:87, scoreClass:'score-high', icon:'🤝', iconBg:'#f0fdf4', flag:'🇺🇸', status:'done', duration:'47m', actionItems:['Enviar presentación de precios actualizada a Sarah antes del viernes','Programar demo técnica con el equipo de ingeniería de Mike','Compartir caso de estudio de cliente retail similar','Dar seguimiento al estado de aprobación del presupuesto Q3'], summary:'Acme Corp está evaluando la renovación con alcance expandido. Sarah mostró fuerte interés en el plan empresarial pero la aprobación del presupuesto está pendiente. Mike planteó preocupaciones sobre la integración con su CRM heredado.', emailSubject:'Asunto: Próximos pasos de la llamada de hoy — Acme × Callforge', emailBody:'Hola Sarah,<br><br>Gracias por tu tiempo hoy. Te enviaré:<br><br>1. Presentación de precios actualizada<br>2. Caso de estudio de cliente retail comparable<br>3. Propuesta de sesión técnica con el equipo de Mike<br><br>Hablamos pronto,<br>Alex' }
+  },
+  '2': {
+    en: { title:'Mendoza & Asociados — Discovery Call', meta:'Yesterday · 38 min · Carlos Mendoza, Ana López · Zoom', shortMeta:'Yesterday · 38 min · Carlos Mendoza, Ana López', score:81, scoreClass:'score-high', icon:'📞', iconBg:'#fff7ed', flag:'🇪🇸', status:'done', duration:'38m', actionItems:['Send Spanish-language onboarding materials to Carlos','Connect Ana with our customer success team','Provide ROI calculator for their team of 12 reps','Schedule pilot kickoff for next Tuesday'], summary:'Mendoza & Asociados is a 12-rep sales team in Mexico City looking to modernize their call review process. Carlos (CEO) is the decision maker. Ana (Head of Sales) wants Spanish-language materials. Ready to start a paid pilot next week.', emailSubject:'Subject: Welcome to Callforge — your team is going to love this', emailBody:"Hi Carlos and Ana,<br><br>Wonderful meeting today. I'll send Spanish onboarding guides, an ROI calculator for 12 reps, and connection to our success team.<br><br>Looking forward to Tuesday's kickoff.<br><br>Best,<br>Alex" },
+    es: { title:'Mendoza & Asociados — Llamada de Descubrimiento', meta:'Ayer · 38 min · Carlos Mendoza, Ana López · Zoom', shortMeta:'Ayer · 38 min · Carlos Mendoza, Ana López', score:81, scoreClass:'score-high', icon:'📞', iconBg:'#fff7ed', flag:'🇪🇸', status:'done', duration:'38m', actionItems:['Enviar materiales de onboarding en español a Carlos','Conectar a Ana con nuestro equipo de éxito al cliente','Proporcionar calculadora de ROI para su equipo de 12 vendedores','Programar inicio del piloto para el próximo martes'], summary:'Mendoza & Asociados es un equipo de ventas de 12 personas en Ciudad de México que busca modernizar su proceso de revisión de llamadas. Carlos (CEO) es el tomador de decisiones. Ana (Directora de Ventas) quiere materiales en español. Listos para comenzar un piloto pagado la próxima semana.', emailSubject:'Asunto: Bienvenidos a Callforge — a su equipo le va a encantar', emailBody:'Hola Carlos y Ana,<br><br>Excelente reunión hoy. Les enviaré guías de onboarding en español, calculadora de ROI para 12 vendedores, y conexión con nuestro equipo de éxito.<br><br>Espero con ganas el inicio del martes.<br><br>Saludos,<br>Alex' }
+  },
+  '3': {
+    en: { title:'Initech — Follow-up & Objection Handling', meta:'2 days ago · 28 min · Lisa Wang · Google Meet', shortMeta:'2 days ago · 28 min · Lisa Wang', score:42, scoreClass:'score-low', icon:'🔄', iconBg:'#fff1f2', flag:'🇺🇸', status:'processing', duration:'28m', actionItems:[], summary:'', emailSubject:'', emailBody:'' },
+    es: { title:'Initech — Seguimiento y Manejo de Objeciones', meta:'Hace 2 días · 28 min · Lisa Wang · Google Meet', shortMeta:'Hace 2 días · 28 min · Lisa Wang', score:42, scoreClass:'score-low', icon:'🔄', iconBg:'#fff1f2', flag:'🇺🇸', status:'processing', duration:'28m', actionItems:[], summary:'', emailSubject:'', emailBody:'' }
+  }
+};
+
+let currentLang = 'en';
 let currentUser = null;
+let currentMeetingId = '1';
+try { currentLang = localStorage.getItem('cf_lang') || 'en'; } catch(e) {}
 
-function openModal(type) {
-  document.getElementById('authModal').classList.add('open');
-  switchForm(type);
+function setLang(lang) {
+  currentLang = lang;
+  try { localStorage.setItem('cf_lang', lang); } catch(e) {}
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (T[lang][key]) el.textContent = T[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (T[lang][key]) el.innerHTML = T[lang][key];
+  });
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+  });
+  populateMeetingsLists();
+  if (document.getElementById('meetingDetail').classList.contains('show')) renderMeetingDetail(currentMeetingId);
 }
 
-function closeModal() {
-  document.getElementById('authModal').classList.remove('open');
+function populateMeetingsLists() {
+  const ids = ['1','2','3'];
+  const html = ids.map(id => meetingCardHTML(id)).join('');
+  document.getElementById('recentMeetingsList').innerHTML = html;
+  document.getElementById('allMeetingsList').innerHTML = html;
 }
 
+function meetingCardHTML(id) {
+  const m = meetings[id][currentLang];
+  const clickable = m.status === 'done' ? `onclick="openMeeting('${id}')"` : '';
+  const statusText = T[currentLang]['status.' + m.status];
+  const dealLabel = T[currentLang]['dash.dealScore'];
+  return `<div class="meeting-card" ${clickable}><div class="meeting-type" style="background:${m.iconBg}">${m.icon}</div><div class="meeting-info"><div class="meeting-title">${m.title} <span class="meeting-lang-flag">${m.flag}</span></div><div class="meeting-meta">${m.shortMeta}</div></div><span class="meeting-status status-${m.status}">${statusText}</span><div class="meeting-score"><div class="score-val ${m.scoreClass}">${m.score}</div><div class="score-label">${dealLabel}</div></div></div>`;
+}
+
+function openModal(type) { document.getElementById('authModal').classList.add('open'); switchForm(type); }
+function closeModal() { document.getElementById('authModal').classList.remove('open'); }
 function switchForm(type) {
   document.getElementById('signupForm').style.display = type === 'signup' ? 'block' : 'none';
   document.getElementById('loginForm').style.display = type === 'login' ? 'block' : 'none';
 }
-
-document.getElementById('authModal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
+document.getElementById('authModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 
 function handleSignup() {
   const name = document.getElementById('signupName').value || 'User';
   const email = document.getElementById('signupEmail').value || 'user@example.com';
-  if (!name || !email) { alert('Please fill in all fields'); return; }
   currentUser = { name, email };
   closeModal();
   showDashboard();
@@ -1365,7 +1006,6 @@ function showDashboard() {
   document.getElementById('landing').classList.remove('active');
   document.getElementById('dashboard').classList.add('active');
   document.getElementById('dashboard').style.display = 'flex';
-
   if (currentUser) {
     const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
     document.getElementById('userAvatar').textContent = initials;
@@ -1373,6 +1013,7 @@ function showDashboard() {
     document.getElementById('settingsName').value = currentUser.name;
     document.getElementById('settingsEmail').value = currentUser.email;
   }
+  populateMeetingsLists();
 }
 
 function logout() {
@@ -1382,57 +1023,41 @@ function logout() {
   document.getElementById('landing').classList.add('active');
 }
 
-const tabTitles = {
-  overview: 'Overview',
-  meetings: 'Meetings',
-  upload: 'Upload Meeting',
-  agents: 'AI Agents',
-  settings: 'Settings'
-};
-
 function switchTab(tab) {
   document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
-  document.querySelectorAll('.nav-item')[['overview','meetings','upload','agents','settings'].indexOf(tab)].classList.add('active');
-  document.getElementById('pageTitle').textContent = tabTitles[tab];
+  document.querySelectorAll('.nav-item')[['overview','meetings','upload','forged','settings'].indexOf(tab)].classList.add('active');
+  const titleKey = tab === 'upload' ? 'dash.uploadMeeting' : 'dash.' + tab;
+  document.getElementById('pageTitle').textContent = T[currentLang][titleKey];
   closeMeeting();
 }
 
-const meetings = {
-  '1': { title: 'Acme Corp — Q4 Renewal Discovery', meta: 'Today · 47 minutes · Sarah Chen, Mike Park · Zoom' },
-  '2': { title: 'Globex Industries — Demo Call', meta: 'Yesterday · 32 minutes · Tom Richards · Google Meet' }
-};
-
 function openMeeting(id) {
-  const m = meetings[id];
-  if (!m) return;
+  currentMeetingId = id;
+  renderMeetingDetail(id);
+  document.getElementById('meetingDetail').classList.add('show');
+  document.getElementById('meetingDetail').style.display = 'block';
+}
+
+function renderMeetingDetail(id) {
+  const m = meetings[id][currentLang];
   document.getElementById('detailTitle').textContent = m.title;
   document.getElementById('detailMeta').textContent = m.meta;
-  const detail = document.getElementById('meetingDetail');
-  detail.classList.add('show');
-  detail.style.display = 'block';
+  document.getElementById('detailScore').textContent = m.score;
+  document.getElementById('detailActions').textContent = m.actionItems.length;
+  document.getElementById('detailDuration').textContent = m.duration;
+  document.getElementById('summaryText').textContent = m.summary;
+  document.getElementById('actionItemsList').innerHTML = m.actionItems.map(item => `<div class="action-item"><div class="action-check" onclick="this.style.background='var(--forge)';this.style.borderColor='var(--forge)'"></div>${item}</div>`).join('');
+  document.getElementById('followupEmail').innerHTML = `<strong style="color:var(--ink);display:block;margin-bottom:8px">${m.emailSubject}</strong>${m.emailBody}`;
 }
 
 function closeMeeting() {
-  const detail = document.getElementById('meetingDetail');
-  detail.classList.remove('show');
-  detail.style.display = 'none';
+  document.getElementById('meetingDetail').classList.remove('show');
+  document.getElementById('meetingDetail').style.display = 'none';
 }
 
 function triggerUpload() { document.getElementById('fileInput').click(); }
-
-function handleDragOver(e) {
-  e.preventDefault();
-  document.getElementById('uploadZone').classList.add('dragover');
-}
-
-function handleDrop(e) {
-  e.preventDefault();
-  document.getElementById('uploadZone').classList.remove('dragover');
-  const file = e.dataTransfer.files[0];
-  if (file) startProcessing(file.name);
-}
 
 function handleFileSelect(e) {
   const file = e.target.files[0];
@@ -1444,10 +1069,8 @@ function startProcessing(filename) {
   const card = document.getElementById('processingCard');
   card.classList.add('show');
   document.getElementById('processingFileName').textContent = filename;
-
   const steps = ['step1','step2','step3','step4','step5'];
   let current = 1;
-
   const advance = () => {
     if (current >= steps.length) {
       setTimeout(() => {
@@ -1472,7 +1095,6 @@ function startProcessing(filename) {
     current++;
     setTimeout(advance, 2200);
   };
-
   setTimeout(advance, 1800);
 }
 
@@ -1485,9 +1107,12 @@ function saveSettings(event) {
     document.getElementById('userName').textContent = currentUser.name;
   }
   const btn = event.target;
-  btn.textContent = 'Saved ✓';
-  setTimeout(() => btn.textContent = 'Save changes', 2000);
+  btn.textContent = currentLang === 'es' ? 'Guardado ✓' : 'Saved ✓';
+  setTimeout(() => btn.textContent = T[currentLang]['form.saveChanges'], 2000);
 }
+
+setLang(currentLang);
+populateMeetingsLists();
 </script>
 </body>
 </html>
