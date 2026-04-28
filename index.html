@@ -3,20 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MeetMind — AI Meeting Intelligence for Sales Teams</title>
+<title>Callforge — AI Meeting Intelligence for Sales Teams</title>
 <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --ink: #0d0d12;
-  --paper: #f5f3ee;
-  --cream: #faf8f4;
-  --lime: #c8f135;
-  --lime-dark: #a8cc1a;
-  --charcoal: #1a1a24;
-  --gray: #8a8a96;
-  --light-gray: #e8e6e0;
+  --ink: #0a0e1a;
+  --paper: #f4f1ea;
+  --cream: #faf7f0;
+  --forge: #ff6b1a;
+  --forge-dark: #e55a0d;
+  --forge-glow: #ffb088;
+  --ember: #ffd166;
+  --charcoal: #14192a;
+  --gray: #7a7a8c;
+  --light-gray: #e6e3dc;
   --white: #ffffff;
   --red: #ff4545;
   --success: #22c55e;
@@ -29,14 +31,26 @@ body {
   overflow-x: hidden;
 }
 
-/* ---- SCREENS ---- */
 .screen { display: none; min-height: 100vh; }
 .screen.active { display: block; }
 
-/* ===== LANDING PAGE ===== */
-#landing { background: var(--ink); color: var(--paper); }
+#landing { background: var(--ink); color: var(--paper); position: relative; }
 
-/* Nav */
+#landing::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse at center, rgba(255,107,26,0.15), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#landing > * { position: relative; z-index: 1; }
+
 nav {
   display: flex;
   align-items: center;
@@ -55,11 +69,40 @@ nav {
   gap: 8px;
 }
 
-.nav-logo .dot { color: var(--lime); }
+.logo-mark {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, var(--forge), var(--ember));
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  position: relative;
+  box-shadow: 0 0 20px rgba(255,107,26,0.4);
+}
+
+.logo-mark::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, var(--forge), var(--forge-dark));
+}
+
+.logo-mark::after {
+  content: '⚒';
+  position: relative;
+  font-size: 14px;
+  color: white;
+  z-index: 1;
+}
+
+.nav-logo .accent { color: var(--forge); }
 
 .nav-links { display: flex; gap: 32px; align-items: center; }
 .nav-links a {
-  color: rgba(245,243,238,0.5);
+  color: rgba(244,241,234,0.5);
   text-decoration: none;
   font-size: 14px;
   transition: color 0.2s;
@@ -67,8 +110,8 @@ nav {
 .nav-links a:hover { color: var(--paper); }
 
 .btn-primary {
-  background: var(--lime);
-  color: var(--ink);
+  background: var(--forge);
+  color: white;
   border: none;
   padding: 12px 24px;
   border-radius: 8px;
@@ -78,11 +121,13 @@ nav {
   cursor: pointer;
   transition: all 0.2s;
   letter-spacing: 0.2px;
+  box-shadow: 0 4px 20px rgba(255,107,26,0.3);
 }
 
 .btn-primary:hover {
-  background: var(--lime-dark);
+  background: var(--forge-dark);
   transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(255,107,26,0.4);
 }
 
 .btn-secondary {
@@ -100,42 +145,43 @@ nav {
 
 .btn-secondary:hover { border-color: rgba(255,255,255,0.5); }
 
-/* Hero */
 .hero {
   padding: 100px 48px 80px;
   max-width: 1100px;
   margin: 0 auto;
+  text-align: center;
 }
 
 .hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(200,241,53,0.1);
-  border: 1px solid rgba(200,241,53,0.25);
+  background: rgba(255,107,26,0.1);
+  border: 1px solid rgba(255,107,26,0.25);
   border-radius: 100px;
   padding: 6px 14px;
   font-size: 12px;
-  color: var(--lime);
+  color: var(--forge);
   margin-bottom: 32px;
   letter-spacing: 0.5px;
 }
 
 .hero-badge-dot {
   width: 6px; height: 6px;
-  background: var(--lime);
+  background: var(--forge);
   border-radius: 50%;
   animation: blink 2s infinite;
+  box-shadow: 0 0 8px var(--forge);
 }
 
 @keyframes blink {
-  0%,100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
 }
 
 .hero h1 {
   font-family: 'Clash Display', sans-serif;
-  font-size: clamp(42px, 7vw, 80px);
+  font-size: clamp(42px, 7vw, 84px);
   font-weight: 700;
   line-height: 1.0;
   letter-spacing: -2px;
@@ -144,27 +190,29 @@ nav {
 
 .hero h1 em {
   font-style: normal;
-  color: var(--lime);
+  background: linear-gradient(135deg, var(--forge), var(--ember));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   position: relative;
 }
 
 .hero p {
   font-size: 18px;
-  color: rgba(245,243,238,0.55);
+  color: rgba(244,241,234,0.55);
   line-height: 1.7;
-  max-width: 520px;
-  margin-bottom: 40px;
+  max-width: 580px;
+  margin: 0 auto 40px;
   font-weight: 300;
 }
 
-.hero-cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.hero-cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: center; }
 
 .hero-cta .btn-primary { padding: 16px 32px; font-size: 15px; border-radius: 10px; }
 .hero-cta .btn-secondary { padding: 16px 32px; font-size: 15px; border-radius: 10px; }
 
-.hero-note { font-size: 12px; color: rgba(245,243,238,0.3); margin-top: 14px; }
+.hero-note { font-size: 12px; color: rgba(244,241,234,0.3); margin-top: 14px; }
 
-/* Stats bar */
 .stats-bar {
   border-top: 1px solid rgba(255,255,255,0.07);
   border-bottom: 1px solid rgba(255,255,255,0.07);
@@ -188,14 +236,16 @@ nav {
   font-family: 'Clash Display', sans-serif;
   font-size: 36px;
   font-weight: 700;
-  color: var(--lime);
+  background: linear-gradient(135deg, var(--forge), var(--ember));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   line-height: 1;
   margin-bottom: 6px;
 }
 
-.stat-label { font-size: 12px; color: rgba(245,243,238,0.4); letter-spacing: 0.5px; }
+.stat-label { font-size: 12px; color: rgba(244,241,234,0.4); letter-spacing: 0.5px; }
 
-/* Features */
 .features {
   padding: 80px 48px;
   max-width: 1100px;
@@ -205,9 +255,10 @@ nav {
 .features-label {
   font-size: 11px;
   letter-spacing: 3px;
-  color: rgba(245,243,238,0.3);
+  color: rgba(244,241,234,0.3);
   text-transform: uppercase;
   margin-bottom: 48px;
+  text-align: center;
 }
 
 .features-grid {
@@ -226,12 +277,13 @@ nav {
   transition: background 0.2s;
 }
 
-.feature:hover { background: #1f1f2e; }
+.feature:hover { background: #1a2038; }
 
 .feature-icon {
   width: 44px;
   height: 44px;
-  background: rgba(200,241,53,0.1);
+  background: rgba(255,107,26,0.1);
+  border: 1px solid rgba(255,107,26,0.2);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -248,9 +300,8 @@ nav {
   letter-spacing: -0.3px;
 }
 
-.feature p { font-size: 13px; color: rgba(245,243,238,0.45); line-height: 1.6; font-weight: 300; }
+.feature p { font-size: 13px; color: rgba(244,241,234,0.45); line-height: 1.6; font-weight: 300; }
 
-/* Pricing */
 .pricing {
   padding: 80px 48px;
   max-width: 900px;
@@ -266,7 +317,7 @@ nav {
   margin-bottom: 12px;
 }
 
-.pricing > p { font-size: 16px; color: rgba(245,243,238,0.45); margin-bottom: 48px; font-weight: 300; }
+.pricing > p { font-size: 16px; color: rgba(244,241,234,0.45); margin-bottom: 48px; font-weight: 300; }
 
 .pricing-grid {
   display: grid;
@@ -284,12 +335,13 @@ nav {
 }
 
 .pricing-card.featured {
-  background: var(--lime);
-  color: var(--ink);
-  border-color: var(--lime);
+  background: linear-gradient(135deg, var(--forge), var(--forge-dark));
+  color: white;
+  border-color: var(--forge);
+  box-shadow: 0 10px 40px rgba(255,107,26,0.3);
 }
 
-.pricing-card:not(.featured):hover { border-color: rgba(255,255,255,0.25); }
+.pricing-card:not(.featured):hover { border-color: rgba(255,255,255,0.25); transform: translateY(-2px); }
 
 .plan-name { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; opacity: 0.6; }
 .plan-price {
@@ -305,8 +357,8 @@ nav {
 
 .plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
 .plan-features li { font-size: 13px; display: flex; align-items: center; gap: 8px; }
-.plan-features li::before { content: '✓'; font-weight: 700; color: var(--lime); }
-.pricing-card.featured .plan-features li::before { color: var(--ink); }
+.plan-features li::before { content: '✓'; font-weight: 700; color: var(--forge); }
+.pricing-card.featured .plan-features li::before { color: white; }
 
 .plan-btn {
   width: 100%;
@@ -327,13 +379,12 @@ nav {
 }
 .plan-btn-outline:hover { border-color: rgba(255,255,255,0.5); }
 
-.plan-btn-dark {
-  background: var(--ink);
-  color: var(--lime);
+.plan-btn-light {
+  background: white;
+  color: var(--forge-dark);
 }
-.plan-btn-dark:hover { background: #1a1a1a; }
+.plan-btn-light:hover { background: var(--cream); }
 
-/* Footer */
 footer {
   border-top: 1px solid rgba(255,255,255,0.07);
   padding: 32px 48px;
@@ -341,10 +392,9 @@ footer {
   justify-content: space-between;
   align-items: center;
   font-size: 12px;
-  color: rgba(245,243,238,0.3);
+  color: rgba(244,241,234,0.3);
 }
 
-/* ===== AUTH MODAL ===== */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -366,6 +416,7 @@ footer {
   max-width: 420px;
   margin: 20px;
   animation: modalIn 0.3s ease;
+  position: relative;
 }
 
 @keyframes modalIn {
@@ -379,9 +430,12 @@ footer {
   font-weight: 700;
   color: var(--ink);
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.modal-logo span { color: var(--lime-dark); }
+.modal-logo .accent { color: var(--forge); }
 
 .modal h2 {
   font-family: 'Clash Display', sans-serif;
@@ -419,7 +473,7 @@ footer {
   outline: none;
 }
 
-.form-group input:focus { border-color: var(--ink); background: white; }
+.form-group input:focus { border-color: var(--forge); background: white; }
 
 .modal .btn-primary {
   width: 100%;
@@ -427,14 +481,10 @@ footer {
   font-size: 15px;
   border-radius: 10px;
   margin-top: 4px;
-  background: var(--ink);
-  color: var(--lime);
 }
 
-.modal .btn-primary:hover { background: var(--charcoal); transform: none; }
-
 .modal-switch { text-align: center; margin-top: 16px; font-size: 13px; color: var(--gray); }
-.modal-switch a { color: var(--ink); font-weight: 700; cursor: pointer; text-decoration: none; }
+.modal-switch a { color: var(--forge); font-weight: 700; cursor: pointer; text-decoration: none; }
 .modal-close {
   position: absolute;
   top: 16px; right: 16px;
@@ -447,7 +497,6 @@ footer {
   display: flex; align-items: center; justify-content: center;
 }
 
-/* ===== DASHBOARD ===== */
 #dashboard { background: var(--cream); display: none; }
 #dashboard.active { display: flex; }
 
@@ -468,9 +517,12 @@ footer {
   color: var(--paper);
   margin-bottom: 40px;
   padding: 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.sidebar-logo span { color: var(--lime); }
+.sidebar-logo .accent { color: var(--forge); }
 
 .sidebar-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 
@@ -480,7 +532,7 @@ footer {
   gap: 10px;
   padding: 11px 12px;
   border-radius: 8px;
-  color: rgba(245,243,238,0.45);
+  color: rgba(244,241,234,0.45);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -489,7 +541,7 @@ footer {
 }
 
 .nav-item:hover { background: rgba(255,255,255,0.06); color: var(--paper); }
-.nav-item.active { background: rgba(200,241,53,0.12); color: var(--lime); }
+.nav-item.active { background: rgba(255,107,26,0.12); color: var(--forge); }
 .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
 
 .sidebar-user {
@@ -502,22 +554,21 @@ footer {
 
 .user-avatar {
   width: 34px; height: 34px;
-  background: var(--lime);
+  background: linear-gradient(135deg, var(--forge), var(--ember));
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 13px;
-  color: var(--ink);
+  color: white;
   flex-shrink: 0;
 }
 
 .user-info { flex: 1; overflow: hidden; }
 .user-name { font-size: 13px; color: var(--paper); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.user-plan { font-size: 10px; color: rgba(245,243,238,0.3); letter-spacing: 1px; text-transform: uppercase; }
+.user-plan { font-size: 10px; color: rgba(244,241,234,0.3); letter-spacing: 1px; text-transform: uppercase; }
 
-/* Main content */
 .main { flex: 1; overflow-y: auto; }
 
 .main-header {
@@ -539,8 +590,8 @@ footer {
 .header-actions { display: flex; gap: 10px; }
 
 .btn-upload {
-  background: var(--ink);
-  color: var(--lime);
+  background: var(--forge);
+  color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
@@ -552,16 +603,15 @@ footer {
   display: flex;
   align-items: center;
   gap: 6px;
+  box-shadow: 0 2px 12px rgba(255,107,26,0.25);
 }
 
-.btn-upload:hover { background: var(--charcoal); }
+.btn-upload:hover { background: var(--forge-dark); transform: translateY(-1px); }
 
-/* Dashboard tabs */
 .tab-pages { padding: 0; }
 .tab-page { display: none; }
 .tab-page.active { display: block; }
 
-/* Overview tab */
 .overview-content { padding: 32px 36px; }
 
 .metrics-row {
@@ -593,7 +643,6 @@ footer {
 .metric-up { color: var(--success); }
 .metric-down { color: var(--red); }
 
-/* Recent meetings */
 .section-header {
   display: flex;
   align-items: center;
@@ -609,7 +658,7 @@ footer {
 }
 
 .view-all { font-size: 12px; color: var(--gray); cursor: pointer; text-decoration: none; }
-.view-all:hover { color: var(--ink); }
+.view-all:hover { color: var(--forge); }
 
 .meetings-list { display: flex; flex-direction: column; gap: 10px; }
 
@@ -625,7 +674,7 @@ footer {
   transition: all 0.15s;
 }
 
-.meeting-card:hover { border-color: var(--ink); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.meeting-card:hover { border-color: var(--forge); box-shadow: 0 2px 12px rgba(255,107,26,0.08); }
 
 .meeting-type {
   width: 40px; height: 40px;
@@ -641,10 +690,7 @@ footer {
 .meeting-title { font-size: 14px; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
 .meeting-meta { font-size: 11px; color: var(--gray); }
 
-.meeting-score {
-  text-align: right;
-  flex-shrink: 0;
-}
+.meeting-score { text-align: right; flex-shrink: 0; }
 
 .score-val {
   font-family: 'Clash Display', sans-serif;
@@ -671,7 +717,6 @@ footer {
 .status-done { background: #dcfce7; color: #166534; }
 .status-processing { background: #fef9c3; color: #854d0e; }
 
-/* Upload area */
 .upload-tab { padding: 32px 36px; }
 
 .upload-zone {
@@ -686,8 +731,8 @@ footer {
 }
 
 .upload-zone:hover, .upload-zone.dragover {
-  border-color: var(--ink);
-  background: var(--cream);
+  border-color: var(--forge);
+  background: #fff7f1;
 }
 
 .upload-icon { font-size: 48px; margin-bottom: 16px; }
@@ -703,7 +748,6 @@ footer {
 .upload-zone p { font-size: 13px; color: var(--gray); margin-bottom: 20px; }
 .upload-formats { font-size: 11px; color: var(--gray); margin-top: 12px; }
 
-/* Processing state */
 .processing-card {
   background: white;
   border: 1px solid var(--light-gray);
@@ -734,13 +778,12 @@ footer {
 }
 
 .progress-step.done { color: var(--success); background: #f0fdf4; }
-.progress-step.active { color: var(--ink); background: #fefce8; font-weight: 500; }
+.progress-step.active { color: var(--ink); background: #fff7f1; font-weight: 500; }
 
 .step-check { width: 20px; height: 20px; border-radius: 50%; background: var(--light-gray); display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
 .progress-step.done .step-check { background: var(--success); color: white; }
-.progress-step.active .step-check { background: var(--ink); color: var(--lime); font-size: 8px; animation: blink 1s infinite; }
+.progress-step.active .step-check { background: var(--forge); color: white; font-size: 8px; animation: blink 1s infinite; }
 
-/* Meeting detail */
 .meeting-detail { padding: 32px 36px; display: none; }
 .meeting-detail.show { display: block; }
 
@@ -758,7 +801,7 @@ footer {
   padding: 0;
 }
 
-.back-btn:hover { color: var(--ink); }
+.back-btn:hover { color: var(--forge); }
 
 .detail-header {
   background: white;
@@ -778,12 +821,7 @@ footer {
 
 .detail-meta { font-size: 12px; color: var(--gray); margin-bottom: 20px; }
 
-.detail-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 0;
-}
+.detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 
 .detail-stat {
   background: var(--cream);
@@ -842,11 +880,10 @@ footer {
   transition: all 0.15s;
 }
 
-.action-check:hover { border-color: var(--ink); }
+.action-check:hover { border-color: var(--forge); }
 
 .summary-text { font-size: 13px; color: var(--gray); line-height: 1.7; font-weight: 300; }
 
-/* Responsive */
 @media (max-width: 768px) {
   nav { padding: 16px 20px; }
   .nav-links { display: none; }
@@ -876,24 +913,25 @@ footer {
 </head>
 <body>
 
-<!-- ===== LANDING PAGE ===== -->
 <div id="landing" class="screen active">
   <nav>
-    <div class="nav-logo">Meet<span class="dot">Mind</span></div>
+    <div class="nav-logo">
+      <div class="logo-mark"></div>
+      Call<span class="accent">forge</span>
+    </div>
     <div class="nav-links">
-      <a href="#">Features</a>
-      <a href="#">Pricing</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
       <a href="#">For Sales Teams</a>
       <button class="btn-secondary" onclick="openModal('login')">Sign in</button>
       <button class="btn-primary" onclick="openModal('signup')">Start free trial</button>
     </div>
-    <button class="btn-primary" style="display:none" id="mobile-cta" onclick="openModal('signup')">Try free</button>
   </nav>
 
   <section class="hero">
-    <div class="hero-badge"><div class="hero-badge-dot"></div> Now with deal scoring AI</div>
-    <h1>Every sales call.<br><em>Remembered.</em><br>Acted on.</h1>
-    <p>MeetMind records your sales calls, writes the summary, extracts action items, and sends the follow-up — before your prospect even closes the tab.</p>
+    <div class="hero-badge"><div class="hero-badge-dot"></div> NOW WITH DEAL SCORING AI</div>
+    <h1>Forge every call<br>into a <em>closed deal.</em></h1>
+    <p>Callforge records your sales calls, writes the summary, extracts action items, and drafts the follow-up email — before your prospect even closes the tab.</p>
     <div class="hero-cta">
       <button class="btn-primary" onclick="openModal('signup')">Start free — no card needed</button>
       <button class="btn-secondary" onclick="showDashboard()">See a demo →</button>
@@ -908,8 +946,8 @@ footer {
     <div class="stat"><div class="stat-num">$0</div><div class="stat-label">To start today</div></div>
   </div>
 
-  <section class="features">
-    <div class="features-label">What MeetMind does</div>
+  <section class="features" id="features">
+    <div class="features-label">— WHAT CALLFORGE DOES —</div>
     <div class="features-grid">
       <div class="feature">
         <div class="feature-icon">🎙</div>
@@ -924,7 +962,7 @@ footer {
       <div class="feature">
         <div class="feature-icon">✅</div>
         <h3>Action items extracted</h3>
-        <p>Never drop the ball again. MeetMind pulls every commitment and task from the conversation.</p>
+        <p>Never drop the ball again. Callforge pulls every commitment and task from the conversation.</p>
       </div>
       <div class="feature">
         <div class="feature-icon">📈</div>
@@ -944,7 +982,7 @@ footer {
     </div>
   </section>
 
-  <section class="pricing">
+  <section class="pricing" id="pricing">
     <h2>Simple, honest pricing.</h2>
     <p>Start free. Upgrade when you're ready. No surprise charges.</p>
     <div class="pricing-grid">
@@ -972,7 +1010,7 @@ footer {
           <li>Call coaching insights</li>
           <li>Priority support</li>
         </ul>
-        <button class="plan-btn plan-btn-dark" onclick="openModal('signup')">Start free trial</button>
+        <button class="plan-btn plan-btn-light" onclick="openModal('signup')">Start free trial</button>
       </div>
       <div class="pricing-card">
         <div class="plan-name">Team</div>
@@ -991,18 +1029,16 @@ footer {
   </section>
 
   <footer>
-    <div>© 2025 MeetMind Inc.</div>
-    <div>Privacy · Terms · support@meetmind.app</div>
+    <div>© 2026 Callforge Inc.</div>
+    <div>Privacy · Terms · support@callforge.to</div>
   </footer>
 </div>
 
-<!-- ===== AUTH MODAL ===== -->
 <div class="modal-overlay" id="authModal">
-  <div class="modal" style="position:relative">
+  <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-logo">Meet<span>Mind</span></div>
+    <div class="modal-logo"><div class="logo-mark"></div>Call<span class="accent">forge</span></div>
 
-    <!-- Sign Up -->
     <div id="signupForm">
       <h2>Start your free trial</h2>
       <p>14 days free · No credit card required</p>
@@ -1022,10 +1058,9 @@ footer {
       <div class="modal-switch">Already have an account? <a onclick="switchForm('login')">Sign in</a></div>
     </div>
 
-    <!-- Login -->
     <div id="loginForm" style="display:none">
       <h2>Welcome back</h2>
-      <p>Sign in to your MeetMind account</p>
+      <p>Sign in to your Callforge account</p>
       <div class="form-group">
         <label>Email</label>
         <input type="email" placeholder="alex@company.com" id="loginEmail">
@@ -1035,15 +1070,14 @@ footer {
         <input type="password" placeholder="Your password" id="loginPass">
       </div>
       <button class="btn-primary" onclick="handleLogin()">Sign in →</button>
-      <div class="modal-switch">New to MeetMind? <a onclick="switchForm('signup')">Start free trial</a></div>
+      <div class="modal-switch">New to Callforge? <a onclick="switchForm('signup')">Start free trial</a></div>
     </div>
   </div>
 </div>
 
-<!-- ===== DASHBOARD ===== -->
 <div id="dashboard" class="screen">
   <aside class="sidebar">
-    <div class="sidebar-logo">Meet<span>Mind</span></div>
+    <div class="sidebar-logo"><div class="logo-mark"></div>Call<span class="accent">forge</span></div>
     <nav class="sidebar-nav">
       <a class="nav-item active" onclick="switchTab('overview')"><span class="icon">📊</span><span>Overview</span></a>
       <a class="nav-item" onclick="switchTab('meetings')"><span class="icon">🎙</span><span>Meetings</span></a>
@@ -1069,7 +1103,6 @@ footer {
     </div>
 
     <div class="tab-pages">
-      <!-- Overview -->
       <div class="tab-page active" id="tab-overview">
         <div class="overview-content">
           <div class="metrics-row">
@@ -1132,7 +1165,6 @@ footer {
         </div>
       </div>
 
-      <!-- Meetings tab (same as overview list but fuller) -->
       <div class="tab-page" id="tab-meetings">
         <div class="overview-content">
           <div class="section-header" style="margin-bottom:16px">
@@ -1167,7 +1199,6 @@ footer {
         </div>
       </div>
 
-      <!-- Upload tab -->
       <div class="tab-page" id="tab-upload">
         <div class="upload-tab">
           <div class="upload-zone" id="uploadZone" onclick="triggerUpload()" ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
@@ -1181,9 +1212,9 @@ footer {
 
           <div class="processing-card" id="processingCard">
             <div class="processing-header">
-              <div class="processing-icon">⚙</div>
+              <div class="processing-icon">⚒</div>
               <div>
-                <div class="processing-title">Processing your meeting...</div>
+                <div class="processing-title">Forging your meeting...</div>
                 <div class="processing-sub" id="processingFileName">acme-discovery-call.mp3</div>
               </div>
             </div>
@@ -1198,7 +1229,6 @@ footer {
         </div>
       </div>
 
-      <!-- Agents tab -->
       <div class="tab-page" id="tab-agents">
         <div class="overview-content">
           <div class="section-header" style="margin-bottom:16px">
@@ -1237,14 +1267,13 @@ footer {
         </div>
       </div>
 
-      <!-- Settings tab -->
       <div class="tab-page" id="tab-settings">
         <div class="overview-content">
           <div class="section-header" style="margin-bottom:16px"><span class="section-title">Account Settings</span></div>
           <div style="background:white;border:1px solid var(--light-gray);border-radius:14px;padding:28px;max-width:500px">
             <div class="form-group"><label>Full Name</label><input type="text" id="settingsName" style="width:100%;padding:12px 14px;border:1.5px solid var(--light-gray);border-radius:10px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;outline:none"></div>
             <div class="form-group"><label>Email</label><input type="email" id="settingsEmail" style="width:100%;padding:12px 14px;border:1.5px solid var(--light-gray);border-radius:10px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;outline:none"></div>
-            <button class="btn-upload" style="margin-top:8px" onclick="saveSettings()">Save changes</button>
+            <button class="btn-upload" style="margin-top:8px" onclick="saveSettings(event)">Save changes</button>
             <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--light-gray)">
               <button onclick="logout()" style="background:none;border:none;color:var(--red);font-family:'Cabinet Grotesk',sans-serif;font-size:13px;cursor:pointer;font-weight:700">Sign out →</button>
             </div>
@@ -1253,7 +1282,6 @@ footer {
       </div>
     </div>
 
-    <!-- Meeting detail overlay -->
     <div class="meeting-detail" id="meetingDetail">
       <button class="back-btn" onclick="closeMeeting()">← Back to meetings</button>
       <div class="detail-header">
@@ -1268,10 +1296,10 @@ footer {
       <div class="detail-sections">
         <div class="detail-section">
           <h3>✅ Action Items</h3>
-          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--ink)';this.style.borderColor='var(--ink)'"></div>Send updated pricing deck to Sarah by EOD Friday</div>
-          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--ink)';this.style.borderColor='var(--ink)'"></div>Schedule technical demo with Mike's engineering team</div>
-          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--ink)';this.style.borderColor='var(--ink)'"></div>Share case study from similar-sized retail client</div>
-          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--ink)';this.style.borderColor='var(--ink)'"></div>Follow up on Q3 budget approval status</div>
+          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--forge)';this.style.borderColor='var(--forge)'"></div>Send updated pricing deck to Sarah by EOD Friday</div>
+          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--forge)';this.style.borderColor='var(--forge)'"></div>Schedule technical demo with Mike's engineering team</div>
+          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--forge)';this.style.borderColor='var(--forge)'"></div>Share case study from similar-sized retail client</div>
+          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--forge)';this.style.borderColor='var(--forge)'"></div>Follow up on Q3 budget approval status</div>
         </div>
         <div class="detail-section">
           <h3>📝 AI Summary</h3>
@@ -1280,7 +1308,7 @@ footer {
         <div class="detail-section" style="grid-column: 1 / -1">
           <h3>📧 AI-Generated Follow-up Email</h3>
           <div style="background:var(--cream);border-radius:10px;padding:16px;font-size:13px;color:var(--gray);line-height:1.7">
-            <strong style="color:var(--ink);display:block;margin-bottom:8px">Subject: Next steps from today's call — Acme × MeetMind</strong>
+            <strong style="color:var(--ink);display:block;margin-bottom:8px">Subject: Next steps from today's call — Acme × Callforge</strong>
             Hi Sarah,<br><br>
             Thank you for taking the time today — it was great to dig into your Q4 plans with you and Mike. A few things I'll be sending over:<br><br>
             1. Updated pricing deck with the enterprise tier breakdown you asked about<br>
@@ -1297,16 +1325,8 @@ footer {
 </div>
 
 <script>
-// ---- State ----
 let currentUser = null;
 
-// ---- Mobile nav ----
-window.addEventListener('resize', () => {
-  const mobileCta = document.getElementById('mobile-cta');
-  if (mobileCta) mobileCta.style.display = window.innerWidth < 768 ? 'block' : 'none';
-});
-
-// ---- Modal ----
 function openModal(type) {
   document.getElementById('authModal').classList.add('open');
   switchForm(type);
@@ -1325,7 +1345,6 @@ document.getElementById('authModal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
 
-// ---- Auth ----
 function handleSignup() {
   const name = document.getElementById('signupName').value || 'User';
   const email = document.getElementById('signupEmail').value || 'user@example.com';
@@ -1363,7 +1382,6 @@ function logout() {
   document.getElementById('landing').classList.add('active');
 }
 
-// ---- Dashboard tabs ----
 const tabTitles = {
   overview: 'Overview',
   meetings: 'Meetings',
@@ -1381,7 +1399,6 @@ function switchTab(tab) {
   closeMeeting();
 }
 
-// ---- Meeting detail ----
 const meetings = {
   '1': { title: 'Acme Corp — Q4 Renewal Discovery', meta: 'Today · 47 minutes · Sarah Chen, Mike Park · Zoom' },
   '2': { title: 'Globex Industries — Demo Call', meta: 'Yesterday · 32 minutes · Tom Richards · Google Meet' }
@@ -1395,17 +1412,14 @@ function openMeeting(id) {
   const detail = document.getElementById('meetingDetail');
   detail.classList.add('show');
   detail.style.display = 'block';
-  document.querySelectorAll('.tab-page.active .meetings-list, .tab-page.active .overview-content > *:not(.meeting-detail)').forEach(el => el.style.opacity = '0.3');
 }
 
 function closeMeeting() {
   const detail = document.getElementById('meetingDetail');
   detail.classList.remove('show');
   detail.style.display = 'none';
-  document.querySelectorAll('.meetings-list, .overview-content > *').forEach(el => el.style.opacity = '');
 }
 
-// ---- Upload flow ----
 function triggerUpload() { document.getElementById('fileInput').click(); }
 
 function handleDragOver(e) {
@@ -1462,8 +1476,7 @@ function startProcessing(filename) {
   setTimeout(advance, 1800);
 }
 
-// ---- Settings ----
-function saveSettings() {
+function saveSettings(event) {
   if (currentUser) {
     currentUser.name = document.getElementById('settingsName').value;
     currentUser.email = document.getElementById('settingsEmail').value;

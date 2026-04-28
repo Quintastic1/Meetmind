@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MeetMind — iPad Deploy Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Cabinet Grotesk', sans-serif; background: #f5f3ee; color: #0d0d12; padding: 32px 20px; max-width: 680px; margin: 0 auto; }
+h1 { font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; }
+.subtitle { color: #8a8a96; font-size: 15px; margin-bottom: 40px; font-weight: 300; }
+.step { background: white; border: 1px solid #e8e6e0; border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+.step-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #0d0d12; color: #c8f135; border-radius: 50%; font-size: 12px; font-weight: 700; margin-bottom: 12px; }
+.step h2 { font-family: 'Clash Display', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; }
+.step p { font-size: 14px; color: #4a4a56; line-height: 1.7; margin-bottom: 10px; font-weight: 300; }
+.step p:last-child { margin-bottom: 0; }
+.url { background: #f5f3ee; border: 1px solid #e8e6e0; border-radius: 8px; padding: 10px 14px; font-size: 13px; font-weight: 700; color: #0d0d12; margin: 8px 0; display: block; word-break: break-all; }
+.tip { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #166534; margin-top: 10px; }
+.warn { background: #fefce8; border: 1px solid #fde68a; border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #854d0e; margin-top: 10px; }
+.total { background: #0d0d12; color: #c8f135; border-radius: 16px; padding: 24px; margin-bottom: 16px; text-align: center; }
+.total h3 { font-family: 'Clash Display', sans-serif; font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+.total p { font-size: 13px; color: rgba(200,241,53,0.6); }
+</style>
+</head>
+<body>
+<h1>🚀 Launch MeetMind from your iPad</h1>
+<p class="subtitle">Complete beginner guide — no coding, no computer needed. Takes about 30 minutes.</p>
+
+<div class="total">
+  <h3>Total cost to go live: $12</h3>
+  <p>Just the domain name. Everything else is free.</p>
+</div>
+
+<div class="step">
+  <div class="step-num">1</div>
+  <h2>Create a free GitHub account</h2>
+  <p>GitHub is where we store the app's code. Think of it like Google Drive but for websites.</p>
+  <span class="url">→ Go to: github.com and tap "Sign up"</span>
+  <p>Use any email. Choose a username. Verify your email. That's it.</p>
+</div>
+
+<div class="step">
+  <div class="step-num">2</div>
+  <h2>Create a new repository</h2>
+  <p>A "repository" is just a folder for your app. Once logged into GitHub:</p>
+  <p>1. Tap the green <strong>"New"</strong> button<br>
+  2. Name it: <strong>meetmind</strong><br>
+  3. Make sure it's set to <strong>Public</strong><br>
+  4. Check ✅ "Add a README file"<br>
+  5. Tap <strong>"Create repository"</strong></p>
+</div>
+
+<div class="step">
+  <div class="step-num">3</div>
+  <h2>Upload the app file</h2>
+  <p>You should have received a file called <strong>index.html</strong> from Claude. Now:</p>
+  <p>1. Inside your new repository, tap <strong>"Add file" → "Upload files"</strong><br>
+  2. Tap <strong>"choose your files"</strong> and select <strong>index.html</strong><br>
+  3. Scroll down and tap <strong>"Commit changes"</strong></p>
+  <div class="tip">✓ Your app is now saved on GitHub. Next we make it live on the internet.</div>
+</div>
+
+<div class="step">
+  <div class="step-num">4</div>
+  <h2>Deploy to Vercel (makes it live)</h2>
+  <p>Vercel takes your GitHub code and puts it on the internet — for free.</p>
+  <span class="url">→ Go to: vercel.com</span>
+  <p>1. Tap <strong>"Sign Up"</strong> → choose <strong>"Continue with GitHub"</strong><br>
+  2. Tap <strong>"Add New Project"</strong><br>
+  3. Find your <strong>meetmind</strong> repository and tap <strong>"Import"</strong><br>
+  4. Don't change anything — just tap <strong>"Deploy"</strong><br>
+  5. Wait ~60 seconds</p>
+  <div class="tip">✓ Vercel gives you a free link like meetmind.vercel.app — your app is LIVE!</div>
+</div>
+
+<div class="step">
+  <div class="step-num">5</div>
+  <h2>Buy your domain (optional but worth it)</h2>
+  <p>Instead of meetmind.vercel.app you'll want meetmind.app or similar. This costs ~$12/year.</p>
+  <span class="url">→ Go to: namecheap.com</span>
+  <p>1. Search for <strong>meetmind.app</strong> (or meetmind.io)<br>
+  2. Add to cart and checkout (~$12)<br>
+  3. Back in Vercel: go to your project → <strong>Settings → Domains</strong><br>
+  4. Type your domain name and tap <strong>Add</strong><br>
+  5. Follow Vercel's instructions to connect it (copy/paste two values into Namecheap)</p>
+  <div class="warn">⏱ Domain connections take up to 24 hours to go live — totally normal.</div>
+</div>
+
+<div class="step">
+  <div class="step-num">6</div>
+  <h2>Set up Stripe (to collect payments)</h2>
+  <span class="url">→ Go to: stripe.com</span>
+  <p>1. Sign up for a free account<br>
+  2. Complete identity verification (takes 5 min, needs your ID)<br>
+  3. You'll get a <strong>Publishable Key</strong> — save it, Claude will need it for the next version of the app</p>
+  <div class="tip">✓ Stripe is now ready to accept credit cards. You won't pay anything until you make money.</div>
+</div>
+
+<div class="step">
+  <div class="step-num">7</div>
+  <h2>Set up Supabase (your database)</h2>
+  <p>This stores user accounts and meeting data.</p>
+  <span class="url">→ Go to: supabase.com</span>
+  <p>1. Sign up free with GitHub<br>
+  2. Tap <strong>"New Project"</strong><br>
+  3. Name it <strong>meetmind</strong>, choose any region<br>
+  4. Save the <strong>Project URL</strong> and <strong>anon key</strong> — Claude will use these next</p>
+</div>
+
+<div class="step">
+  <div class="step-num">8</div>
+  <h2>You're live! Tell Claude what's next</h2>
+  <p>Once you've done steps 1–7, come back to Claude and say:</p>
+  <p><em>"My Vercel URL is _____, my Stripe key is _____, my Supabase URL is _____, my Supabase key is _____. Now connect everything and add real payments."</em></p>
+  <p>Claude will then build the fully connected version with real user accounts, real payments, and real AI transcription.</p>
+  <div class="tip">✓ Your $200 budget is still mostly intact. The hard part is done.</div>
+</div>
+
+<div style="text-align:center;padding:32px 0 16px;color:#8a8a96;font-size:12px;border-top:1px solid #e8e6e0;margin-top:24px">
+  MeetMind Setup Guide · Generated by Claude · Questions? Just ask Claude in the chat.
+</div>
+</body>
+</html>
