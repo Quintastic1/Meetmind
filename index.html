@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MeetMind — AI Meeting Intelligence for Sales Teams</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink: #0d0d12;
+  --paper: #f5f3ee;
+  --cream: #faf8f4;
+  --lime: #c8f135;
+  --lime-dark: #a8cc1a;
+  --charcoal: #1a1a24;
+  --gray: #8a8a96;
+  --light-gray: #e8e6e0;
+  --white: #ffffff;
+  --red: #ff4545;
+  --success: #22c55e;
+}
+
+body {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ---- SCREENS ---- */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: block; }
+
+/* ===== LANDING PAGE ===== */
+#landing { background: var(--ink); color: var(--paper); }
+
+/* Nav */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.nav-logo {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-logo .dot { color: var(--lime); }
+
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  color: rgba(245,243,238,0.5);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--paper); }
+
+.btn-primary {
+  background: var(--lime);
+  color: var(--ink);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.2px;
+}
+
+.btn-primary:hover {
+  background: var(--lime-dark);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--paper);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover { border-color: rgba(255,255,255,0.5); }
+
+/* Hero */
+.hero {
+  padding: 100px 48px 80px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(200,241,53,0.1);
+  border: 1px solid rgba(200,241,53,0.25);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--lime);
+  margin-bottom: 32px;
+  letter-spacing: 0.5px;
+}
+
+.hero-badge-dot {
+  width: 6px; height: 6px;
+  background: var(--lime);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero h1 {
+  font-family: 'Clash Display', sans-serif;
+  font-size: clamp(42px, 7vw, 80px);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -2px;
+  margin-bottom: 24px;
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--lime);
+  position: relative;
+}
+
+.hero p {
+  font-size: 18px;
+  color: rgba(245,243,238,0.55);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+
+.hero-cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+.hero-cta .btn-primary { padding: 16px 32px; font-size: 15px; border-radius: 10px; }
+.hero-cta .btn-secondary { padding: 16px 32px; font-size: 15px; border-radius: 10px; }
+
+.hero-note { font-size: 12px; color: rgba(245,243,238,0.3); margin-top: 14px; }
+
+/* Stats bar */
+.stats-bar {
+  border-top: 1px solid rgba(255,255,255,0.07);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  padding: 32px 48px;
+  display: flex;
+  gap: 0;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+  padding: 0 24px;
+  border-right: 1px solid rgba(255,255,255,0.07);
+}
+
+.stat:last-child { border-right: none; }
+
+.stat-num {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--lime);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.stat-label { font-size: 12px; color: rgba(245,243,238,0.4); letter-spacing: 0.5px; }
+
+/* Features */
+.features {
+  padding: 80px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.features-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: rgba(245,243,238,0.3);
+  text-transform: uppercase;
+  margin-bottom: 48px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.feature {
+  background: var(--charcoal);
+  padding: 32px;
+  transition: background 0.2s;
+}
+
+.feature:hover { background: #1f1f2e; }
+
+.feature-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(200,241,53,0.1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.feature h3 {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+
+.feature p { font-size: 13px; color: rgba(245,243,238,0.45); line-height: 1.6; font-weight: 300; }
+
+/* Pricing */
+.pricing {
+  padding: 80px 48px;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.pricing h2 {
+  font-family: 'Clash Display', sans-serif;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
+}
+
+.pricing > p { font-size: 16px; color: rgba(245,243,238,0.45); margin-bottom: 48px; font-weight: 300; }
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  text-align: left;
+}
+
+.pricing-card {
+  background: var(--charcoal);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 32px;
+  transition: all 0.2s;
+}
+
+.pricing-card.featured {
+  background: var(--lime);
+  color: var(--ink);
+  border-color: var(--lime);
+}
+
+.pricing-card:not(.featured):hover { border-color: rgba(255,255,255,0.25); }
+
+.plan-name { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; opacity: 0.6; }
+.plan-price {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.plan-price span { font-size: 16px; font-weight: 400; opacity: 0.6; letter-spacing: 0; }
+.plan-desc { font-size: 13px; opacity: 0.5; margin-bottom: 24px; font-weight: 300; }
+
+.plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+.plan-features li { font-size: 13px; display: flex; align-items: center; gap: 8px; }
+.plan-features li::before { content: '✓'; font-weight: 700; color: var(--lime); }
+.pricing-card.featured .plan-features li::before { color: var(--ink); }
+
+.plan-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.plan-btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--paper);
+}
+.plan-btn-outline:hover { border-color: rgba(255,255,255,0.5); }
+
+.plan-btn-dark {
+  background: var(--ink);
+  color: var(--lime);
+}
+.plan-btn-dark:hover { background: #1a1a1a; }
+
+/* Footer */
+footer {
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding: 32px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: rgba(245,243,238,0.3);
+}
+
+/* ===== AUTH MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  margin: 20px;
+  animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-logo {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.modal-logo span { color: var(--lime-dark); }
+
+.modal h2 {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.modal p { font-size: 13px; color: var(--gray); margin-bottom: 28px; }
+
+.form-group { margin-bottom: 16px; }
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1.5px solid var(--light-gray);
+  border-radius: 10px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--cream);
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.form-group input:focus { border-color: var(--ink); background: white; }
+
+.modal .btn-primary {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  border-radius: 10px;
+  margin-top: 4px;
+  background: var(--ink);
+  color: var(--lime);
+}
+
+.modal .btn-primary:hover { background: var(--charcoal); transform: none; }
+
+.modal-switch { text-align: center; margin-top: 16px; font-size: 13px; color: var(--gray); }
+.modal-switch a { color: var(--ink); font-weight: 700; cursor: pointer; text-decoration: none; }
+.modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--light-gray);
+  cursor: pointer;
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ===== DASHBOARD ===== */
+#dashboard { background: var(--cream); display: none; }
+#dashboard.active { display: flex; }
+
+.sidebar {
+  width: 240px;
+  background: var(--ink);
+  min-height: 100vh;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--paper);
+  margin-bottom: 40px;
+  padding: 0 8px;
+}
+
+.sidebar-logo span { color: var(--lime); }
+
+.sidebar-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: 8px;
+  color: rgba(245,243,238,0.45);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+
+.nav-item:hover { background: rgba(255,255,255,0.06); color: var(--paper); }
+.nav-item.active { background: rgba(200,241,53,0.12); color: var(--lime); }
+.nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+
+.sidebar-user {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 34px; height: 34px;
+  background: var(--lime);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+
+.user-info { flex: 1; overflow: hidden; }
+.user-name { font-size: 13px; color: var(--paper); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-plan { font-size: 10px; color: rgba(245,243,238,0.3); letter-spacing: 1px; text-transform: uppercase; }
+
+/* Main content */
+.main { flex: 1; overflow-y: auto; }
+
+.main-header {
+  background: white;
+  padding: 20px 36px;
+  border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.main-header h1 {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.header-actions { display: flex; gap: 10px; }
+
+.btn-upload {
+  background: var(--ink);
+  color: var(--lime);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-upload:hover { background: var(--charcoal); }
+
+/* Dashboard tabs */
+.tab-pages { padding: 0; }
+.tab-page { display: none; }
+.tab-page.active { display: block; }
+
+/* Overview tab */
+.overview-content { padding: 32px 36px; }
+
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.metric-card {
+  background: white;
+  border: 1px solid var(--light-gray);
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.metric-label { font-size: 11px; color: var(--gray); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+
+.metric-value {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.metric-change { font-size: 11px; display: flex; align-items: center; gap: 4px; }
+.metric-up { color: var(--success); }
+.metric-down { color: var(--red); }
+
+/* Recent meetings */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.view-all { font-size: 12px; color: var(--gray); cursor: pointer; text-decoration: none; }
+.view-all:hover { color: var(--ink); }
+
+.meetings-list { display: flex; flex-direction: column; gap: 10px; }
+
+.meeting-card {
+  background: white;
+  border: 1px solid var(--light-gray);
+  border-radius: 12px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.meeting-card:hover { border-color: var(--ink); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+
+.meeting-type {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.meeting-info { flex: 1; min-width: 0; }
+.meeting-title { font-size: 14px; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+.meeting-meta { font-size: 11px; color: var(--gray); }
+
+.meeting-score {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.score-val {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.score-label { font-size: 10px; color: var(--gray); letter-spacing: 0.5px; }
+
+.score-high { color: var(--success); }
+.score-med { color: #f59e0b; }
+.score-low { color: var(--red); }
+
+.meeting-status {
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.status-done { background: #dcfce7; color: #166534; }
+.status-processing { background: #fef9c3; color: #854d0e; }
+
+/* Upload area */
+.upload-tab { padding: 32px 36px; }
+
+.upload-zone {
+  border: 2px dashed var(--light-gray);
+  border-radius: 16px;
+  padding: 60px 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+  margin-bottom: 24px;
+}
+
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--ink);
+  background: var(--cream);
+}
+
+.upload-icon { font-size: 48px; margin-bottom: 16px; }
+
+.upload-zone h3 {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+
+.upload-zone p { font-size: 13px; color: var(--gray); margin-bottom: 20px; }
+.upload-formats { font-size: 11px; color: var(--gray); margin-top: 12px; }
+
+/* Processing state */
+.processing-card {
+  background: white;
+  border: 1px solid var(--light-gray);
+  border-radius: 14px;
+  padding: 24px;
+  display: none;
+}
+
+.processing-card.show { display: block; }
+
+.processing-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.processing-icon { font-size: 24px; animation: spin 2s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.processing-title { font-family: 'Clash Display', sans-serif; font-size: 16px; font-weight: 700; }
+.processing-sub { font-size: 12px; color: var(--gray); }
+
+.progress-steps { display: flex; flex-direction: column; gap: 10px; }
+
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--gray);
+  background: var(--cream);
+}
+
+.progress-step.done { color: var(--success); background: #f0fdf4; }
+.progress-step.active { color: var(--ink); background: #fefce8; font-weight: 500; }
+
+.step-check { width: 20px; height: 20px; border-radius: 50%; background: var(--light-gray); display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
+.progress-step.done .step-check { background: var(--success); color: white; }
+.progress-step.active .step-check { background: var(--ink); color: var(--lime); font-size: 8px; animation: blink 1s infinite; }
+
+/* Meeting detail */
+.meeting-detail { padding: 32px 36px; display: none; }
+.meeting-detail.show { display: block; }
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--gray);
+  cursor: pointer;
+  margin-bottom: 24px;
+  background: none;
+  border: none;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  padding: 0;
+}
+
+.back-btn:hover { color: var(--ink); }
+
+.detail-header {
+  background: white;
+  border: 1px solid var(--light-gray);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 20px;
+}
+
+.detail-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+.detail-meta { font-size: 12px; color: var(--gray); margin-bottom: 20px; }
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 0;
+}
+
+.detail-stat {
+  background: var(--cream);
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-align: center;
+}
+
+.detail-stat-val {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.detail-stat-label { font-size: 10px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+
+.detail-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.detail-section {
+  background: white;
+  border: 1px solid var(--light-gray);
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.detail-section h3 {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--light-gray);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.action-item:last-child { border-bottom: none; }
+
+.action-check {
+  width: 18px; height: 18px;
+  border: 2px solid var(--light-gray);
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.action-check:hover { border-color: var(--ink); }
+
+.summary-text { font-size: 13px; color: var(--gray); line-height: 1.7; font-weight: 300; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 60px 20px 48px; }
+  .stats-bar { padding: 24px 20px; flex-wrap: wrap; gap: 16px; }
+  .stat { flex: 1 1 40%; border-right: none; }
+  .features { padding: 48px 20px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .pricing { padding: 48px 20px; }
+  footer { padding: 24px 20px; flex-direction: column; gap: 8px; text-align: center; }
+
+  #dashboard { flex-direction: column; }
+  .sidebar { width: 100%; min-height: auto; padding: 16px; flex-direction: row; align-items: center; }
+  .sidebar-nav { flex-direction: row; flex: 1; gap: 4px; overflow-x: auto; }
+  .nav-item span:not(.icon) { display: none; }
+  .sidebar-user { border-top: none; border-left: 1px solid rgba(255,255,255,0.08); padding-top: 0; padding-left: 12px; }
+  .user-info { display: none; }
+  .sidebar-logo { display: none; }
+
+  .main-header { padding: 16px 20px; }
+  .overview-content, .upload-tab, .meeting-detail { padding: 20px 16px; }
+  .metrics-row { grid-template-columns: repeat(2, 1fr); }
+  .detail-sections { grid-template-columns: 1fr; }
+  .detail-grid { grid-template-columns: repeat(3, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== LANDING PAGE ===== -->
+<div id="landing" class="screen active">
+  <nav>
+    <div class="nav-logo">Meet<span class="dot">Mind</span></div>
+    <div class="nav-links">
+      <a href="#">Features</a>
+      <a href="#">Pricing</a>
+      <a href="#">For Sales Teams</a>
+      <button class="btn-secondary" onclick="openModal('login')">Sign in</button>
+      <button class="btn-primary" onclick="openModal('signup')">Start free trial</button>
+    </div>
+    <button class="btn-primary" style="display:none" id="mobile-cta" onclick="openModal('signup')">Try free</button>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-badge"><div class="hero-badge-dot"></div> Now with deal scoring AI</div>
+    <h1>Every sales call.<br><em>Remembered.</em><br>Acted on.</h1>
+    <p>MeetMind records your sales calls, writes the summary, extracts action items, and sends the follow-up — before your prospect even closes the tab.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="openModal('signup')">Start free — no card needed</button>
+      <button class="btn-secondary" onclick="showDashboard()">See a demo →</button>
+    </div>
+    <p class="hero-note">14-day free trial · Cancels anytime · Works with Zoom, Meet, Teams</p>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-num">2 min</div><div class="stat-label">Avg. summary time</div></div>
+    <div class="stat"><div class="stat-num">94%</div><div class="stat-label">Action item accuracy</div></div>
+    <div class="stat"><div class="stat-num">3.2×</div><div class="stat-label">Faster follow-up</div></div>
+    <div class="stat"><div class="stat-num">$0</div><div class="stat-label">To start today</div></div>
+  </div>
+
+  <section class="features">
+    <div class="features-label">What MeetMind does</div>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon">🎙</div>
+        <h3>Transcribe any call</h3>
+        <p>Upload a recording or connect directly to Zoom, Google Meet, or Teams. We transcribe everything instantly.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <h3>AI summaries in 2 min</h3>
+        <p>Get a clean, structured summary with key points, objections raised, and next steps — automatically.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">✅</div>
+        <h3>Action items extracted</h3>
+        <p>Never drop the ball again. MeetMind pulls every commitment and task from the conversation.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📈</div>
+        <h3>Deal health scoring</h3>
+        <p>Our AI scores each deal from 0–100 based on tone, buying signals, and next steps clarity.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📧</div>
+        <h3>Auto follow-up drafts</h3>
+        <p>A personalized follow-up email, ready to send, generated the moment your call ends.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔗</div>
+        <h3>CRM sync</h3>
+        <p>Push summaries, notes, and tasks directly to HubSpot or Salesforce with one click.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing">
+    <h2>Simple, honest pricing.</h2>
+    <p>Start free. Upgrade when you're ready. No surprise charges.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">$49<span>/mo</span></div>
+        <div class="plan-desc">Perfect for solo reps</div>
+        <ul class="plan-features">
+          <li>20 meetings / month</li>
+          <li>AI summaries & action items</li>
+          <li>Follow-up email drafts</li>
+          <li>Deal scoring</li>
+          <li>Email support</li>
+        </ul>
+        <button class="plan-btn plan-btn-outline" onclick="openModal('signup')">Start free trial</button>
+      </div>
+      <div class="pricing-card featured">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$99<span>/mo</span></div>
+        <div class="plan-desc">Best for closing teams</div>
+        <ul class="plan-features">
+          <li>Unlimited meetings</li>
+          <li>CRM sync (HubSpot, SFDC)</li>
+          <li>Team dashboard</li>
+          <li>Call coaching insights</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="plan-btn plan-btn-dark" onclick="openModal('signup')">Start free trial</button>
+      </div>
+      <div class="pricing-card">
+        <div class="plan-name">Team</div>
+        <div class="plan-price">$299<span>/mo</span></div>
+        <div class="plan-desc">For sales orgs of 5+</div>
+        <ul class="plan-features">
+          <li>Everything in Pro</li>
+          <li>Up to 10 seats</li>
+          <li>Manager analytics</li>
+          <li>Custom AI personas</li>
+          <li>Dedicated onboarding</li>
+        </ul>
+        <button class="plan-btn plan-btn-outline" onclick="openModal('signup')">Start free trial</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>© 2025 MeetMind Inc.</div>
+    <div>Privacy · Terms · support@meetmind.app</div>
+  </footer>
+</div>
+
+<!-- ===== AUTH MODAL ===== -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-logo">Meet<span>Mind</span></div>
+
+    <!-- Sign Up -->
+    <div id="signupForm">
+      <h2>Start your free trial</h2>
+      <p>14 days free · No credit card required</p>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="Alex Johnson" id="signupName">
+      </div>
+      <div class="form-group">
+        <label>Work Email</label>
+        <input type="email" placeholder="alex@company.com" id="signupEmail">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" placeholder="Min. 8 characters" id="signupPass">
+      </div>
+      <button class="btn-primary" onclick="handleSignup()">Create account →</button>
+      <div class="modal-switch">Already have an account? <a onclick="switchForm('login')">Sign in</a></div>
+    </div>
+
+    <!-- Login -->
+    <div id="loginForm" style="display:none">
+      <h2>Welcome back</h2>
+      <p>Sign in to your MeetMind account</p>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="alex@company.com" id="loginEmail">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" placeholder="Your password" id="loginPass">
+      </div>
+      <button class="btn-primary" onclick="handleLogin()">Sign in →</button>
+      <div class="modal-switch">New to MeetMind? <a onclick="switchForm('signup')">Start free trial</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="dashboard" class="screen">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Meet<span>Mind</span></div>
+    <nav class="sidebar-nav">
+      <a class="nav-item active" onclick="switchTab('overview')"><span class="icon">📊</span><span>Overview</span></a>
+      <a class="nav-item" onclick="switchTab('meetings')"><span class="icon">🎙</span><span>Meetings</span></a>
+      <a class="nav-item" onclick="switchTab('upload')"><span class="icon">⬆</span><span>Upload</span></a>
+      <a class="nav-item" onclick="switchTab('agents')"><span class="icon">🤖</span><span>AI Agents</span></a>
+      <a class="nav-item" onclick="switchTab('settings')"><span class="icon">⚙</span><span>Settings</span></a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="user-avatar" id="userAvatar">A</div>
+      <div class="user-info">
+        <div class="user-name" id="userName">Alex Johnson</div>
+        <div class="user-plan">PRO TRIAL</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="main-header">
+      <h1 id="pageTitle">Overview</h1>
+      <div class="header-actions">
+        <button class="btn-upload" onclick="switchTab('upload')">⬆ Upload Meeting</button>
+      </div>
+    </div>
+
+    <div class="tab-pages">
+      <!-- Overview -->
+      <div class="tab-page active" id="tab-overview">
+        <div class="overview-content">
+          <div class="metrics-row">
+            <div class="metric-card">
+              <div class="metric-label">Meetings This Month</div>
+              <div class="metric-value">12</div>
+              <div class="metric-change metric-up">↑ 4 vs last month</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Avg Deal Score</div>
+              <div class="metric-value" style="color:#22c55e">74</div>
+              <div class="metric-change metric-up">↑ 8pts vs last month</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Action Items</div>
+              <div class="metric-value">34</div>
+              <div class="metric-change" style="color:#f59e0b">8 still open</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Follow-ups Sent</div>
+              <div class="metric-value">11</div>
+              <div class="metric-change metric-up">↑ 91% auto-sent</div>
+            </div>
+          </div>
+
+          <div class="section-header">
+            <span class="section-title">Recent Meetings</span>
+            <a class="view-all" onclick="switchTab('meetings')">View all →</a>
+          </div>
+
+          <div class="meetings-list">
+            <div class="meeting-card" onclick="openMeeting('1')">
+              <div class="meeting-type" style="background:#f0fdf4">🤝</div>
+              <div class="meeting-info">
+                <div class="meeting-title">Acme Corp — Q4 Renewal Discovery</div>
+                <div class="meeting-meta">Today · 47 min · Sarah Chen, Mike Park</div>
+              </div>
+              <span class="meeting-status status-done">Done</span>
+              <div class="meeting-score"><div class="score-val score-high">87</div><div class="score-label">DEAL SCORE</div></div>
+            </div>
+            <div class="meeting-card" onclick="openMeeting('2')">
+              <div class="meeting-type" style="background:#fefce8">📞</div>
+              <div class="meeting-info">
+                <div class="meeting-title">Globex Industries — Demo Call</div>
+                <div class="meeting-meta">Yesterday · 32 min · Tom Richards</div>
+              </div>
+              <span class="meeting-status status-done">Done</span>
+              <div class="meeting-score"><div class="score-val score-med">61</div><div class="score-label">DEAL SCORE</div></div>
+            </div>
+            <div class="meeting-card">
+              <div class="meeting-type" style="background:#fff1f2">🔄</div>
+              <div class="meeting-info">
+                <div class="meeting-title">Initech — Follow-up & Objection Handling</div>
+                <div class="meeting-meta">2 days ago · 28 min · Lisa Wang</div>
+              </div>
+              <span class="meeting-status status-processing">Processing</span>
+              <div class="meeting-score"><div class="score-val score-low">42</div><div class="score-label">DEAL SCORE</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Meetings tab (same as overview list but fuller) -->
+      <div class="tab-page" id="tab-meetings">
+        <div class="overview-content">
+          <div class="section-header" style="margin-bottom:16px">
+            <span class="section-title">All Meetings</span>
+          </div>
+          <div class="meetings-list">
+            <div class="meeting-card" onclick="openMeeting('1')">
+              <div class="meeting-type" style="background:#f0fdf4">🤝</div>
+              <div class="meeting-info"><div class="meeting-title">Acme Corp — Q4 Renewal Discovery</div><div class="meeting-meta">Today · 47 min · Sarah Chen, Mike Park</div></div>
+              <span class="meeting-status status-done">Done</span>
+              <div class="meeting-score"><div class="score-val score-high">87</div><div class="score-label">DEAL SCORE</div></div>
+            </div>
+            <div class="meeting-card" onclick="openMeeting('2')">
+              <div class="meeting-type" style="background:#fefce8">📞</div>
+              <div class="meeting-info"><div class="meeting-title">Globex Industries — Demo Call</div><div class="meeting-meta">Yesterday · 32 min · Tom Richards</div></div>
+              <span class="meeting-status status-done">Done</span>
+              <div class="meeting-score"><div class="score-val score-med">61</div><div class="score-label">DEAL SCORE</div></div>
+            </div>
+            <div class="meeting-card">
+              <div class="meeting-type" style="background:#fff1f2">🔄</div>
+              <div class="meeting-info"><div class="meeting-title">Initech — Follow-up & Objection Handling</div><div class="meeting-meta">2 days ago · 28 min · Lisa Wang</div></div>
+              <span class="meeting-status status-processing">Processing</span>
+              <div class="meeting-score"><div class="score-val score-low">42</div><div class="score-label">DEAL SCORE</div></div>
+            </div>
+            <div class="meeting-card" onclick="openMeeting('1')">
+              <div class="meeting-type" style="background:#f0fdf4">🎯</div>
+              <div class="meeting-info"><div class="meeting-title">Umbrella Corp — Initial Discovery</div><div class="meeting-meta">4 days ago · 55 min · Dana Cruz</div></div>
+              <span class="meeting-status status-done">Done</span>
+              <div class="meeting-score"><div class="score-val score-high">79</div><div class="score-label">DEAL SCORE</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload tab -->
+      <div class="tab-page" id="tab-upload">
+        <div class="upload-tab">
+          <div class="upload-zone" id="uploadZone" onclick="triggerUpload()" ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
+            <div class="upload-icon">🎙</div>
+            <h3>Drop your meeting recording here</h3>
+            <p>Or click to browse your files</p>
+            <button class="btn-primary" style="display:inline-block; padding: 12px 28px;" onclick="triggerUpload()">Choose file</button>
+            <p class="upload-formats">Supports MP3, MP4, M4A, WAV, WebM · Max 500MB</p>
+          </div>
+          <input type="file" id="fileInput" style="display:none" accept=".mp3,.mp4,.m4a,.wav,.webm" onchange="handleFileSelect(event)">
+
+          <div class="processing-card" id="processingCard">
+            <div class="processing-header">
+              <div class="processing-icon">⚙</div>
+              <div>
+                <div class="processing-title">Processing your meeting...</div>
+                <div class="processing-sub" id="processingFileName">acme-discovery-call.mp3</div>
+              </div>
+            </div>
+            <div class="progress-steps">
+              <div class="progress-step done" id="step1"><div class="step-check">✓</div>File uploaded</div>
+              <div class="progress-step active" id="step2"><div class="step-check">•</div>Transcribing audio with Whisper AI...</div>
+              <div class="progress-step" id="step3"><div class="step-check"></div>Generating summary & action items</div>
+              <div class="progress-step" id="step4"><div class="step-check"></div>Scoring deal health</div>
+              <div class="progress-step" id="step5"><div class="step-check"></div>Drafting follow-up email</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agents tab -->
+      <div class="tab-page" id="tab-agents">
+        <div class="overview-content">
+          <div class="section-header" style="margin-bottom:16px">
+            <span class="section-title">Your AI Agent Team</span>
+          </div>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:14px">
+            <div style="background:white;border:1px solid var(--light-gray);border-radius:14px;padding:22px">
+              <div style="font-size:28px;margin-bottom:10px">📣</div>
+              <div style="font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px">Maya — Marketing</div>
+              <div style="font-size:11px;color:var(--gray);margin-bottom:12px;letter-spacing:1px">RUNS EVERY 24H</div>
+              <div style="font-size:12px;color:var(--gray);line-height:1.7">Publishes SEO blog posts, manages LinkedIn + Twitter, and A/B tests your landing page copy automatically.</div>
+              <div style="margin-top:14px;display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;background:#22c55e;border-radius:50%"></div><span style="font-size:11px;color:#22c55e;font-weight:700">ACTIVE</span></div>
+            </div>
+            <div style="background:white;border:1px solid var(--light-gray);border-radius:14px;padding:22px">
+              <div style="font-size:28px;margin-bottom:10px">💼</div>
+              <div style="font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px">Sam — Sales</div>
+              <div style="font-size:11px;color:var(--gray);margin-bottom:12px;letter-spacing:1px">RUNS EVERY 6H</div>
+              <div style="font-size:12px;color:var(--gray);line-height:1.7">Sends personalized cold outreach, qualifies signups, and handles trial-to-paid follow-up sequences.</div>
+              <div style="margin-top:14px;display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;background:#22c55e;border-radius:50%"></div><span style="font-size:11px;color:#22c55e;font-weight:700">ACTIVE</span></div>
+            </div>
+            <div style="background:white;border:1px solid var(--light-gray);border-radius:14px;padding:22px">
+              <div style="font-size:28px;margin-bottom:10px">📊</div>
+              <div style="font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px">Finn — Finance</div>
+              <div style="font-size:11px;color:var(--gray);margin-bottom:12px;letter-spacing:1px">WEEKLY DIGEST</div>
+              <div style="font-size:12px;color:var(--gray);line-height:1.7">Tracks MRR, churn, and CAC. Sends you a Sunday digest with your full P&L and growth metrics.</div>
+              <div style="margin-top:14px;display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;background:#22c55e;border-radius:50%"></div><span style="font-size:11px;color:#22c55e;font-weight:700">ACTIVE</span></div>
+            </div>
+            <div style="background:white;border:1px solid var(--light-gray);border-radius:14px;padding:22px">
+              <div style="font-size:28px;margin-bottom:10px">🎯</div>
+              <div style="font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px">Aria — Ads</div>
+              <div style="font-size:11px;color:var(--gray);margin-bottom:12px;letter-spacing:1px">REAL-TIME</div>
+              <div style="font-size:12px;color:var(--gray);line-height:1.7">Generates ad copy variants, pauses low performers, and scales budget to winning creatives automatically.</div>
+              <div style="margin-top:14px;display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;background:#f59e0b;border-radius:50%"></div><span style="font-size:11px;color:#f59e0b;font-weight:700">SETUP NEEDED</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings tab -->
+      <div class="tab-page" id="tab-settings">
+        <div class="overview-content">
+          <div class="section-header" style="margin-bottom:16px"><span class="section-title">Account Settings</span></div>
+          <div style="background:white;border:1px solid var(--light-gray);border-radius:14px;padding:28px;max-width:500px">
+            <div class="form-group"><label>Full Name</label><input type="text" id="settingsName" style="width:100%;padding:12px 14px;border:1.5px solid var(--light-gray);border-radius:10px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;outline:none"></div>
+            <div class="form-group"><label>Email</label><input type="email" id="settingsEmail" style="width:100%;padding:12px 14px;border:1.5px solid var(--light-gray);border-radius:10px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;outline:none"></div>
+            <button class="btn-upload" style="margin-top:8px" onclick="saveSettings()">Save changes</button>
+            <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--light-gray)">
+              <button onclick="logout()" style="background:none;border:none;color:var(--red);font-family:'Cabinet Grotesk',sans-serif;font-size:13px;cursor:pointer;font-weight:700">Sign out →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meeting detail overlay -->
+    <div class="meeting-detail" id="meetingDetail">
+      <button class="back-btn" onclick="closeMeeting()">← Back to meetings</button>
+      <div class="detail-header">
+        <div class="detail-title" id="detailTitle">Acme Corp — Q4 Renewal Discovery</div>
+        <div class="detail-meta" id="detailMeta">Today · 47 minutes · Sarah Chen, Mike Park · Zoom</div>
+        <div class="detail-grid">
+          <div class="detail-stat"><div class="detail-stat-val" style="color:#22c55e">87</div><div class="detail-stat-label">Deal Score</div></div>
+          <div class="detail-stat"><div class="detail-stat-val">6</div><div class="detail-stat-label">Action Items</div></div>
+          <div class="detail-stat"><div class="detail-stat-val">47m</div><div class="detail-stat-label">Duration</div></div>
+        </div>
+      </div>
+      <div class="detail-sections">
+        <div class="detail-section">
+          <h3>✅ Action Items</h3>
+          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--ink)';this.style.borderColor='var(--ink)'"></div>Send updated pricing deck to Sarah by EOD Friday</div>
+          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--ink)';this.style.borderColor='var(--ink)'"></div>Schedule technical demo with Mike's engineering team</div>
+          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--ink)';this.style.borderColor='var(--ink)'"></div>Share case study from similar-sized retail client</div>
+          <div class="action-item"><div class="action-check" onclick="this.style.background='var(--ink)';this.style.borderColor='var(--ink)'"></div>Follow up on Q3 budget approval status</div>
+        </div>
+        <div class="detail-section">
+          <h3>📝 AI Summary</h3>
+          <p class="summary-text">Acme Corp is evaluating renewal with expanded scope. Sarah expressed strong interest in the enterprise tier but flagged budget approval is pending Q4 sign-off. Mike raised integration concerns with their legacy CRM — this is the primary blocker. Buying committee includes Sarah (champion), Mike (technical), and VP of Sales (economic buyer, not on call). Timeline: decision expected within 3 weeks. Overall sentiment was positive with high intent signals.</p>
+        </div>
+        <div class="detail-section" style="grid-column: 1 / -1">
+          <h3>📧 AI-Generated Follow-up Email</h3>
+          <div style="background:var(--cream);border-radius:10px;padding:16px;font-size:13px;color:var(--gray);line-height:1.7">
+            <strong style="color:var(--ink);display:block;margin-bottom:8px">Subject: Next steps from today's call — Acme × MeetMind</strong>
+            Hi Sarah,<br><br>
+            Thank you for taking the time today — it was great to dig into your Q4 plans with you and Mike. A few things I'll be sending over:<br><br>
+            1. Updated pricing deck with the enterprise tier breakdown you asked about<br>
+            2. A case study from a comparable retail client (38% faster close cycles)<br>
+            3. A proposed technical session with Mike's team to walk through the CRM integration<br><br>
+            On the budget timeline — totally understand Q4 approvals are in motion. Happy to provide any supporting materials that would help make the case internally.<br><br>
+            Talk soon,<br>Alex
+          </div>
+          <button class="btn-upload" style="margin-top:14px;font-size:12px;padding:8px 16px">Copy email ↗</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ---- State ----
+let currentUser = null;
+
+// ---- Mobile nav ----
+window.addEventListener('resize', () => {
+  const mobileCta = document.getElementById('mobile-cta');
+  if (mobileCta) mobileCta.style.display = window.innerWidth < 768 ? 'block' : 'none';
+});
+
+// ---- Modal ----
+function openModal(type) {
+  document.getElementById('authModal').classList.add('open');
+  switchForm(type);
+}
+
+function closeModal() {
+  document.getElementById('authModal').classList.remove('open');
+}
+
+function switchForm(type) {
+  document.getElementById('signupForm').style.display = type === 'signup' ? 'block' : 'none';
+  document.getElementById('loginForm').style.display = type === 'login' ? 'block' : 'none';
+}
+
+document.getElementById('authModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ---- Auth ----
+function handleSignup() {
+  const name = document.getElementById('signupName').value || 'User';
+  const email = document.getElementById('signupEmail').value || 'user@example.com';
+  if (!name || !email) { alert('Please fill in all fields'); return; }
+  currentUser = { name, email };
+  closeModal();
+  showDashboard();
+}
+
+function handleLogin() {
+  const email = document.getElementById('loginEmail').value || 'user@example.com';
+  currentUser = { name: email.split('@')[0], email };
+  closeModal();
+  showDashboard();
+}
+
+function showDashboard() {
+  document.getElementById('landing').classList.remove('active');
+  document.getElementById('dashboard').classList.add('active');
+  document.getElementById('dashboard').style.display = 'flex';
+
+  if (currentUser) {
+    const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+    document.getElementById('userAvatar').textContent = initials;
+    document.getElementById('userName').textContent = currentUser.name;
+    document.getElementById('settingsName').value = currentUser.name;
+    document.getElementById('settingsEmail').value = currentUser.email;
+  }
+}
+
+function logout() {
+  currentUser = null;
+  document.getElementById('dashboard').classList.remove('active');
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('landing').classList.add('active');
+}
+
+// ---- Dashboard tabs ----
+const tabTitles = {
+  overview: 'Overview',
+  meetings: 'Meetings',
+  upload: 'Upload Meeting',
+  agents: 'AI Agents',
+  settings: 'Settings'
+};
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelectorAll('.nav-item')[['overview','meetings','upload','agents','settings'].indexOf(tab)].classList.add('active');
+  document.getElementById('pageTitle').textContent = tabTitles[tab];
+  closeMeeting();
+}
+
+// ---- Meeting detail ----
+const meetings = {
+  '1': { title: 'Acme Corp — Q4 Renewal Discovery', meta: 'Today · 47 minutes · Sarah Chen, Mike Park · Zoom' },
+  '2': { title: 'Globex Industries — Demo Call', meta: 'Yesterday · 32 minutes · Tom Richards · Google Meet' }
+};
+
+function openMeeting(id) {
+  const m = meetings[id];
+  if (!m) return;
+  document.getElementById('detailTitle').textContent = m.title;
+  document.getElementById('detailMeta').textContent = m.meta;
+  const detail = document.getElementById('meetingDetail');
+  detail.classList.add('show');
+  detail.style.display = 'block';
+  document.querySelectorAll('.tab-page.active .meetings-list, .tab-page.active .overview-content > *:not(.meeting-detail)').forEach(el => el.style.opacity = '0.3');
+}
+
+function closeMeeting() {
+  const detail = document.getElementById('meetingDetail');
+  detail.classList.remove('show');
+  detail.style.display = 'none';
+  document.querySelectorAll('.meetings-list, .overview-content > *').forEach(el => el.style.opacity = '');
+}
+
+// ---- Upload flow ----
+function triggerUpload() { document.getElementById('fileInput').click(); }
+
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.add('dragover');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) startProcessing(file.name);
+}
+
+function handleFileSelect(e) {
+  const file = e.target.files[0];
+  if (file) startProcessing(file.name);
+}
+
+function startProcessing(filename) {
+  document.getElementById('uploadZone').style.display = 'none';
+  const card = document.getElementById('processingCard');
+  card.classList.add('show');
+  document.getElementById('processingFileName').textContent = filename;
+
+  const steps = ['step1','step2','step3','step4','step5'];
+  let current = 1;
+
+  const advance = () => {
+    if (current >= steps.length) {
+      setTimeout(() => {
+        card.classList.remove('show');
+        document.getElementById('uploadZone').style.display = '';
+        steps.forEach(s => {
+          const el = document.getElementById(s);
+          el.classList.remove('active','done');
+        });
+        document.getElementById('step1').classList.add('done');
+        document.getElementById('step2').classList.add('active');
+        switchTab('overview');
+      }, 1000);
+      return;
+    }
+    const prev = document.getElementById(steps[current - 1]);
+    const next = document.getElementById(steps[current]);
+    prev.classList.remove('active');
+    prev.classList.add('done');
+    prev.querySelector('.step-check').textContent = '✓';
+    next.classList.add('active');
+    current++;
+    setTimeout(advance, 2200);
+  };
+
+  setTimeout(advance, 1800);
+}
+
+// ---- Settings ----
+function saveSettings() {
+  if (currentUser) {
+    currentUser.name = document.getElementById('settingsName').value;
+    currentUser.email = document.getElementById('settingsEmail').value;
+    const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+    document.getElementById('userAvatar').textContent = initials;
+    document.getElementById('userName').textContent = currentUser.name;
+  }
+  const btn = event.target;
+  btn.textContent = 'Saved ✓';
+  setTimeout(() => btn.textContent = 'Save changes', 2000);
+}
+</script>
+</body>
+</html>
