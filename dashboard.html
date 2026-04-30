@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Callforge — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#0a0e1a;--paper:#f4f1ea;--cream:#faf7f0;--forge:#ff6b1a;--forge-dark:#e55a0d;--ember:#ffd166;--charcoal:#14192a;--gray:#7a7a8c;--light-gray:#e6e3dc;--white:#fff;--red:#ff4545;--success:#22c55e}
+body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;display:flex}
+
+/* SIDEBAR */
+.sidebar{width:240px;background:var(--ink);min-height:100vh;padding:28px 20px;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto}
+.sidebar-logo{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;color:var(--paper);margin-bottom:36px;padding:0 8px;display:flex;align-items:center;gap:8px}
+.sidebar-logo .accent{color:var(--forge)}
+.logo-mark{width:26px;height:26px;background:linear-gradient(135deg,var(--forge),var(--ember));border-radius:6px;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 0 16px rgba(255,107,26,0.4);flex-shrink:0}
+.logo-mark::before{content:'';position:absolute;inset:2px;border-radius:4px;background:linear-gradient(135deg,var(--forge),var(--forge-dark))}
+.logo-mark::after{content:'⚒';position:relative;font-size:12px;color:#fff;z-index:1}
+.sidebar-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.nav-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;color:rgba(244,241,234,0.45);font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;transition:all 0.15s}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:var(--paper)}
+.nav-item.active{background:rgba(255,107,26,0.12);color:var(--forge)}
+.nav-item .nav-icon{font-size:16px;width:20px;text-align:center}
+.sidebar-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;margin-top:8px}
+.lang-switcher{display:flex;gap:2px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:2px;margin-bottom:14px}
+.lang-btn{flex:1;background:transparent;border:none;color:rgba(244,241,234,0.5);padding:5px 6px;font-family:'Cabinet Grotesk',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.5px;cursor:pointer;border-radius:4px;text-align:center}
+.lang-btn.active{background:var(--forge);color:#fff}
+.user-row{display:flex;align-items:center;gap:10px}
+.user-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--forge),var(--ember));border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0}
+.user-info{flex:1;min-width:0}
+.user-name{font-size:13px;color:var(--paper);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-plan{font-size:10px;color:rgba(244,241,234,0.3);letter-spacing:1px;text-transform:uppercase}
+.logout-btn{background:none;border:none;color:rgba(244,241,234,0.3);cursor:pointer;font-size:14px;padding:4px;border-radius:4px}
+.logout-btn:hover{color:var(--red)}
+
+/* MAIN */
+.main{margin-left:240px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+.main-header{background:var(--white);padding:20px 36px;border-bottom:1px solid var(--light-gray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.main-header h1{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px}
+.btn-upload{background:var(--forge);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 2px 12px rgba(255,107,26,0.25);transition:all 0.2s}
+.btn-upload:hover{background:var(--forge-dark);transform:translateY(-1px)}
+.page-content{padding:32px 36px;flex:1}
+
+/* TABS */
+.tab-page{display:none}
+.tab-page.active{display:block}
+
+/* METRICS */
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.metric-card{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:22px}
+.metric-label{font-size:11px;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.metric-value{font-family:'Clash Display',sans-serif;font-size:32px;font-weight:700;letter-spacing:-1px;line-height:1;margin-bottom:6px}
+.metric-change{font-size:11px}
+.metric-up{color:var(--success)}
+.metric-warn{color:#f59e0b}
+
+/* MEETINGS */
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.section-title{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700}
+.view-all{font-size:12px;color:var(--gray);cursor:pointer;background:none;border:none;font-family:'Cabinet Grotesk',sans-serif}
+.view-all:hover{color:var(--forge)}
+.meetings-list{display:flex;flex-direction:column;gap:10px}
+.meeting-card{background:var(--white);border:1px solid var(--light-gray);border-radius:12px;padding:18px 22px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:all 0.15s}
+.meeting-card:hover{border-color:var(--forge);box-shadow:0 2px 12px rgba(255,107,26,0.08)}
+.meeting-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.meeting-info{flex:1;min-width:0}
+.meeting-title{font-size:14px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+.meeting-meta{font-size:11px;color:var(--gray)}
+.meeting-status{padding:4px 10px;border-radius:100px;font-size:10px;font-weight:700;flex-shrink:0}
+.status-done{background:#dcfce7;color:#166534}
+.status-processing{background:#fef9c3;color:#854d0e}
+.meeting-score{text-align:right;flex-shrink:0}
+.score-val{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;line-height:1}
+.score-high{color:var(--success)}
+.score-low{color:var(--red)}
+.score-label{font-size:10px;color:var(--gray)}
+.empty-state{text-align:center;padding:60px 20px;color:var(--gray)}
+.empty-icon{font-size:48px;margin-bottom:16px}
+.empty-state h3{font-family:'Clash Display',sans-serif;font-size:20px;color:var(--ink);margin-bottom:8px}
+.empty-state p{font-size:14px;line-height:1.6;max-width:400px;margin:0 auto 20px}
+
+/* UPLOAD TAB */
+.upload-info-banner{background:rgba(255,107,26,0.05);border:1px solid rgba(255,107,26,0.15);border-radius:10px;padding:12px 16px;font-size:12px;color:var(--ink);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.upload-info-banner strong{color:var(--forge)}
+.upload-zone{border:2px dashed var(--light-gray);border-radius:16px;padding:60px 40px;text-align:center;cursor:pointer;background:var(--white);transition:all 0.2s;margin-bottom:24px}
+.upload-zone:hover{border-color:var(--forge);background:#fff7f1}
+.upload-zone h3{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;margin-bottom:8px}
+.upload-zone p{font-size:13px;color:var(--gray);margin-bottom:20px}
+.upload-formats{font-size:11px;color:var(--gray);margin-top:12px}
+.btn-choose{background:var(--forge);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(255,107,26,0.3)}
+.processing-card{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:24px;display:none}
+.processing-card.show{display:block}
+.processing-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.processing-icon{font-size:24px;animation:spin 2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.processing-title{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700}
+.processing-sub{font-size:12px;color:var(--gray)}
+.progress-step{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;font-size:13px;color:var(--gray);background:var(--cream);margin-bottom:10px;transition:all 0.3s}
+.progress-step.done{color:var(--success);background:#f0fdf4}
+.progress-step.active{color:var(--ink);background:#fff7f1;font-weight:500}
+.step-dot{width:20px;height:20px;border-radius:50%;background:var(--light-gray);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.progress-step.done .step-dot{background:var(--success);color:#fff}
+.progress-step.active .step-dot{background:var(--forge);color:#fff}
+
+/* MEETING DETAIL */
+.meeting-detail{display:none}
+.meeting-detail.show{display:block}
+.back-btn{background:none;border:none;font-size:13px;color:var(--gray);cursor:pointer;margin-bottom:24px;font-family:'Cabinet Grotesk',sans-serif;display:flex;align-items:center;gap:4px;padding:0}
+.back-btn:hover{color:var(--forge)}
+.detail-header{background:var(--white);border:1px solid var(--light-gray);border-radius:16px;padding:28px;margin-bottom:20px}
+.detail-title{font-family:'Clash Display',sans-serif;font-size:24px;font-weight:700;margin-bottom:8px}
+.detail-meta{font-size:12px;color:var(--gray);margin-bottom:20px}
+.detail-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.detail-stat{background:var(--cream);border-radius:10px;padding:14px 16px;text-align:center}
+.detail-stat-val{font-family:'Clash Display',sans-serif;font-size:24px;font-weight:700}
+.detail-stat-label{font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.detail-section{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:22px}
+.detail-section h3{font-family:'Clash Display',sans-serif;font-size:14px;font-weight:700;margin-bottom:14px}
+.detail-section.full{grid-column:1/-1}
+.action-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--light-gray);font-size:13px;line-height:1.5}
+.action-item:last-child{border-bottom:none}
+.action-check{width:18px;height:18px;border:2px solid var(--light-gray);border-radius:4px;flex-shrink:0;margin-top:1px;cursor:pointer;transition:all 0.2s}
+.action-check:hover{border-color:var(--forge)}
+.summary-text{font-size:13px;color:var(--gray);line-height:1.7;font-weight:300}
+.email-block{background:var(--cream);border-radius:10px;padding:16px;font-size:13px;color:var(--gray);line-height:1.7}
+.copy-btn{background:var(--forge);color:#fff;border:none;padding:8px 16px;border-radius:6px;font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-top:14px}
+.copy-btn:hover{background:var(--forge-dark)}
+
+/* THE FORGED TAB */
+.forged-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.forged-dash-card{background:var(--white);border:1px solid var(--light-gray);border-radius:18px;padding:24px;position:relative;overflow:hidden;transition:all 0.2s}
+.forged-dash-card:hover{border-color:var(--forge);transform:translateY(-3px);box-shadow:0 8px 24px rgba(255,107,26,0.1)}
+.forged-dash-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--forge),var(--ember))}
+.forged-header{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.forged-avatar{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.forged-avatar.maya{background:linear-gradient(135deg,#fef3c7,#fde047)}
+.forged-avatar.sam{background:linear-gradient(135deg,#bfdbfe,#60a5fa)}
+.forged-avatar.finn{background:linear-gradient(135deg,#bbf7d0,#4ade80)}
+.forged-avatar.aria{background:linear-gradient(135deg,#fecaca,#f87171)}
+.forged-name{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700;margin-bottom:2px}
+.forged-role{font-size:10px;letter-spacing:1.5px;color:var(--forge);text-transform:uppercase;font-weight:700}
+.forged-insight{font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:14px}
+.forged-action{font-size:12px;color:var(--forge);font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;background:none;border:none;font-family:'Cabinet Grotesk',sans-serif;padding:0}
+.forged-action:hover{text-decoration:underline}
+.active-badge{position:absolute;top:16px;right:16px;background:#dcfce7;color:#166534;font-size:9px;font-weight:700;padding:3px 8px;border-radius:100px;letter-spacing:0.5px;display:flex;align-items:center;gap:4px}
+.active-badge::before{content:'';width:5px;height:5px;background:#22c55e;border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* SETTINGS */
+.settings-card{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:28px;max-width:520px}
+.settings-group{margin-bottom:16px}
+.settings-group label{display:block;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase}
+.settings-group input{width:100%;padding:12px 16px;border:1.5px solid var(--light-gray);border-radius:10px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;color:var(--ink);background:var(--cream);outline:none;transition:all 0.2s}
+.settings-group input:focus{border-color:var(--forge);background:#fff}
+.settings-divider{border-top:1px solid var(--light-gray);margin:20px 0}
+.btn-save{background:var(--forge);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-save:hover{background:var(--forge-dark)}
+.btn-danger{background:none;border:none;color:var(--red);font-family:'Cabinet Grotesk',sans-serif;font-size:13px;cursor:pointer;font-weight:600}
+.btn-danger:hover{text-decoration:underline}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--ink);color:var(--paper);padding:14px 24px;border-radius:12px;font-size:14px;font-weight:600;z-index:2000;transition:all 0.4s;opacity:0;border-left:4px solid var(--forge)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.success{border-left-color:var(--success)}
+.toast.error{border-left-color:var(--red)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sidebar{position:fixed;bottom:0;left:0;right:0;top:auto;width:100%;min-height:auto;height:60px;flex-direction:row;padding:0 16px;align-items:center;border-top:1px solid rgba(255,255,255,0.1)}
+  .sidebar-logo,.sidebar-bottom{display:none}
+  .sidebar-nav{flex-direction:row;justify-content:space-around;gap:0}
+  .nav-item span:not(.nav-icon){display:none}
+  .nav-item{padding:8px 12px;flex-direction:column;gap:2px;font-size:9px}
+  .nav-item .nav-icon{width:auto}
+  .main{margin-left:0;padding-bottom:60px}
+  .main-header{padding:16px 20px}
+  .page-content{padding:20px 16px}
+  .metrics-row{grid-template-columns:repeat(2,1fr)}
+  .detail-grid{grid-template-columns:1fr}
+  .detail-stats{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-mark"></div>Call<span class="accent">forge</span></div>
+  <nav class="sidebar-nav">
+    <a class="nav-item active" onclick="switchTab('overview')"><span class="nav-icon">📊</span><span>Overview</span></a>
+    <a class="nav-item" onclick="switchTab('meetings')"><span class="nav-icon">🎙</span><span>Meetings</span></a>
+    <a class="nav-item" onclick="switchTab('upload')"><span class="nav-icon">⬆</span><span>Upload</span></a>
+    <a class="nav-item" onclick="switchTab('forged')"><span class="nav-icon">⚒</span><span>The Forged</span></a>
+    <a class="nav-item" onclick="switchTab('settings')"><span class="nav-icon">⚙</span><span>Settings</span></a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="setLang('en')" data-lang="en">EN</button>
+      <button class="lang-btn" onclick="setLang('es')" data-lang="es">ES</button>
+    </div>
+    <div class="user-row">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <div class="user-info">
+        <div class="user-name" id="userName">Loading...</div>
+        <div class="user-plan">PRO TRIAL</div>
+      </div>
+      <button class="logout-btn" onclick="handleLogout()" title="Sign out">↩</button>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="main-header">
+    <h1 id="pageTitle">Overview</h1>
+    <button class="btn-upload" onclick="switchTab('upload')">⬆ Upload Meeting</button>
+  </div>
+
+  <div class="page-content">
+
+    <!-- OVERVIEW TAB -->
+    <div class="tab-page active" id="tab-overview">
+      <div class="metrics-row">
+        <div class="metric-card"><div class="metric-label">Meetings This Month</div><div class="metric-value" id="metricMeetings">0</div><div class="metric-change metric-up">Upload your first call</div></div>
+        <div class="metric-card"><div class="metric-label">Avg Deal Score</div><div class="metric-value" id="metricScore" style="color:var(--gray)">—</div><div class="metric-change metric-warn">No data yet</div></div>
+        <div class="metric-card"><div class="metric-label">Action Items</div><div class="metric-value" id="metricActions">0</div><div class="metric-change metric-warn">None extracted yet</div></div>
+        <div class="metric-card"><div class="metric-label">Follow-ups Drafted</div><div class="metric-value" id="metricFollowups">0</div><div class="metric-change metric-up">AI-generated</div></div>
+      </div>
+      <div class="section-header">
+        <span class="section-title">Recent Meetings</span>
+        <button class="view-all" onclick="switchTab('meetings')">View all →</button>
+      </div>
+      <div class="meetings-list" id="recentMeetingsList">
+        <div class="empty-state">
+          <div class="empty-icon">🎙</div>
+          <h3>No meetings yet</h3>
+          <p>Upload your first sales call and Callforge will forge it into a summary, action items, and a follow-up email.</p>
+          <button class="btn-upload" onclick="switchTab('upload')">⬆ Upload your first call</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEETINGS TAB -->
+    <div class="tab-page" id="tab-meetings">
+      <div class="section-header"><span class="section-title">All Meetings</span></div>
+      <div class="meetings-list" id="allMeetingsList">
+        <div class="empty-state">
+          <div class="empty-icon">🎙</div>
+          <h3>No meetings yet</h3>
+          <p>Upload your first sales call to get started.</p>
+          <button class="btn-upload" onclick="switchTab('upload')">⬆ Upload a call</button>
+        </div>
+      </div>
+
+      <!-- Meeting detail panel -->
+      <div class="meeting-detail" id="meetingDetail">
+        <button class="back-btn" onclick="closeMeetingDetail()">← Back to meetings</button>
+        <div class="detail-header">
+          <div class="detail-title" id="detailTitle"></div>
+          <div class="detail-meta" id="detailMeta"></div>
+          <div class="detail-stats">
+            <div class="detail-stat"><div class="detail-stat-val" id="detailScore">—</div><div class="detail-stat-label">Deal Score</div></div>
+            <div class="detail-stat"><div class="detail-stat-val" id="detailActions">—</div><div class="detail-stat-label">Action Items</div></div>
+            <div class="detail-stat"><div class="detail-stat-val" id="detailLang">—</div><div class="detail-stat-label">Language</div></div>
+          </div>
+        </div>
+        <div class="detail-grid">
+          <div class="detail-section"><h3>✅ Action Items</h3><div id="actionItemsList"></div></div>
+          <div class="detail-section"><h3>📝 AI Summary</h3><p class="summary-text" id="summaryText"></p></div>
+          <div class="detail-section full"><h3>📧 AI-Generated Follow-up Email</h3><div class="email-block" id="followupEmail"></div><button class="copy-btn" onclick="copyEmail()">Copy email ↗</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPLOAD TAB -->
+    <div class="tab-page" id="tab-upload">
+      <div class="upload-info-banner">🌎 <span><strong>Auto language detection.</strong> Upload a meeting in English or Spanish — Callforge detects the language and delivers everything in that language.</span></div>
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+        <div style="font-size:48px;margin-bottom:16px">🎙</div>
+        <h3>Drop your meeting recording here</h3>
+        <p>Or click to browse your files</p>
+        <button class="btn-choose" onclick="event.stopPropagation();document.getElementById('fileInput').click()">Choose file</button>
+        <p class="upload-formats">Supports MP3, MP4, M4A, WAV, WebM · Max 500MB</p>
+      </div>
+      <input type="file" id="fileInput" accept="audio/*,video/*" style="display:none" onchange="handleFileSelect(event)">
+      <div class="processing-card" id="processingCard">
+        <div class="processing-header">
+          <div class="processing-icon">⚒</div>
+          <div>
+            <div class="processing-title">Forging your meeting...</div>
+            <div class="processing-sub" id="processingFileName">your-call.mp3</div>
+          </div>
+        </div>
+        <div class="progress-step active" id="step1"><div class="step-dot">1</div><span>Uploading audio file</span></div>
+        <div class="progress-step" id="step2"><div class="step-dot">2</div><span>Detecting language &amp; transcribing audio</span></div>
+        <div class="progress-step" id="step3"><div class="step-dot">3</div><span>Generating AI summary &amp; action items</span></div>
+        <div class="progress-step" id="step4"><div class="step-dot">4</div><span>Scoring deal health</span></div>
+        <div class="progress-step" id="step5"><div class="step-dot">5</div><span>Drafting follow-up email</span></div>
+      </div>
+    </div>
+
+    <!-- THE FORGED TAB -->
+    <div class="tab-page" id="tab-forged">
+      <p style="font-size:13px;color:var(--gray);margin-bottom:20px;line-height:1.6">Four AI specialists working in the background to help you close more deals. Upload a meeting to see their insights.</p>
+      <div class="forged-grid">
+        <div class="forged-dash-card">
+          <div class="active-badge">ACTIVE</div>
+          <div class="forged-header"><div class="forged-avatar maya">⚡</div><div><div class="forged-name">Maya the Spark</div><div class="forged-role">Pitch Coach</div></div></div>
+          <p class="forged-insight">Upload a sales call and Maya will analyze your pitch — telling you exactly which lines worked, which fell flat, and how to open stronger next time.</p>
+          <button class="forged-action">View pitch insights →</button>
+        </div>
+        <div class="forged-dash-card">
+          <div class="active-badge">ACTIVE</div>
+          <div class="forged-header"><div class="forged-avatar sam">🔨</div><div><div class="forged-name">Sam the Anvil</div><div class="forged-role">Follow-up Coach</div></div></div>
+          <p class="forged-insight">After every call, Sam drafts a personalized follow-up email in your voice. Upload a meeting and it'll be ready before you leave the room.</p>
+          <button class="forged-action">View drafted emails →</button>
+        </div>
+        <div class="forged-dash-card">
+          <div class="active-badge">ACTIVE</div>
+          <div class="forged-header"><div class="forged-avatar finn">🔧</div><div><div class="forged-name">Finn the Tongs</div><div class="forged-role">Deal Analyst</div></div></div>
+          <p class="forged-insight">Finn tracks deal health across every call — scoring intent, flagging risks, and telling you which deals need attention before it's too late.</p>
+          <button class="forged-action">View pipeline analysis →</button>
+        </div>
+        <div class="forged-dash-card">
+          <div class="active-badge">ACTIVE</div>
+          <div class="forged-header"><div class="forged-avatar aria">⚒</div><div><div class="forged-name">Aria the Hammer</div><div class="forged-role">Objection Coach</div></div></div>
+          <p class="forged-insight">Aria detects every objection across your calls and coaches you on the perfect comeback — so you're never caught off guard twice.</p>
+          <button class="forged-action">View objection coaching →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div class="tab-page" id="tab-settings">
+      <div class="settings-card">
+        <div class="settings-group"><label>Full Name</label><input type="text" id="settingsName" placeholder="Your name"></div>
+        <div class="settings-group"><label>Email</label><input type="email" id="settingsEmail" placeholder="your@email.com" readonly style="opacity:0.6;cursor:not-allowed"></div>
+        <div class="settings-group">
+          <label>Preferred Language</label>
+          <div style="display:flex;gap:8px">
+            <button onclick="setLang('en')" style="background:var(--cream);color:var(--ink);border:1.5px solid var(--light-gray);padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Cabinet Grotesk';font-size:13px;font-weight:700;transition:all 0.2s" onmouseover="this.style.borderColor='var(--forge)'" onmouseout="this.style.borderColor='var(--light-gray)'">🇺🇸 English</button>
+            <button onclick="setLang('es')" style="background:var(--cream);color:var(--ink);border:1.5px solid var(--light-gray);padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Cabinet Grotesk';font-size:13px;font-weight:700;transition:all 0.2s" onmouseover="this.style.borderColor='var(--forge)'" onmouseout="this.style.borderColor='var(--light-gray)'">🇪🇸 Español</button>
+          </div>
+        </div>
+        <div class="settings-divider"></div>
+        <button class="btn-save" onclick="saveSettings()">Save changes</button>
+        <div class="settings-divider"></div>
+        <button class="btn-danger" onclick="handleLogout()">Sign out →</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── SUPABASE CONFIG ───────────────────────────────────────────────────────
+const SUPABASE_URL  = 'https://yrptztgbwedvszqjonil.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_hDz5RZJ04KKQK_3lrHVysw_9_Uf9dmE';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentUser = null;
+let currentLang = 'en';
+let allMeetings = [];
+let currentMeetingId = null;
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+async function init() {
+  try { currentLang = localStorage.getItem('cf_lang') || 'en'; } catch(e){}
+  applyLang(currentLang);
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = 'index.html'; return; }
+
+  currentUser = session.user;
+  const name = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
+  const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('userAvatar').textContent = initials;
+  document.getElementById('userName').textContent = name;
+  document.getElementById('settingsName').value = name;
+  document.getElementById('settingsEmail').value = currentUser.email;
+
+  loadMeetings();
+}
+
+// ─── MEETINGS ──────────────────────────────────────────────────────────────
+async function loadMeetings() {
+  const { data, error } = await sb
+    .from('meetings')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false });
+
+  if (error) { console.error('Error loading meetings:', error); return; }
+  allMeetings = data || [];
+  renderMeetings();
+  updateMetrics();
+}
+
+function renderMeetings() {
+  const recentEl = document.getElementById('recentMeetingsList');
+  const allEl    = document.getElementById('allMeetingsList');
+  if (allMeetings.length === 0) return;
+
+  const html = allMeetings.map(m => `
+    <div class="meeting-card" onclick="openMeeting('${m.id}')">
+      <div class="meeting-icon" style="background:${m.language==='es'?'#fff7ed':'#f0fdf4'}">${m.language==='es'?'🇪🇸':'🇺🇸'}</div>
+      <div class="meeting-info">
+        <div class="meeting-title">${m.title || 'Untitled Meeting'}</div>
+        <div class="meeting-meta">${new Date(m.created_at).toLocaleDateString()} · ${m.status}</div>
+      </div>
+      <span class="meeting-status ${m.status==='done'?'status-done':'status-processing'}">${m.status==='done'?'Done':'Processing'}</span>
+      <div class="meeting-score">
+        <div class="score-val ${m.deal_score>=70?'score-high':'score-low'}">${m.deal_score||'—'}</div>
+        <div class="score-label">SCORE</div>
+      </div>
+    </div>
+  `).join('');
+
+  recentEl.innerHTML = html;
+  allEl.innerHTML = html;
+}
+
+function updateMetrics() {
+  document.getElementById('metricMeetings').textContent = allMeetings.length;
+  const scored = allMeetings.filter(m => m.deal_score);
+  const avgScore = scored.length ? Math.round(scored.reduce((a,m) => a+m.deal_score, 0) / scored.length) : null;
+  document.getElementById('metricScore').textContent = avgScore || '—';
+  if (avgScore) document.getElementById('metricScore').style.color = avgScore >= 70 ? 'var(--success)' : 'var(--red)';
+  const totalActions = allMeetings.reduce((a,m) => a + (m.action_items?.length || 0), 0);
+  document.getElementById('metricActions').textContent = totalActions;
+  const followups = allMeetings.filter(m => m.follow_up_email).length;
+  document.getElementById('metricFollowups').textContent = followups;
+}
+
+function openMeeting(id) {
+  const m = allMeetings.find(x => x.id === id);
+  if (!m) return;
+  currentMeetingId = id;
+  document.getElementById('detailTitle').textContent = m.title || 'Untitled Meeting';
+  document.getElementById('detailMeta').textContent = new Date(m.created_at).toLocaleString() + ' · ' + (m.language === 'es' ? 'Spanish' : 'English');
+  document.getElementById('detailScore').textContent = m.deal_score || '—';
+  if (m.deal_score) document.getElementById('detailScore').style.color = m.deal_score >= 70 ? 'var(--success)' : 'var(--red)';
+  document.getElementById('detailActions').textContent = m.action_items?.length || 0;
+  document.getElementById('detailLang').textContent = m.language === 'es' ? '🇪🇸 ES' : '🇺🇸 EN';
+  document.getElementById('summaryText').textContent = m.summary || 'Summary not available.';
+  const actions = m.action_items || [];
+  document.getElementById('actionItemsList').innerHTML = actions.map(a =>
+    `<div class="action-item"><div class="action-check" onclick="this.style.background='var(--forge)';this.style.borderColor='var(--forge)'"></div>${a}</div>`
+  ).join('') || '<p style="font-size:13px;color:var(--gray)">No action items extracted.</p>';
+  document.getElementById('followupEmail').innerHTML = m.follow_up_email || '<em>No follow-up email drafted.</em>';
+  document.getElementById('meetingDetail').classList.add('show');
+  document.getElementById('allMeetingsList').style.display = 'none';
+  document.querySelector('.section-header').style.display = 'none';
+}
+
+function closeMeetingDetail() {
+  document.getElementById('meetingDetail').classList.remove('show');
+  document.getElementById('allMeetingsList').style.display = '';
+  document.querySelector('.section-header').style.display = '';
+  currentMeetingId = null;
+}
+
+function copyEmail() {
+  const m = allMeetings.find(x => x.id === currentMeetingId);
+  if (m?.follow_up_email) {
+    navigator.clipboard.writeText(m.follow_up_email.replace(/<[^>]*>/g, ''));
+    showToast('Email copied to clipboard ✓', 'success');
+  }
+}
+
+// ─── UPLOAD ───────────────────────────────────────────────────────────────
+function handleFileSelect(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  startProcessing(file.name);
+}
+
+async function startProcessing(filename) {
+  document.getElementById('uploadZone').style.display = 'none';
+  const card = document.getElementById('processingCard');
+  card.classList.add('show');
+  document.getElementById('processingFileName').textContent = filename;
+
+  // Simulate processing steps for now
+  // TODO: Replace with real API call to your backend processing function
+  const steps = ['step1','step2','step3','step4','step5'];
+  for (let i = 0; i < steps.length; i++) {
+    await new Promise(r => setTimeout(r, 1800));
+    const el = document.getElementById(steps[i]);
+    el.classList.remove('active');
+    el.classList.add('done');
+    el.querySelector('.step-dot').textContent = '✓';
+    if (i < steps.length - 1) {
+      document.getElementById(steps[i+1]).classList.add('active');
+    }
+  }
+
+  await new Promise(r => setTimeout(r, 1000));
+  card.classList.remove('show');
+  document.getElementById('uploadZone').style.display = '';
+  // Reset steps
+  steps.forEach(s => {
+    const el = document.getElementById(s);
+    el.classList.remove('active','done');
+    el.querySelector('.step-dot').textContent = s.replace('step','');
+  });
+  document.getElementById('step1').classList.add('active');
+  document.getElementById('fileInput').value = '';
+
+  showToast('⚒ Meeting forged! Check your meetings tab.', 'success');
+  switchTab('overview');
+  loadMeetings();
+}
+
+// ─── SETTINGS ─────────────────────────────────────────────────────────────
+async function saveSettings() {
+  const name = document.getElementById('settingsName').value.trim();
+  if (!name) return;
+  const { error } = await sb.auth.updateUser({ data: { full_name: name } });
+  if (error) { showToast('Failed to save. Please try again.', 'error'); return; }
+  const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('userAvatar').textContent = initials;
+  document.getElementById('userName').textContent = name;
+  showToast('Settings saved ✓', 'success');
+}
+
+// ─── AUTH ──────────────────────────────────────────────────────────────────
+async function handleLogout() {
+  await sb.auth.signOut();
+  window.location.href = 'index.html';
+}
+
+// ─── NAVIGATION ───────────────────────────────────────────────────────────
+const tabTitles = {
+  overview:'Overview', meetings:'Meetings',
+  upload:'Upload Meeting', forged:'The Forged', settings:'Settings'
+};
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelectorAll('.nav-item')[['overview','meetings','upload','forged','settings'].indexOf(tab)]?.classList.add('active');
+  document.getElementById('pageTitle').textContent = tabTitles[tab] || '';
+  closeMeetingDetail();
+}
+
+// ─── LANGUAGE ─────────────────────────────────────────────────────────────
+function setLang(lang) {
+  currentLang = lang;
+  try { localStorage.setItem('cf_lang', lang); } catch(e){}
+  applyLang(lang);
+}
+
+function applyLang(lang) {
+  document.querySelectorAll('.lang-btn').forEach(btn =>
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang)
+  );
+}
+
+// ─── TOAST ─────────────────────────────────────────────────────────────────
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast show ${type}`;
+  setTimeout(() => t.className = 'toast', 3500);
+}
+
+init();
+</script>
+</body>
+</html>

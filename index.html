@@ -4,13 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Callforge — AI Meeting Intelligence for Sales Teams</title>
-
-<!-- Primary Meta -->
 <meta name="description" content="Bilingual AI that records your sales calls, writes the summary, extracts action items, and drafts the follow-up email. English and Spanish. Built by a husband-wife team.">
 <meta name="author" content="Callforge">
 <meta name="theme-color" content="#ff6b1a">
-
-<!-- Open Graph / WhatsApp / Facebook / LinkedIn -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://callforge.to">
 <meta property="og:site_name" content="Callforge">
@@ -21,31 +17,23 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Callforge — Forge every call into a closed deal">
 <meta property="og:locale" content="en_US">
-
-<!-- Twitter / X Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@hellocallforge">
 <meta name="twitter:creator" content="@hellocallforge">
 <meta name="twitter:title" content="Callforge — AI Meeting Intelligence for Sales Teams">
 <meta name="twitter:description" content="Bilingual AI that records your sales calls, writes the summary, extracts action items, and drafts the follow-up email. 🇺🇸 + 🇪🇸">
 <meta name="twitter:image" content="https://callforge.to/og-image.png">
-
-<!-- iMessage / Apple -->
 <meta name="apple-mobile-web-app-title" content="Callforge">
 <meta name="apple-mobile-web-app-capable" content="yes">
-
 <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--ink:#0a0e1a;--paper:#f4f1ea;--cream:#faf7f0;--forge:#ff6b1a;--forge-dark:#e55a0d;--ember:#ffd166;--charcoal:#14192a;--gray:#7a7a8c;--light-gray:#e6e3dc;--white:#fff;--red:#ff4545;--success:#22c55e}
 body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
-.screen{display:none;min-height:100vh}
-.screen.active{display:block}
-#landing{background:var(--ink);color:var(--paper);position:relative}
+#landing{background:var(--ink);color:var(--paper);position:relative;min-height:100vh}
 #landing::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse at center,rgba(255,107,26,0.15),transparent 70%);pointer-events:none;z-index:0}
 #landing>*{position:relative;z-index:1}
-
-/* TITO MASCOT */
 .tito-container{position:absolute;right:48px;top:120px;width:240px;height:240px;z-index:2;cursor:pointer;animation:titoFloat 4s ease-in-out infinite}
 @keyframes titoFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(2deg)}}
 .tito-image{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 30px rgba(255,107,26,0.3))}
@@ -53,8 +41,6 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 .tito-speech::after{content:'';position:absolute;bottom:-8px;right:24px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:10px solid #fff}
 .tito-container:hover .tito-speech{opacity:1;transform:translateY(0)}
 .tito-container:hover .tito-image{transform:scale(1.05);transition:transform 0.3s}
-
-/* NAV */
 nav{display:flex;align-items:center;justify-content:space-between;padding:24px 48px;border-bottom:1px solid rgba(255,255,255,0.07)}
 .nav-logo{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;display:flex;align-items:center;gap:8px}
 .logo-mark{width:28px;height:28px;background:linear-gradient(135deg,var(--forge),var(--ember));border-radius:7px;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 0 20px rgba(255,107,26,0.4)}
@@ -71,8 +57,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:24px 4
 .btn-primary:hover{background:var(--forge-dark);transform:translateY(-1px)}
 .btn-secondary{background:transparent;color:var(--paper);border:1px solid rgba(255,255,255,0.2);padding:12px 24px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:500;cursor:pointer}
 .btn-secondary:hover{border-color:rgba(255,255,255,0.5)}
-
-/* HERO */
 .hero{padding:80px 48px 60px;max-width:1200px;margin:0 auto;text-align:center;position:relative}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,26,0.1);border:1px solid rgba(255,107,26,0.25);border-radius:100px;padding:6px 14px;font-size:12px;color:var(--forge);margin-bottom:32px;letter-spacing:0.5px}
 .hero-badge-dot{width:6px;height:6px;background:var(--forge);border-radius:50%;animation:blink 2s infinite;box-shadow:0 0 8px var(--forge)}
@@ -83,8 +67,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:24px 4
 .hero-cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .hero-cta .btn-primary,.hero-cta .btn-secondary{padding:16px 32px;font-size:15px;border-radius:10px}
 .hero-note{font-size:12px;color:rgba(244,241,234,0.3);margin-top:14px}
-
-/* WAITLIST */
 .waitlist-section{padding:60px 48px;max-width:680px;margin:0 auto}
 .waitlist-card{background:linear-gradient(135deg,rgba(255,107,26,0.08),rgba(255,209,102,0.04));border:1px solid rgba(255,107,26,0.25);border-radius:20px;padding:40px;text-align:center;position:relative;overflow:hidden}
 .waitlist-card::before{content:'';position:absolute;top:-100px;right:-100px;width:300px;height:300px;background:radial-gradient(circle,rgba(255,107,26,0.15),transparent);pointer-events:none}
@@ -99,9 +81,9 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:24px 4
 .waitlist-form select{appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3e%3cpath fill='%23ff6b1a' d='M6 9L1 4h10z'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px;cursor:pointer}
 .waitlist-form select option{background:var(--ink);color:var(--paper)}
 .waitlist-submit{padding:16px;border-radius:10px;font-size:15px;font-weight:700;border:none;background:var(--forge);color:#fff;cursor:pointer;box-shadow:0 6px 24px rgba(255,107,26,0.4);transition:all 0.2s;margin-top:4px}
-.waitlist-submit:hover{background:var(--forge-dark);transform:translateY(-1px);box-shadow:0 8px 28px rgba(255,107,26,0.5)}
+.waitlist-submit:hover{background:var(--forge-dark);transform:translateY(-1px)}
 .waitlist-submit:disabled{opacity:0.6;cursor:not-allowed;transform:none}
-.waitlist-counter{margin-top:20px;font-size:13px;color:rgba(244,241,234,0.5);position:relative}
+.waitlist-counter{margin-top:20px;font-size:13px;color:rgba(244,241,234,0.5)}
 .waitlist-counter strong{color:var(--ember);font-weight:700}
 .waitlist-success{display:none;text-align:center;padding:20px}
 .waitlist-success.show{display:block;animation:fadeInUp 0.5s ease}
@@ -109,18 +91,13 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:24px 4
 .success-icon{font-size:48px;margin-bottom:12px}
 .waitlist-success h3{font-family:'Clash Display',sans-serif;font-size:24px;font-weight:700;margin-bottom:8px;color:var(--ember)}
 .waitlist-success p{font-size:14px;color:rgba(244,241,234,0.7);font-weight:300;line-height:1.6}
-.waitlist-perks{display:flex;justify-content:center;gap:24px;margin-top:24px;font-size:12px;color:rgba(244,241,234,0.6);flex-wrap:wrap;position:relative}
-.waitlist-perks span{display:flex;align-items:center;gap:6px}
-.waitlist-perks span::before{content:'✓';color:var(--forge);font-weight:700}
-
-/* STATS */
+.waitlist-perks{display:flex;justify-content:center;gap:24px;margin-top:24px;font-size:12px;color:rgba(244,241,234,0.6);flex-wrap:wrap}
+.waitlist-perks span::before{content:'✓ ';color:var(--forge);font-weight:700}
 .stats-bar{border-top:1px solid rgba(255,255,255,0.07);border-bottom:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:flex;max-width:1100px;margin:0 auto}
 .stat{flex:1;text-align:center;padding:0 24px;border-right:1px solid rgba(255,255,255,0.07)}
 .stat:last-child{border-right:none}
 .stat-num{font-family:'Clash Display',sans-serif;font-size:36px;font-weight:700;background:linear-gradient(135deg,var(--forge),var(--ember));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:6px}
 .stat-label{font-size:12px;color:rgba(244,241,234,0.4)}
-
-/* THE FORGED */
 .forged-section{padding:80px 48px;max-width:1100px;margin:0 auto;text-align:center}
 .section-eyebrow{font-size:11px;letter-spacing:3px;color:var(--forge);text-transform:uppercase;margin-bottom:16px;font-weight:700}
 .forged-section h2{font-family:'Clash Display',sans-serif;font-size:clamp(32px,5vw,48px);font-weight:700;letter-spacing:-1px;margin-bottom:12px}
@@ -129,7 +106,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:24px 4
 .forged-card{background:linear-gradient(180deg,var(--charcoal),#0e1320);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:24px;transition:all 0.3s;position:relative;overflow:hidden}
 .forged-card:hover{border-color:rgba(255,107,26,0.4);transform:translateY(-6px);box-shadow:0 16px 40px rgba(255,107,26,0.15)}
 .forged-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--forge),var(--ember))}
-.char-avatar{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:38px;margin-bottom:16px;position:relative;animation:charBob 3s ease-in-out infinite}
+.char-avatar{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:38px;margin-bottom:16px;animation:charBob 3s ease-in-out infinite}
 .char-avatar.maya{background:linear-gradient(135deg,#fef3c7,#fde047);box-shadow:0 6px 20px rgba(253,224,71,0.4)}
 .char-avatar.sam{background:linear-gradient(135deg,#bfdbfe,#60a5fa);box-shadow:0 6px 20px rgba(96,165,250,0.4);animation-delay:0.5s}
 .char-avatar.finn{background:linear-gradient(135deg,#bbf7d0,#4ade80);box-shadow:0 6px 20px rgba(74,222,128,0.4);animation-delay:1s}
@@ -139,8 +116,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:24px 4
 .char-title{font-size:11px;letter-spacing:1.5px;color:var(--forge);text-transform:uppercase;margin-bottom:12px;font-weight:700}
 .char-desc{font-size:13px;color:rgba(244,241,234,0.55);line-height:1.6;font-weight:300;margin-bottom:14px}
 .char-quote{font-size:11px;color:var(--ember);font-style:italic;border-left:2px solid var(--forge);padding-left:10px;line-height:1.5}
-
-/* FEATURES */
 .features{padding:80px 48px;max-width:1100px;margin:0 auto}
 .features-label{font-size:11px;letter-spacing:3px;color:rgba(244,241,234,0.3);text-transform:uppercase;margin-bottom:48px;text-align:center}
 .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden}
@@ -150,8 +125,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:24px 4
 .feature h3{font-family:'Clash Display',sans-serif;font-size:17px;font-weight:600;margin-bottom:8px}
 .feature p{font-size:13px;color:rgba(244,241,234,0.45);line-height:1.6;font-weight:300}
 .bilingual-badge{display:inline-block;background:var(--forge);color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle}
-
-/* PRICING */
 .pricing{padding:80px 48px;max-width:900px;margin:0 auto;text-align:center}
 .pricing h2{font-family:'Clash Display',sans-serif;font-size:clamp(32px,5vw,48px);font-weight:700;letter-spacing:-1px;margin-bottom:12px}
 .pricing>p{font-size:16px;color:rgba(244,241,234,0.45);margin-bottom:48px;font-weight:300}
@@ -173,48 +146,41 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:24px 4
 .plan-btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.2);color:var(--paper)}
 .plan-btn-outline:hover{border-color:var(--forge);color:var(--forge)}
 .plan-btn-light{background:#fff;color:var(--forge-dark)}
-
-/* FOUNDERS NOTE */
 .founders-note{padding:60px 48px;max-width:760px;margin:0 auto;text-align:center}
 .founders-note-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:40px}
 .founders-note-card .eyebrow{font-size:11px;letter-spacing:3px;color:var(--forge);text-transform:uppercase;margin-bottom:14px;font-weight:700}
 .founders-note-card h3{font-family:'Clash Display',sans-serif;font-size:24px;font-weight:700;margin-bottom:14px;letter-spacing:-0.5px}
-.founders-note-card p{font-size:15px;color:rgba(244,241,234,0.65);line-height:1.7;font-weight:300;margin-bottom:0}
+.founders-note-card p{font-size:15px;color:rgba(244,241,234,0.65);line-height:1.7;font-weight:300}
 .founders-signature{margin-top:20px;font-size:13px;color:var(--ember);font-style:italic}
-
 footer{border-top:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:flex;justify-content:space-between;font-size:12px;color:rgba(244,241,234,0.3);flex-wrap:wrap;gap:12px}
-
-@media (max-width:900px){
-  .tito-container{position:relative;right:auto;top:auto;margin:0 auto 30px;width:180px;height:180px}
-  .tito-speech{display:none}
-  .hero{padding:60px 20px 48px}
-}
-@media (max-width:768px){
-  nav{padding:16px 20px;flex-wrap:wrap;gap:8px}
-  .nav-links{gap:12px;flex-wrap:wrap}
-  .nav-links a:not(.lang-switcher):not(.btn-secondary):not(.btn-primary){display:none}
-  .stats-bar{padding:24px 20px;flex-wrap:wrap;gap:16px}
-  .stat{flex:1 1 40%;border-right:none}
-  .features{padding:48px 20px}
-  .features-grid{grid-template-columns:1fr}
-  .forged-section{padding:48px 20px}
-  .forged-grid{grid-template-columns:1fr 1fr;gap:12px}
-  .pricing{padding:48px 20px}
-  .waitlist-section{padding:40px 20px}
-  .waitlist-card{padding:28px 20px}
-  .form-row{grid-template-columns:1fr}
-  .founders-note{padding:40px 20px}
-  .founders-note-card{padding:28px 20px}
-  footer{padding:24px 20px;flex-direction:column;gap:8px;text-align:center}
-}
-@media (max-width:480px){
-  .forged-grid{grid-template-columns:1fr}
-}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:20px;padding:40px;width:100%;max-width:420px;margin:20px;position:relative}
+.modal-logo{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.modal-logo .accent{color:var(--forge)}
+.modal h2{font-family:'Clash Display',sans-serif;font-size:26px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.modal>p{font-size:13px;color:var(--gray);margin-bottom:24px}
+.modal-form-group{margin-bottom:14px}
+.modal-form-group label{display:block;font-size:11px;font-weight:700;color:var(--ink);margin-bottom:5px;letter-spacing:0.5px;text-transform:uppercase}
+.modal-form-group input{width:100%;padding:13px 16px;border:1.5px solid var(--light-gray);border-radius:10px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;color:var(--ink);background:var(--cream);outline:none;transition:all 0.2s}
+.modal-form-group input:focus{border-color:var(--forge);background:#fff}
+.modal-error{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:14px;display:none}
+.modal-error.show{display:block}
+.modal .btn-primary{width:100%;padding:14px;font-size:15px;border-radius:10px;margin-top:4px}
+.modal-switch{text-align:center;margin-top:16px;font-size:13px;color:var(--gray)}
+.modal-switch a{color:var(--forge);font-weight:700;cursor:pointer}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;border:none;background:var(--light-gray);cursor:pointer;font-size:14px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--ink);color:var(--paper);padding:14px 24px;border-radius:12px;font-size:14px;font-weight:600;z-index:2000;transition:all 0.4s;opacity:0;border-left:4px solid var(--forge)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.success{border-left-color:var(--success)}
+.toast.error{border-left-color:var(--red)}
+@media(max-width:900px){.tito-container{position:relative;right:auto;top:auto;margin:0 auto 30px;width:180px;height:180px}.tito-speech{display:none}.hero{padding:60px 20px 48px}}
+@media(max-width:768px){nav{padding:16px 20px;flex-wrap:wrap;gap:8px}.nav-links a:not(:last-child){display:none}.stats-bar{padding:24px 20px;flex-wrap:wrap}.stat{flex:1 1 40%;border-right:none}.features{padding:48px 20px}.features-grid{grid-template-columns:1fr}.forged-section{padding:48px 20px}.forged-grid{grid-template-columns:1fr 1fr;gap:12px}.pricing{padding:48px 20px}.waitlist-section{padding:40px 20px}.waitlist-card{padding:28px 20px}.form-row{grid-template-columns:1fr}.founders-note{padding:40px 20px}.founders-note-card{padding:28px 20px}footer{padding:24px 20px;flex-direction:column;text-align:center}}
+@media(max-width:480px){.forged-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
-<div id="landing" class="screen active">
+<div id="landing">
   <nav>
     <div class="nav-logo"><div class="logo-mark"></div>Call<span class="accent">forge</span></div>
     <div class="nav-links">
@@ -225,67 +191,60 @@ footer{border-top:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:fle
         <button class="lang-btn active" onclick="setLang('en')" data-lang="en">EN</button>
         <button class="lang-btn" onclick="setLang('es')" data-lang="es">ES</button>
       </div>
+      <button class="btn-secondary" onclick="openModal('login')" data-i18n="nav.signIn">Sign in</button>
       <button class="btn-primary" onclick="scrollToWaitlist()" data-i18n="nav.joinWaitlist">Join the waitlist</button>
     </div>
   </nav>
 
   <section class="hero">
-    <div class="tito-container" title="Hey, I'm Tito!">
+    <div class="tito-container">
       <div class="tito-speech" data-i18n="tito.greeting">¡Hola! I'm Tito 👋</div>
-      <img src="Tito.png" alt="Tito the Blacksmith - Callforge mascot" class="tito-image" onerror="this.style.display='none'">
+      <img src="Tito.png" alt="Tito the Callforge mascot" class="tito-image" onerror="this.style.display='none'">
     </div>
-
-    <div class="hero-badge"><div class="hero-badge-dot"></div> <span data-i18n="hero.badge">LAUNCHING SOON · JOIN THE WAITLIST</span></div>
+    <div class="hero-badge"><div class="hero-badge-dot"></div><span data-i18n="hero.badge">LAUNCHING SOON · JOIN THE WAITLIST</span></div>
     <h1 data-i18n-html="hero.title">Forge every call<br>into a <em>closed deal.</em></h1>
     <p data-i18n="hero.subtitle">Callforge records your sales calls in English or Spanish, writes the summary, extracts action items, and drafts the follow-up email — before your prospect even closes the tab.</p>
     <div class="hero-cta">
       <button class="btn-primary" onclick="scrollToWaitlist()" data-i18n="hero.ctaPrimary">Join the waitlist →</button>
-      <button class="btn-secondary" onclick="scrollToFeatures()" data-i18n="hero.ctaSecondary">See how it works</button>
+      <button class="btn-secondary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})" data-i18n="hero.ctaSecondary">See how it works</button>
     </div>
     <p class="hero-note" data-i18n="hero.note">Early waitlist gets 25% off the first 6 months · No card required</p>
   </section>
 
-  <!-- WAITLIST -->
   <section class="waitlist-section" id="waitlist">
     <div class="waitlist-card">
       <div class="waitlist-eyebrow" data-i18n="waitlist.eyebrow">⚒ EARLY ACCESS</div>
       <h2 data-i18n="waitlist.title">Be the first to forge.</h2>
       <p data-i18n="waitlist.subtitle">We're hammering Callforge into shape and launching soon. Get on the waitlist for early access and 25% off your first 6 months.</p>
-
       <form class="waitlist-form" id="waitlistForm" onsubmit="handleWaitlistSubmit(event)">
         <div class="form-row">
-          <input type="text" id="waitlistName" placeholder="First name" data-i18n-placeholder="form.firstName" required>
-          <input type="email" id="waitlistEmail" placeholder="Work email" data-i18n-placeholder="form.workEmail" required>
+          <input type="text" id="wlName" placeholder="First name" required>
+          <input type="email" id="wlEmail" placeholder="Work email" required>
         </div>
         <div class="form-row">
-          <input type="text" id="waitlistCompany" placeholder="Company (optional)" data-i18n-placeholder="form.company">
-          <select id="waitlistSize">
-            <option value="" data-i18n="form.teamSize">Team size (optional)</option>
-            <option value="solo" data-i18n="form.teamSolo">Just me</option>
-            <option value="small" data-i18n="form.teamSmall">2-10 reps</option>
-            <option value="medium" data-i18n="form.teamMedium">11-50 reps</option>
-            <option value="large" data-i18n="form.teamLarge">50+ reps</option>
+          <input type="text" id="wlCompany" placeholder="Company (optional)">
+          <select id="wlSize">
+            <option value="">Team size (optional)</option>
+            <option value="solo">Just me</option>
+            <option value="small">2–10 reps</option>
+            <option value="medium">11–50 reps</option>
+            <option value="large">50+ reps</option>
           </select>
         </div>
-        <select id="waitlistLanguage">
-          <option value="" data-i18n="form.preferLanguage">Preferred language (optional)</option>
-          <option value="en" data-i18n="form.preferEn">🇺🇸 English</option>
-          <option value="es" data-i18n="form.preferEs">🇪🇸 Español</option>
-          <option value="both" data-i18n="form.preferBoth">🌎 Both</option>
+        <select id="wlLang">
+          <option value="">Preferred language (optional)</option>
+          <option value="en">🇺🇸 English</option>
+          <option value="es">🇪🇸 Español</option>
+          <option value="both">🌎 Both</option>
         </select>
-        <button type="submit" class="waitlist-submit" id="waitlistSubmit" data-i18n="waitlist.submit">Join the waitlist →</button>
+        <button type="submit" class="waitlist-submit" id="wlSubmit">Join the waitlist →</button>
       </form>
-
       <div class="waitlist-success" id="waitlistSuccess">
         <div class="success-icon">⚒</div>
         <h3 data-i18n="waitlist.successTitle">You're on the list!</h3>
         <p data-i18n="waitlist.successDesc">We'll send you early access the moment Callforge launches. Tito's already working on it.</p>
       </div>
-
-      <div class="waitlist-counter" data-i18n="waitlist.counter">
-        Join <strong>47</strong> sales teams already waiting
-      </div>
-
+      <div class="waitlist-counter" id="waitlistCounter">Join <strong>47</strong> sales teams already waiting</div>
       <div class="waitlist-perks">
         <span data-i18n="waitlist.perk1">25% off first 6 months</span>
         <span data-i18n="waitlist.perk2">Early access</span>
@@ -298,56 +257,25 @@ footer{border-top:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:fle
     <div class="stat"><div class="stat-num">2 min</div><div class="stat-label" data-i18n="stats.summary">Avg. summary time</div></div>
     <div class="stat"><div class="stat-num">94%</div><div class="stat-label" data-i18n="stats.accuracy">Action item accuracy</div></div>
     <div class="stat"><div class="stat-num">2</div><div class="stat-label" data-i18n="stats.languages">Languages supported</div></div>
-    <div class="stat"><div class="stat-num">⚒</div><div class="stat-label" data-i18n="stats.start">Built with care</div></div>
+    <div class="stat"><div class="stat-num">⚒</div><div class="stat-label" data-i18n="stats.built">Built with care</div></div>
   </div>
 
-  <!-- THE FORGED -->
   <section class="forged-section" id="forged">
     <div class="section-eyebrow" data-i18n="forged.eyebrow">⚒ MEET YOUR AI COACH TEAM</div>
     <h2 data-i18n="forged.title">The Forged.</h2>
     <p class="subheading" data-i18n="forged.subtitle">Four AI specialists hammered into shape to help you close more deals. Built into every Pro and Team plan.</p>
-
     <div class="forged-grid">
-      <div class="forged-card">
-        <div class="char-avatar maya">⚡</div>
-        <div class="char-name" data-i18n="forged.maya.name">Maya the Spark</div>
-        <div class="char-title" data-i18n="forged.maya.title">PITCH COACH</div>
-        <p class="char-desc" data-i18n="forged.maya.desc">Reviews your calls and tells you exactly which lines worked, which fell flat, and how to open stronger next time.</p>
-        <div class="char-quote" data-i18n="forged.maya.quote">"Your last pitch lost them at minute 12 — try this instead."</div>
-      </div>
-      <div class="forged-card">
-        <div class="char-avatar sam">🔨</div>
-        <div class="char-name" data-i18n="forged.sam.name">Sam the Anvil</div>
-        <div class="char-title" data-i18n="forged.sam.title">FOLLOW-UP COACH</div>
-        <p class="char-desc" data-i18n="forged.sam.desc">Drafts your follow-up emails the moment the call ends. Reads tone, picks the right close, signs off in your voice.</p>
-        <div class="char-quote" data-i18n="forged.sam.quote">"Send within 2 hours. I drafted it. Just hit send."</div>
-      </div>
-      <div class="forged-card">
-        <div class="char-avatar finn">🔧</div>
-        <div class="char-name" data-i18n="forged.finn.name">Finn the Tongs</div>
-        <div class="char-title" data-i18n="forged.finn.title">DEAL ANALYST</div>
-        <p class="char-desc" data-i18n="forged.finn.desc">Tracks every deal in your pipeline. Scores intent. Flags risks. Tells you which deals to push and which to drop.</p>
-        <div class="char-quote" data-i18n="forged.finn.quote">"Acme is heating up. Mendoza is cooling. Focus here."</div>
-      </div>
-      <div class="forged-card">
-        <div class="char-avatar aria">⚒</div>
-        <div class="char-name" data-i18n="forged.aria.name">Aria the Hammer</div>
-        <div class="char-title" data-i18n="forged.aria.title">OBJECTION COACH</div>
-        <p class="char-desc" data-i18n="forged.aria.desc">Detects every objection raised on your calls and rehearses the perfect comeback for next time. Like having a sales mentor on call.</p>
-        <div class="char-quote" data-i18n="forged.aria.quote">"They mentioned price 4 times. Here's how to reframe it."</div>
-      </div>
+      <div class="forged-card"><div class="char-avatar maya">⚡</div><div class="char-name" data-i18n="forged.maya.name">Maya the Spark</div><div class="char-title" data-i18n="forged.maya.title">PITCH COACH</div><p class="char-desc" data-i18n="forged.maya.desc">Reviews your calls and tells you exactly which lines worked, which fell flat, and how to open stronger next time.</p><div class="char-quote" data-i18n="forged.maya.quote">"Your last pitch lost them at minute 12 — try this instead."</div></div>
+      <div class="forged-card"><div class="char-avatar sam">🔨</div><div class="char-name" data-i18n="forged.sam.name">Sam the Anvil</div><div class="char-title" data-i18n="forged.sam.title">FOLLOW-UP COACH</div><p class="char-desc" data-i18n="forged.sam.desc">Drafts your follow-up emails the moment the call ends. Reads tone, picks the right close, signs off in your voice.</p><div class="char-quote" data-i18n="forged.sam.quote">"Send within 2 hours. I drafted it. Just hit send."</div></div>
+      <div class="forged-card"><div class="char-avatar finn">🔧</div><div class="char-name" data-i18n="forged.finn.name">Finn the Tongs</div><div class="char-title" data-i18n="forged.finn.title">DEAL ANALYST</div><p class="char-desc" data-i18n="forged.finn.desc">Tracks every deal in your pipeline. Scores intent. Flags risks. Tells you which deals to push and which to drop.</p><div class="char-quote" data-i18n="forged.finn.quote">"Acme is heating up. Mendoza is cooling. Focus here."</div></div>
+      <div class="forged-card"><div class="char-avatar aria">⚒</div><div class="char-name" data-i18n="forged.aria.name">Aria the Hammer</div><div class="char-title" data-i18n="forged.aria.title">OBJECTION COACH</div><p class="char-desc" data-i18n="forged.aria.desc">Detects every objection raised on your calls and rehearses the perfect comeback for next time.</p><div class="char-quote" data-i18n="forged.aria.quote">"They mentioned price 4 times. Here's how to reframe it."</div></div>
     </div>
   </section>
 
-  <!-- FEATURES -->
   <section class="features" id="features">
     <div class="features-label" data-i18n="features.label">— WHAT CALLFORGE DOES —</div>
     <div class="features-grid">
-      <div class="feature bilingual">
-        <div class="feature-icon">🌎</div>
-        <h3><span data-i18n="features.bilingual.title">Bilingual AI</span><span class="bilingual-badge" data-i18n="features.bilingual.badge">NEW</span></h3>
-        <p data-i18n="features.bilingual.desc">Process calls in English or Spanish. The AI auto-detects the language and delivers summaries, action items, and emails in the same language.</p>
-      </div>
+      <div class="feature bilingual"><div class="feature-icon">🌎</div><h3><span data-i18n="features.bilingual.title">Bilingual AI</span><span class="bilingual-badge" data-i18n="features.bilingual.badge">NEW</span></h3><p data-i18n="features.bilingual.desc">Process calls in English or Spanish. The AI auto-detects the language and delivers summaries, action items, and emails in the same language.</p></div>
       <div class="feature"><div class="feature-icon">🎙</div><h3 data-i18n="features.transcribe.title">Transcribe any call</h3><p data-i18n="features.transcribe.desc">Upload a recording or connect directly to Zoom, Google Meet, or Teams. We transcribe everything instantly.</p></div>
       <div class="feature"><div class="feature-icon">⚡</div><h3 data-i18n="features.summary.title">AI summaries in 2 min</h3><p data-i18n="features.summary.desc">Get a clean, structured summary with key points, objections raised, and next steps — automatically.</p></div>
       <div class="feature"><div class="feature-icon">✅</div><h3 data-i18n="features.action.title">Action items extracted</h3><p data-i18n="features.action.desc">Never drop the ball again. Callforge pulls every commitment and task from the conversation.</p></div>
@@ -356,55 +284,16 @@ footer{border-top:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:fle
     </div>
   </section>
 
-  <!-- PRICING -->
   <section class="pricing" id="pricing">
     <h2 data-i18n="pricing.title">Simple, honest pricing.</h2>
     <p data-i18n="pricing.subtitle">Coming soon. Waitlist members get 25% off their first 6 months.</p>
     <div class="pricing-grid">
-      <div class="pricing-card">
-        <div class="plan-name" data-i18n="pricing.starter.name">Starter</div>
-        <div class="plan-price">$49<span data-i18n="pricing.perMonth">/mo</span></div>
-        <div class="plan-desc" data-i18n="pricing.starter.desc">Perfect for solo reps</div>
-        <ul class="plan-features">
-          <li data-i18n="pricing.starter.f1">20 meetings / month</li>
-          <li data-i18n="pricing.starter.f2">English & Spanish AI</li>
-          <li data-i18n="pricing.starter.f3">Follow-up email drafts</li>
-          <li data-i18n="pricing.starter.f4">Deal scoring</li>
-          <li data-i18n="pricing.starter.f5">Email support</li>
-        </ul>
-        <button class="plan-btn plan-btn-outline" onclick="scrollToWaitlist()" data-i18n="pricing.joinWaitlist">Join the waitlist</button>
-      </div>
-      <div class="pricing-card featured">
-        <div class="plan-name" data-i18n="pricing.pro.name">Pro</div>
-        <div class="plan-price">$99<span data-i18n="pricing.perMonth">/mo</span></div>
-        <div class="plan-desc" data-i18n="pricing.pro.desc">Best for closing teams</div>
-        <ul class="plan-features">
-          <li data-i18n="pricing.pro.f1">Unlimited meetings</li>
-          <li data-i18n="pricing.pro.f2">All 4 Forged AI Coaches</li>
-          <li data-i18n="pricing.pro.f3">CRM sync (HubSpot, SFDC)</li>
-          <li data-i18n="pricing.pro.f4">Call coaching insights</li>
-          <li data-i18n="pricing.pro.f5">Priority support</li>
-        </ul>
-        <button class="plan-btn plan-btn-light" onclick="scrollToWaitlist()" data-i18n="pricing.joinWaitlist">Join the waitlist</button>
-      </div>
-      <div class="pricing-card">
-        <div class="plan-name" data-i18n="pricing.team.name">Team</div>
-        <div class="plan-price">$299<span data-i18n="pricing.perMonth">/mo</span></div>
-        <div class="plan-desc" data-i18n="pricing.team.desc">For growing sales teams</div>
-        <ul class="plan-features">
-          <li data-i18n="pricing.team.f1">Everything in Pro</li>
-          <li data-i18n="pricing.team.f2">Up to 10 seats included</li>
-          <li data-i18n="pricing.team.f3">Manager analytics dashboard</li>
-          <li data-i18n="pricing.team.f4">Custom AI Coach personas</li>
-          <li data-i18n="pricing.team.f5">Dedicated onboarding</li>
-        </ul>
-        <div class="plan-extra" data-i18n="pricing.team.extra">+ $25/seat after 10</div>
-        <button class="plan-btn plan-btn-outline" onclick="scrollToWaitlist()" data-i18n="pricing.joinWaitlist">Join the waitlist</button>
-      </div>
+      <div class="pricing-card"><div class="plan-name" data-i18n="pricing.starter.name">Starter</div><div class="plan-price">$49<span data-i18n="pricing.perMonth">/mo</span></div><div class="plan-desc" data-i18n="pricing.starter.desc">Perfect for solo reps</div><ul class="plan-features"><li data-i18n="pricing.starter.f1">20 meetings / month</li><li data-i18n="pricing.starter.f2">English & Spanish AI</li><li data-i18n="pricing.starter.f3">Follow-up email drafts</li><li data-i18n="pricing.starter.f4">Deal scoring</li><li data-i18n="pricing.starter.f5">Email support</li></ul><button class="plan-btn plan-btn-outline" onclick="scrollToWaitlist()" data-i18n="pricing.joinWaitlist">Join the waitlist</button></div>
+      <div class="pricing-card featured"><div class="plan-name" data-i18n="pricing.pro.name">Pro</div><div class="plan-price">$99<span data-i18n="pricing.perMonth">/mo</span></div><div class="plan-desc" data-i18n="pricing.pro.desc">Best for closing teams</div><ul class="plan-features"><li data-i18n="pricing.pro.f1">Unlimited meetings</li><li data-i18n="pricing.pro.f2">All 4 Forged AI Coaches</li><li data-i18n="pricing.pro.f3">CRM sync (HubSpot, SFDC)</li><li data-i18n="pricing.pro.f4">Call coaching insights</li><li data-i18n="pricing.pro.f5">Priority support</li></ul><button class="plan-btn plan-btn-light" onclick="scrollToWaitlist()" data-i18n="pricing.joinWaitlist">Join the waitlist</button></div>
+      <div class="pricing-card"><div class="plan-name" data-i18n="pricing.team.name">Team</div><div class="plan-price">$299<span data-i18n="pricing.perMonth">/mo</span></div><div class="plan-desc" data-i18n="pricing.team.desc">For growing sales teams</div><ul class="plan-features"><li data-i18n="pricing.team.f1">Everything in Pro</li><li data-i18n="pricing.team.f2">Up to 10 seats included</li><li data-i18n="pricing.team.f3">Manager analytics dashboard</li><li data-i18n="pricing.team.f4">Custom AI Coach personas</li><li data-i18n="pricing.team.f5">Dedicated onboarding</li></ul><div class="plan-extra" data-i18n="pricing.team.extra">+ $25/seat after 10</div><button class="plan-btn plan-btn-outline" onclick="scrollToWaitlist()" data-i18n="pricing.joinWaitlist">Join the waitlist</button></div>
     </div>
   </section>
 
-  <!-- FOUNDERS NOTE -->
   <section class="founders-note">
     <div class="founders-note-card">
       <div class="eyebrow" data-i18n="founders.eyebrow">⚒ A NOTE FROM THE FOUNDERS</div>
@@ -420,157 +309,250 @@ footer{border-top:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:fle
   </footer>
 </div>
 
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-logo"><div class="logo-mark"></div>Call<span class="accent">forge</span></div>
+    <div id="signupForm">
+      <h2 data-i18n="signup.title">Start your free trial</h2>
+      <p data-i18n="signup.subtitle">14 days free · No credit card required</p>
+      <div class="modal-error" id="signupError"></div>
+      <div class="modal-form-group"><label>Full Name</label><input type="text" id="signupName" placeholder="Alex Johnson"></div>
+      <div class="modal-form-group"><label>Work Email</label><input type="email" id="signupEmail" placeholder="alex@company.com"></div>
+      <div class="modal-form-group"><label>Password</label><input type="password" id="signupPass" placeholder="Min. 8 characters"></div>
+      <button class="btn-primary" onclick="handleSignup()">Create account →</button>
+      <div class="modal-switch">Already have an account? <a onclick="switchForm('login')">Sign in</a></div>
+    </div>
+    <div id="loginForm" style="display:none">
+      <h2 data-i18n="login.title">Welcome back</h2>
+      <p data-i18n="login.subtitle">Sign in to your Callforge account</p>
+      <div class="modal-error" id="loginError"></div>
+      <div class="modal-form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="alex@company.com"></div>
+      <div class="modal-form-group"><label>Password</label><input type="password" id="loginPass"></div>
+      <button class="btn-primary" onclick="handleLogin()">Sign in →</button>
+      <div class="modal-switch">New to Callforge? <a onclick="switchForm('signup')">Start free trial</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
+// ─── SUPABASE CONFIG ───────────────────────────────────────────────────────
+// IMPORTANT: Replace these two values with your real keys from your .env file
+const SUPABASE_URL  = 'https://yrptztgbwedvszqjonil.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_hDz5RZJ04KKQK_3lrHVysw_9_Uf9dmE';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+// ─── TRANSLATIONS ──────────────────────────────────────────────────────────
 const T = {
   en: {
-    'nav.waitlist':'Waitlist','nav.forged':'The Forged','nav.pricing':'Pricing','nav.joinWaitlist':'Join the waitlist',
+    'nav.waitlist':'Waitlist','nav.forged':'The Forged','nav.pricing':'Pricing',
+    'nav.signIn':'Sign in','nav.joinWaitlist':'Join the waitlist',
     'tito.greeting':"¡Hola! I'm Tito 👋",
-    'hero.badge':'LAUNCHING SOON · JOIN THE WAITLIST','hero.title':'Forge every call<br>into a <em>closed deal.</em>',
+    'hero.badge':'LAUNCHING SOON · JOIN THE WAITLIST',
+    'hero.title':'Forge every call<br>into a <em>closed deal.</em>',
     'hero.subtitle':'Callforge records your sales calls in English or Spanish, writes the summary, extracts action items, and drafts the follow-up email — before your prospect even closes the tab.',
     'hero.ctaPrimary':'Join the waitlist →','hero.ctaSecondary':'See how it works',
     'hero.note':'Early waitlist gets 25% off the first 6 months · No card required',
-    'waitlist.eyebrow':'⚒ EARLY ACCESS','waitlist.title':'Be the first to forge.','waitlist.subtitle':"We're hammering Callforge into shape and launching soon. Get on the waitlist for early access and 25% off your first 6 months.",
-    'waitlist.submit':'Join the waitlist →','waitlist.successTitle':"You're on the list!",
+    'waitlist.eyebrow':'⚒ EARLY ACCESS','waitlist.title':'Be the first to forge.',
+    'waitlist.subtitle':"We're hammering Callforge into shape and launching soon. Get on the waitlist for early access and 25% off your first 6 months.",
+    'waitlist.successTitle':"You're on the list!",
     'waitlist.successDesc':"We'll send you early access the moment Callforge launches. Tito's already working on it.",
-    'waitlist.counter':'Join <strong>47</strong> sales teams already waiting',
     'waitlist.perk1':'25% off first 6 months','waitlist.perk2':'Early access','waitlist.perk3':'Founder support',
-    'form.firstName':'First name','form.workEmail':'Work email','form.company':'Company (optional)',
-    'form.teamSize':'Team size (optional)','form.teamSolo':'Just me','form.teamSmall':'2-10 reps','form.teamMedium':'11-50 reps','form.teamLarge':'50+ reps',
-    'form.preferLanguage':'Preferred language (optional)','form.preferEn':'🇺🇸 English','form.preferEs':'🇪🇸 Español','form.preferBoth':'🌎 Both',
-    'stats.summary':'Avg. summary time','stats.accuracy':'Action item accuracy','stats.languages':'Languages supported','stats.start':'Built with care',
-    'forged.eyebrow':'⚒ MEET YOUR AI COACH TEAM','forged.title':'The Forged.','forged.subtitle':'Four AI specialists hammered into shape to help you close more deals. Built into every Pro and Team plan.',
+    'stats.summary':'Avg. summary time','stats.accuracy':'Action item accuracy','stats.languages':'Languages supported','stats.built':'Built with care',
+    'forged.eyebrow':'⚒ MEET YOUR AI COACH TEAM','forged.title':'The Forged.',
+    'forged.subtitle':'Four AI specialists hammered into shape to help you close more deals. Built into every Pro and Team plan.',
     'forged.maya.name':'Maya the Spark','forged.maya.title':'PITCH COACH','forged.maya.desc':'Reviews your calls and tells you exactly which lines worked, which fell flat, and how to open stronger next time.','forged.maya.quote':'"Your last pitch lost them at minute 12 — try this instead."',
     'forged.sam.name':'Sam the Anvil','forged.sam.title':'FOLLOW-UP COACH','forged.sam.desc':'Drafts your follow-up emails the moment the call ends. Reads tone, picks the right close, signs off in your voice.','forged.sam.quote':'"Send within 2 hours. I drafted it. Just hit send."',
     'forged.finn.name':'Finn the Tongs','forged.finn.title':'DEAL ANALYST','forged.finn.desc':'Tracks every deal in your pipeline. Scores intent. Flags risks. Tells you which deals to push and which to drop.','forged.finn.quote':'"Acme is heating up. Mendoza is cooling. Focus here."',
-    'forged.aria.name':'Aria the Hammer','forged.aria.title':'OBJECTION COACH','forged.aria.desc':'Detects every objection raised on your calls and rehearses the perfect comeback for next time. Like having a sales mentor on call.','forged.aria.quote':'"They mentioned price 4 times. Here\'s how to reframe it."',
+    'forged.aria.name':'Aria the Hammer','forged.aria.title':'OBJECTION COACH','forged.aria.desc':'Detects every objection raised on your calls and rehearses the perfect comeback for next time.','forged.aria.quote':'"They mentioned price 4 times. Here\'s how to reframe it."',
     'features.label':'— WHAT CALLFORGE DOES —',
     'features.bilingual.title':'Bilingual AI','features.bilingual.badge':'NEW','features.bilingual.desc':'Process calls in English or Spanish. The AI auto-detects the language and delivers summaries, action items, and emails in the same language.',
-    'features.transcribe.title':'Transcribe any call','features.transcribe.desc':'Upload a recording or connect directly to Zoom, Google Meet, or Teams. We transcribe everything instantly.',
+    'features.transcribe.title':'Transcribe any call','features.transcribe.desc':'Upload a recording or connect to Zoom, Meet, or Teams. We transcribe everything instantly.',
     'features.summary.title':'AI summaries in 2 min','features.summary.desc':'Get a clean, structured summary with key points, objections raised, and next steps — automatically.',
     'features.action.title':'Action items extracted','features.action.desc':'Never drop the ball again. Callforge pulls every commitment and task from the conversation.',
     'features.scoring.title':'Deal health scoring','features.scoring.desc':'Our AI scores each deal from 0–100 based on tone, buying signals, and next steps clarity.',
     'features.followup.title':'Auto follow-up drafts','features.followup.desc':'A personalized follow-up email, ready to send, generated the moment your call ends.',
-    'pricing.title':'Simple, honest pricing.','pricing.subtitle':'Coming soon. Waitlist members get 25% off their first 6 months.','pricing.perMonth':'/mo','pricing.joinWaitlist':'Join the waitlist',
+    'pricing.title':'Simple, honest pricing.','pricing.subtitle':'Coming soon. Waitlist members get 25% off their first 6 months.',
+    'pricing.perMonth':'/mo','pricing.joinWaitlist':'Join the waitlist',
     'pricing.starter.name':'Starter','pricing.starter.desc':'Perfect for solo reps','pricing.starter.f1':'20 meetings / month','pricing.starter.f2':'English & Spanish AI','pricing.starter.f3':'Follow-up email drafts','pricing.starter.f4':'Deal scoring','pricing.starter.f5':'Email support',
     'pricing.pro.name':'Pro','pricing.pro.desc':'Best for closing teams','pricing.pro.f1':'Unlimited meetings','pricing.pro.f2':'All 4 Forged AI Coaches','pricing.pro.f3':'CRM sync (HubSpot, SFDC)','pricing.pro.f4':'Call coaching insights','pricing.pro.f5':'Priority support',
     'pricing.team.name':'Team','pricing.team.desc':'For growing sales teams','pricing.team.f1':'Everything in Pro','pricing.team.f2':'Up to 10 seats included','pricing.team.f3':'Manager analytics dashboard','pricing.team.f4':'Custom AI Coach personas','pricing.team.f5':'Dedicated onboarding','pricing.team.extra':'+ $25/seat after 10',
-    'founders.eyebrow':'⚒ A NOTE FROM THE FOUNDERS',
-    'founders.title':"We're a husband-wife team building this in public.",
+    'founders.eyebrow':'⚒ A NOTE FROM THE FOUNDERS','founders.title':"We're a husband-wife team building this in public.",
     'founders.desc':"Hi, we're Ana and Quin. We started Callforge because every AI sales tool out there was built for English-only markets. Meanwhile, millions of bilingual sales reps deserve the same productivity tools their English-speaking peers have. So we're building it. Bootstrapped, with intention, and a lot of love. Welcome to the journey.",
     'founders.sig':'— Ana & Quin · Forged with care in Florida 🇺🇸',
     'footer.links':'Privacy · Terms · hello@callforge.to',
+    'signup.title':'Start your free trial','signup.subtitle':'14 days free · No credit card required',
+    'login.title':'Welcome back','login.subtitle':'Sign in to your Callforge account',
   },
   es: {
-    'nav.waitlist':'Lista de espera','nav.forged':'Los Forjados','nav.pricing':'Precios','nav.joinWaitlist':'Unirme',
+    'nav.waitlist':'Lista de espera','nav.forged':'Los Forjados','nav.pricing':'Precios',
+    'nav.signIn':'Iniciar sesión','nav.joinWaitlist':'Únete',
     'tito.greeting':'¡Hola! Soy Tito 👋',
-    'hero.badge':'PRÓXIMAMENTE · ÚNETE A LA LISTA','hero.title':'Forja cada llamada<br>en un <em>trato cerrado.</em>',
+    'hero.badge':'PRÓXIMAMENTE · ÚNETE A LA LISTA',
+    'hero.title':'Forja cada llamada<br>en un <em>trato cerrado.</em>',
     'hero.subtitle':'Callforge graba tus llamadas de ventas en inglés o español, redacta el resumen, extrae las tareas pendientes y escribe el correo de seguimiento — antes de que tu prospecto cierre la pestaña.',
     'hero.ctaPrimary':'Únete a la lista →','hero.ctaSecondary':'Ver cómo funciona',
     'hero.note':'La lista temprana obtiene 25% de descuento los primeros 6 meses · Sin tarjeta',
-    'waitlist.eyebrow':'⚒ ACCESO ANTICIPADO','waitlist.title':'Sé el primero en forjar.','waitlist.subtitle':'Estamos forjando Callforge y lanzaremos pronto. Únete a la lista para acceso anticipado y 25% de descuento los primeros 6 meses.',
-    'waitlist.submit':'Únete a la lista →','waitlist.successTitle':'¡Estás en la lista!',
+    'waitlist.eyebrow':'⚒ ACCESO ANTICIPADO','waitlist.title':'Sé el primero en forjar.',
+    'waitlist.subtitle':'Estamos forjando Callforge y lanzaremos pronto. Únete a la lista para acceso anticipado y 25% de descuento los primeros 6 meses.',
+    'waitlist.successTitle':'¡Estás en la lista!',
     'waitlist.successDesc':'Te enviaremos acceso anticipado en cuanto Callforge se lance. Tito ya está trabajando en eso.',
-    'waitlist.counter':'Únete a <strong>47</strong> equipos de ventas que ya esperan',
     'waitlist.perk1':'25% descuento por 6 meses','waitlist.perk2':'Acceso anticipado','waitlist.perk3':'Soporte del fundador',
-    'form.firstName':'Nombre','form.workEmail':'Correo de trabajo','form.company':'Empresa (opcional)',
-    'form.teamSize':'Tamaño del equipo (opcional)','form.teamSolo':'Solo yo','form.teamSmall':'2-10 vendedores','form.teamMedium':'11-50 vendedores','form.teamLarge':'50+ vendedores',
-    'form.preferLanguage':'Idioma preferido (opcional)','form.preferEn':'🇺🇸 Inglés','form.preferEs':'🇪🇸 Español','form.preferBoth':'🌎 Ambos',
-    'stats.summary':'Tiempo promedio de resumen','stats.accuracy':'Precisión de tareas','stats.languages':'Idiomas soportados','stats.start':'Hecho con cariño',
-    'forged.eyebrow':'⚒ CONOCE A TU EQUIPO DE COACHES IA','forged.title':'Los Forjados.','forged.subtitle':'Cuatro especialistas IA forjados para ayudarte a cerrar más tratos. Incluidos en cada plan Pro y Equipo.',
+    'stats.summary':'Tiempo promedio de resumen','stats.accuracy':'Precisión de tareas','stats.languages':'Idiomas soportados','stats.built':'Hecho con cariño',
+    'forged.eyebrow':'⚒ CONOCE A TU EQUIPO DE COACHES IA','forged.title':'Los Forjados.',
+    'forged.subtitle':'Cuatro especialistas IA forjados para ayudarte a cerrar más tratos. Incluidos en cada plan Pro y Equipo.',
     'forged.maya.name':'Maya la Chispa','forged.maya.title':'COACH DE PITCH','forged.maya.desc':'Revisa tus llamadas y te dice exactamente qué frases funcionaron, cuáles fallaron, y cómo abrir más fuerte la próxima vez.','forged.maya.quote':'"Tu último pitch los perdió en el minuto 12 — prueba esto."',
     'forged.sam.name':'Sam el Yunque','forged.sam.title':'COACH DE SEGUIMIENTO','forged.sam.desc':'Redacta tus correos de seguimiento en cuanto termina la llamada. Lee el tono, elige el cierre correcto, firma con tu voz.','forged.sam.quote':'"Envía en 2 horas. Yo lo redacté. Solo dale enviar."',
     'forged.finn.name':'Finn las Pinzas','forged.finn.title':'ANALISTA DE TRATOS','forged.finn.desc':'Rastrea cada trato en tu pipeline. Califica intención. Marca riesgos. Te dice qué tratos empujar y cuáles soltar.','forged.finn.quote':'"Acme se está calentando. Mendoza se enfría. Enfócate aquí."',
-    'forged.aria.name':'Aria el Martillo','forged.aria.title':'COACH DE OBJECIONES','forged.aria.desc':'Detecta cada objeción en tus llamadas y ensaya la respuesta perfecta para la próxima vez. Como tener un mentor de ventas a tu lado.','forged.aria.quote':'"Mencionaron precio 4 veces. Aquí está cómo reformularlo."',
+    'forged.aria.name':'Aria el Martillo','forged.aria.title':'COACH DE OBJECIONES','forged.aria.desc':'Detecta cada objeción en tus llamadas y ensaya la respuesta perfecta para la próxima vez.','forged.aria.quote':'"Mencionaron precio 4 veces. Aquí está cómo reformularlo."',
     'features.label':'— LO QUE HACE CALLFORGE —',
     'features.bilingual.title':'IA Bilingüe','features.bilingual.badge':'NUEVO','features.bilingual.desc':'Procesa llamadas en inglés o español. La IA detecta el idioma automáticamente y entrega resúmenes, tareas y correos en el mismo idioma.',
-    'features.transcribe.title':'Transcribe cualquier llamada','features.transcribe.desc':'Sube una grabación o conecta directamente a Zoom, Google Meet o Teams. Transcribimos todo al instante.',
+    'features.transcribe.title':'Transcribe cualquier llamada','features.transcribe.desc':'Sube una grabación o conecta a Zoom, Meet o Teams. Transcribimos todo al instante.',
     'features.summary.title':'Resúmenes con IA en 2 min','features.summary.desc':'Obtén un resumen claro y estructurado con puntos clave, objeciones y siguientes pasos — automáticamente.',
     'features.action.title':'Tareas extraídas','features.action.desc':'Nunca dejes pasar nada. Callforge extrae cada compromiso y tarea de la conversación.',
     'features.scoring.title':'Puntuación del trato','features.scoring.desc':'Nuestra IA califica cada trato de 0 a 100 según el tono, señales de compra y claridad de los siguientes pasos.',
     'features.followup.title':'Borradores de seguimiento','features.followup.desc':'Un correo de seguimiento personalizado, listo para enviar, generado en el momento que termina tu llamada.',
-    'pricing.title':'Precios simples y honestos.','pricing.subtitle':'Próximamente. Los miembros de la lista obtienen 25% de descuento los primeros 6 meses.','pricing.perMonth':'/mes','pricing.joinWaitlist':'Únete a la lista',
+    'pricing.title':'Precios simples y honestos.','pricing.subtitle':'Próximamente. Los miembros de la lista obtienen 25% de descuento los primeros 6 meses.',
+    'pricing.perMonth':'/mes','pricing.joinWaitlist':'Únete a la lista',
     'pricing.starter.name':'Inicial','pricing.starter.desc':'Perfecto para vendedores solos','pricing.starter.f1':'20 reuniones / mes','pricing.starter.f2':'IA en inglés y español','pricing.starter.f3':'Borradores de seguimiento','pricing.starter.f4':'Puntuación de tratos','pricing.starter.f5':'Soporte por correo',
-    'pricing.pro.name':'Pro','pricing.pro.desc':'Para equipos que cierran','pricing.pro.f1':'Reuniones ilimitadas','pricing.pro.f2':'Los 4 Coaches Forjados','pricing.pro.f3':'Sincronización CRM (HubSpot, SFDC)','pricing.pro.f4':'Insights de coaching','pricing.pro.f5':'Soporte prioritario',
+    'pricing.pro.name':'Pro','pricing.pro.desc':'Para equipos que cierran','pricing.pro.f1':'Reuniones ilimitadas','pricing.pro.f2':'Los 4 Coaches Forjados','pricing.pro.f3':'Sincronización CRM','pricing.pro.f4':'Insights de coaching','pricing.pro.f5':'Soporte prioritario',
     'pricing.team.name':'Equipo','pricing.team.desc':'Para equipos de ventas','pricing.team.f1':'Todo lo de Pro','pricing.team.f2':'Hasta 10 usuarios incluidos','pricing.team.f3':'Panel de analíticas para gerentes','pricing.team.f4':'Personalidades IA personalizadas','pricing.team.f5':'Onboarding dedicado','pricing.team.extra':'+ $25/usuario después de 10',
-    'founders.eyebrow':'⚒ NOTA DE LOS FUNDADORES',
-    'founders.title':'Somos un equipo esposo-esposa construyendo esto en público.',
-    'founders.desc':'Hola, somos Ana y Quin. Comenzamos Callforge porque cada herramienta de ventas con IA estaba construida solo para mercados en inglés. Mientras tanto, millones de vendedores bilingües merecen las mismas herramientas de productividad que sus colegas anglosajones. Así que la estamos construyendo. Bootstrapped, con intención, y mucho amor. Bienvenido al viaje.',
+    'founders.eyebrow':'⚒ NOTA DE LOS FUNDADORES','founders.title':'Somos un equipo esposo-esposa construyendo esto en público.',
+    'founders.desc':'Hola, somos Ana y Quin. Comenzamos Callforge porque cada herramienta de ventas con IA estaba construida solo para mercados en inglés. Mientras tanto, millones de vendedores bilingües merecen las mismas herramientas de productividad. Así que la estamos construyendo. Bootstrapped, con intención, y mucho amor. Bienvenido al viaje.',
     'founders.sig':'— Ana & Quin · Forjado con cariño en Florida 🇺🇸',
     'footer.links':'Privacidad · Términos · hello@callforge.to',
+    'signup.title':'Comienza tu prueba gratis','signup.subtitle':'14 días gratis · Sin tarjeta',
+    'login.title':'Bienvenido de vuelta','login.subtitle':'Inicia sesión en tu cuenta de Callforge',
   }
 };
 
 let currentLang = 'en';
-try { currentLang = localStorage.getItem('cf_lang') || 'en'; } catch(e) {}
+try { currentLang = localStorage.getItem('cf_lang') || 'en'; } catch(e){}
 
 function setLang(lang) {
   currentLang = lang;
-  try { localStorage.setItem('cf_lang', lang); } catch(e) {}
+  try { localStorage.setItem('cf_lang', lang); } catch(e){}
   document.documentElement.lang = lang;
-
   document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (T[lang][key]) {
-      if (key === 'waitlist.counter') {
-        el.innerHTML = T[lang][key];
-      } else {
-        el.textContent = T[lang][key];
-      }
-    }
+    const k = el.getAttribute('data-i18n');
+    if (T[lang][k]) el.textContent = T[lang][k];
   });
-
   document.querySelectorAll('[data-i18n-html]').forEach(el => {
-    const key = el.getAttribute('data-i18n-html');
-    if (T[lang][key]) el.innerHTML = T[lang][key];
+    const k = el.getAttribute('data-i18n-html');
+    if (T[lang][k]) el.innerHTML = T[lang][k];
   });
+  document.querySelectorAll('.lang-btn').forEach(btn =>
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang)
+  );
+}
 
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    if (T[lang][key]) el.placeholder = T[lang][key];
-  });
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast show ${type}`;
+  setTimeout(() => t.className = 'toast', 3500);
+}
 
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-  });
+function openModal(type) {
+  document.getElementById('authModal').classList.add('open');
+  switchForm(type);
+}
+function closeModal() {
+  document.getElementById('authModal').classList.remove('open');
+}
+function switchForm(type) {
+  document.getElementById('signupForm').style.display = type==='signup' ? 'block' : 'none';
+  document.getElementById('loginForm').style.display  = type==='login'  ? 'block' : 'none';
+}
+document.getElementById('authModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+async function handleSignup() {
+  const name  = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const pass  = document.getElementById('signupPass').value;
+  const errEl = document.getElementById('signupError');
+  errEl.classList.remove('show');
+  if (!name || !email || !pass) { errEl.textContent='Please fill in all fields.'; errEl.classList.add('show'); return; }
+  if (pass.length < 8) { errEl.textContent='Password must be at least 8 characters.'; errEl.classList.add('show'); return; }
+  const btn = document.querySelector('#signupForm .btn-primary');
+  btn.textContent = 'Creating account...'; btn.disabled = true;
+  const { error } = await sb.auth.signUp({ email, password: pass, options: { data: { full_name: name } } });
+  btn.textContent = 'Create account →'; btn.disabled = false;
+  if (error) { errEl.textContent = error.message; errEl.classList.add('show'); }
+  else { closeModal(); showToast('⚒ Account created! Check your email to confirm.', 'success'); }
+}
+
+async function handleLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPass').value;
+  const errEl = document.getElementById('loginError');
+  errEl.classList.remove('show');
+  if (!email || !pass) { errEl.textContent='Please enter your email and password.'; errEl.classList.add('show'); return; }
+  const btn = document.querySelector('#loginForm .btn-primary');
+  btn.textContent = 'Signing in...'; btn.disabled = true;
+  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+  btn.textContent = 'Sign in →'; btn.disabled = false;
+  if (error) { errEl.textContent='Invalid email or password. Please try again.'; errEl.classList.add('show'); }
+  else { closeModal(); window.location.href = 'dashboard.html'; }
+}
+
+async function handleWaitlistSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('wlSubmit');
+  btn.disabled = true;
+  btn.textContent = currentLang === 'es' ? 'Forjando...' : 'Forging...';
+  const payload = {
+    name:               document.getElementById('wlName').value.trim(),
+    email:              document.getElementById('wlEmail').value.trim(),
+    company:            document.getElementById('wlCompany').value.trim() || null,
+    team_size:          document.getElementById('wlSize').value || null,
+    preferred_language: document.getElementById('wlLang').value || null,
+  };
+  const { error } = await sb.from('waitlist').insert([payload]);
+  btn.disabled = false;
+  btn.textContent = currentLang === 'es' ? 'Únete a la lista →' : 'Join the waitlist →';
+  if (error && error.code === '23505') {
+    showSuccess(); // already on list, show success anyway
+  } else if (error) {
+    showToast('Something went wrong. Please try again.', 'error');
+  } else {
+    showSuccess();
+    updateCounter();
+  }
+}
+
+function showSuccess() {
+  document.getElementById('waitlistForm').style.display = 'none';
+  document.getElementById('waitlistSuccess').classList.add('show');
+}
+
+async function updateCounter() {
+  const { count } = await sb.from('waitlist').select('*', { count: 'exact', head: true });
+  if (count && count > 0) {
+    const label = currentLang === 'es' ? 'equipos de ventas que ya esperan' : 'sales teams already waiting';
+    document.getElementById('waitlistCounter').innerHTML = `Join <strong>${count}</strong> ${label}`;
+  }
 }
 
 function scrollToWaitlist() {
-  document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth', block: 'center' });
-  setTimeout(() => document.getElementById('waitlistName').focus(), 600);
+  document.getElementById('waitlist').scrollIntoView({ behavior:'smooth', block:'center' });
+  setTimeout(() => document.getElementById('wlName').focus(), 600);
 }
 
-function scrollToFeatures() {
-  document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
-}
-
-function handleWaitlistSubmit(event) {
-  event.preventDefault();
-  const submitBtn = document.getElementById('waitlistSubmit');
-  const originalText = submitBtn.textContent;
-  submitBtn.disabled = true;
-  submitBtn.textContent = currentLang === 'es' ? 'Forjando...' : 'Forging...';
-
-  const data = {
-    name: document.getElementById('waitlistName').value,
-    email: document.getElementById('waitlistEmail').value,
-    company: document.getElementById('waitlistCompany').value || null,
-    team_size: document.getElementById('waitlistSize').value || null,
-    preferred_language: document.getElementById('waitlistLanguage').value || null,
-    submitted_at: new Date().toISOString()
-  };
-
-  console.log('Waitlist submission:', data);
-
-  // TODO: Wire to Supabase next session
-  setTimeout(() => {
-    document.getElementById('waitlistForm').style.display = 'none';
-    document.getElementById('waitlistSuccess').classList.add('show');
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalText;
-  }, 800);
+async function checkSession() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) window.location.href = 'dashboard.html';
 }
 
 setLang(currentLang);
+checkSession();
+updateCounter();
 </script>
 </body>
 </html>
