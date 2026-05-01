@@ -484,8 +484,20 @@ async function handleSignup() {
   btn.textContent = 'Creating account...'; btn.disabled = true;
   const { error } = await sb.auth.signUp({ email, password: pass, options: { data: { full_name: name } } });
   btn.textContent = 'Create account →'; btn.disabled = false;
-  if (error) { errEl.textContent = error.message; errEl.classList.add('show'); }
-  else { closeModal(); showToast('⚒ Account created! Check your email to confirm.', 'success'); }
+  if (error) {
+    errEl.textContent = error.message;
+    errEl.classList.add('show');
+  } else {
+    try {
+      await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'welcome', to: email, name: name }),
+      });
+    } catch(e) { console.log('Welcome email non-fatal:', e); }
+    closeModal();
+    showToast('⚒ Account created! Check your email to confirm.', 'success');
+  }
 }
 
 async function handleLogin() {
@@ -524,6 +536,13 @@ async function handleWaitlistSubmit(e) {
   } else {
     showSuccess();
     updateCounter();
+    try {
+      await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'waitlist_confirmation', to: payload.email, name: payload.name }),
+      });
+    } catch(e) { console.log('Waitlist email non-fatal:', e); }
   }
 }
 

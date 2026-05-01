@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "functions": {
+    "api/process-meeting.js": {
+      "maxDuration": 60
+    },
+    "api/send-email.js": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "SUPABASE_URL": "@supabase_url",
+    "SUPABASE_SERVICE_KEY": "@supabase_service_key",
+    "OPENAI_API_KEY": "@openai_api_key",
+    "ANTHROPIC_API_KEY": "@anthropic_api_key",
+    "RESEND_API_KEY": "@resend_api_key"
+  }
+}

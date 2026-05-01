@@ -10,8 +10,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--ink:#0a0e1a;--paper:#f4f1ea;--cream:#faf7f0;--forge:#ff6b1a;--forge-dark:#e55a0d;--ember:#ffd166;--charcoal:#14192a;--gray:#7a7a8c;--light-gray:#e6e3dc;--white:#fff;--red:#ff4545;--success:#22c55e}
 body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;display:flex}
-
-/* SIDEBAR */
 .sidebar{width:240px;background:var(--ink);min-height:100vh;padding:28px 20px;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto}
 .sidebar-logo{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;color:var(--paper);margin-bottom:36px;padding:0 8px;display:flex;align-items:center;gap:8px}
 .sidebar-logo .accent{color:var(--forge)}
@@ -22,32 +20,26 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 .nav-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;color:rgba(244,241,234,0.45);font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;transition:all 0.15s}
 .nav-item:hover{background:rgba(255,255,255,0.06);color:var(--paper)}
 .nav-item.active{background:rgba(255,107,26,0.12);color:var(--forge)}
-.nav-item .nav-icon{font-size:16px;width:20px;text-align:center}
+.nav-icon{font-size:16px;width:20px;text-align:center}
 .sidebar-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;margin-top:8px}
 .lang-switcher{display:flex;gap:2px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:2px;margin-bottom:14px}
-.lang-btn{flex:1;background:transparent;border:none;color:rgba(244,241,234,0.5);padding:5px 6px;font-family:'Cabinet Grotesk',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.5px;cursor:pointer;border-radius:4px;text-align:center}
+.lang-btn{flex:1;background:transparent;border:none;color:rgba(244,241,234,0.5);padding:5px 6px;font-family:'Cabinet Grotesk',sans-serif;font-size:10px;font-weight:700;cursor:pointer;border-radius:4px;text-align:center}
 .lang-btn.active{background:var(--forge);color:#fff}
 .user-row{display:flex;align-items:center;gap:10px}
 .user-avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--forge),var(--ember));border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0}
 .user-info{flex:1;min-width:0}
 .user-name{font-size:13px;color:var(--paper);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .user-plan{font-size:10px;color:rgba(244,241,234,0.3);letter-spacing:1px;text-transform:uppercase}
-.logout-btn{background:none;border:none;color:rgba(244,241,234,0.3);cursor:pointer;font-size:14px;padding:4px;border-radius:4px}
+.logout-btn{background:none;border:none;color:rgba(244,241,234,0.3);cursor:pointer;font-size:16px;padding:4px;border-radius:4px}
 .logout-btn:hover{color:var(--red)}
-
-/* MAIN */
 .main{margin-left:240px;flex:1;display:flex;flex-direction:column;min-height:100vh}
 .main-header{background:var(--white);padding:20px 36px;border-bottom:1px solid var(--light-gray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .main-header h1{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px}
 .btn-upload{background:var(--forge);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 2px 12px rgba(255,107,26,0.25);transition:all 0.2s}
 .btn-upload:hover{background:var(--forge-dark);transform:translateY(-1px)}
 .page-content{padding:32px 36px;flex:1}
-
-/* TABS */
 .tab-page{display:none}
 .tab-page.active{display:block}
-
-/* METRICS */
 .metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
 .metric-card{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:22px}
 .metric-label{font-size:11px;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
@@ -55,8 +47,6 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 .metric-change{font-size:11px}
 .metric-up{color:var(--success)}
 .metric-warn{color:#f59e0b}
-
-/* MEETINGS */
 .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .section-title{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700}
 .view-all{font-size:12px;color:var(--gray);cursor:pointer;background:none;border:none;font-family:'Cabinet Grotesk',sans-serif}
@@ -71,6 +61,7 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 .meeting-status{padding:4px 10px;border-radius:100px;font-size:10px;font-weight:700;flex-shrink:0}
 .status-done{background:#dcfce7;color:#166534}
 .status-processing{background:#fef9c3;color:#854d0e}
+.status-failed{background:#fee2e2;color:#991b1b}
 .meeting-score{text-align:right;flex-shrink:0}
 .score-val{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;line-height:1}
 .score-high{color:var(--success)}
@@ -81,28 +72,31 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 .empty-state h3{font-family:'Clash Display',sans-serif;font-size:20px;color:var(--ink);margin-bottom:8px}
 .empty-state p{font-size:14px;line-height:1.6;max-width:400px;margin:0 auto 20px}
 
-/* UPLOAD TAB */
+/* UPLOAD */
 .upload-info-banner{background:rgba(255,107,26,0.05);border:1px solid rgba(255,107,26,0.15);border-radius:10px;padding:12px 16px;font-size:12px;color:var(--ink);margin-bottom:24px;display:flex;align-items:center;gap:10px}
 .upload-info-banner strong{color:var(--forge)}
 .upload-zone{border:2px dashed var(--light-gray);border-radius:16px;padding:60px 40px;text-align:center;cursor:pointer;background:var(--white);transition:all 0.2s;margin-bottom:24px}
-.upload-zone:hover{border-color:var(--forge);background:#fff7f1}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--forge);background:#fff7f1}
 .upload-zone h3{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;margin-bottom:8px}
 .upload-zone p{font-size:13px;color:var(--gray);margin-bottom:20px}
 .upload-formats{font-size:11px;color:var(--gray);margin-top:12px}
-.btn-choose{background:var(--forge);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(255,107,26,0.3)}
-.processing-card{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:24px;display:none}
+.btn-choose{background:var(--forge);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(255,107,26,0.3);transition:all 0.2s}
+.btn-choose:hover{background:var(--forge-dark)}
+.processing-card{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:28px;display:none}
 .processing-card.show{display:block}
-.processing-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
-.processing-icon{font-size:24px;animation:spin 2s linear infinite}
+.processing-header{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+.processing-icon{font-size:28px;animation:spin 2s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.processing-title{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700}
+.processing-title{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:700;margin-bottom:4px}
 .processing-sub{font-size:12px;color:var(--gray)}
-.progress-step{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;font-size:13px;color:var(--gray);background:var(--cream);margin-bottom:10px;transition:all 0.3s}
+.progress-step{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:10px;font-size:13px;color:var(--gray);background:var(--cream);margin-bottom:10px;transition:all 0.4s}
 .progress-step.done{color:var(--success);background:#f0fdf4}
-.progress-step.active{color:var(--ink);background:#fff7f1;font-weight:500}
-.step-dot{width:20px;height:20px;border-radius:50%;background:var(--light-gray);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.progress-step.active{color:var(--ink);background:#fff7f1;font-weight:600}
+.progress-step.failed{color:var(--red);background:#fef2f2}
+.step-dot{width:22px;height:22px;border-radius:50%;background:var(--light-gray);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;font-weight:700}
 .progress-step.done .step-dot{background:var(--success);color:#fff}
 .progress-step.active .step-dot{background:var(--forge);color:#fff}
+.progress-step.failed .step-dot{background:var(--red);color:#fff}
 
 /* MEETING DETAIL */
 .meeting-detail{display:none}
@@ -124,12 +118,12 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 .action-item:last-child{border-bottom:none}
 .action-check{width:18px;height:18px;border:2px solid var(--light-gray);border-radius:4px;flex-shrink:0;margin-top:1px;cursor:pointer;transition:all 0.2s}
 .action-check:hover{border-color:var(--forge)}
-.summary-text{font-size:13px;color:var(--gray);line-height:1.7;font-weight:300}
-.email-block{background:var(--cream);border-radius:10px;padding:16px;font-size:13px;color:var(--gray);line-height:1.7}
-.copy-btn{background:var(--forge);color:#fff;border:none;padding:8px 16px;border-radius:6px;font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-top:14px}
+.summary-text{font-size:13px;color:var(--gray);line-height:1.7}
+.email-block{background:var(--cream);border-radius:10px;padding:16px;font-size:13px;color:var(--gray);line-height:1.7;white-space:pre-wrap}
+.copy-btn{background:var(--forge);color:#fff;border:none;padding:8px 16px;border-radius:6px;font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-top:14px;transition:all 0.2s}
 .copy-btn:hover{background:var(--forge-dark)}
 
-/* THE FORGED TAB */
+/* THE FORGED */
 .forged-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
 .forged-dash-card{background:var(--white);border:1px solid var(--light-gray);border-radius:18px;padding:24px;position:relative;overflow:hidden;transition:all 0.2s}
 .forged-dash-card:hover{border-color:var(--forge);transform:translateY(-3px);box-shadow:0 8px 24px rgba(255,107,26,0.1)}
@@ -143,7 +137,7 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 .forged-name{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700;margin-bottom:2px}
 .forged-role{font-size:10px;letter-spacing:1.5px;color:var(--forge);text-transform:uppercase;font-weight:700}
 .forged-insight{font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:14px}
-.forged-action{font-size:12px;color:var(--forge);font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;background:none;border:none;font-family:'Cabinet Grotesk',sans-serif;padding:0}
+.forged-action{font-size:12px;color:var(--forge);font-weight:700;cursor:pointer;background:none;border:none;font-family:'Cabinet Grotesk',sans-serif;padding:0}
 .forged-action:hover{text-decoration:underline}
 .active-badge{position:absolute;top:16px;right:16px;background:#dcfce7;color:#166534;font-size:9px;font-weight:700;padding:3px 8px;border-radius:100px;letter-spacing:0.5px;display:flex;align-items:center;gap:4px}
 .active-badge::before{content:'';width:5px;height:5px;background:#22c55e;border-radius:50%;animation:blink 2s infinite}
@@ -156,10 +150,9 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 .settings-group input{width:100%;padding:12px 16px;border:1.5px solid var(--light-gray);border-radius:10px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;color:var(--ink);background:var(--cream);outline:none;transition:all 0.2s}
 .settings-group input:focus{border-color:var(--forge);background:#fff}
 .settings-divider{border-top:1px solid var(--light-gray);margin:20px 0}
-.btn-save{background:var(--forge);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-save{background:var(--forge);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
 .btn-save:hover{background:var(--forge-dark)}
 .btn-danger{background:none;border:none;color:var(--red);font-family:'Cabinet Grotesk',sans-serif;font-size:13px;cursor:pointer;font-weight:600}
-.btn-danger:hover{text-decoration:underline}
 
 /* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--ink);color:var(--paper);padding:14px 24px;border-radius:12px;font-size:14px;font-weight:600;z-index:2000;transition:all 0.4s;opacity:0;border-left:4px solid var(--forge)}
@@ -167,14 +160,12 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 .toast.success{border-left-color:var(--success)}
 .toast.error{border-left-color:var(--red)}
 
-/* RESPONSIVE */
 @media(max-width:768px){
   .sidebar{position:fixed;bottom:0;left:0;right:0;top:auto;width:100%;min-height:auto;height:60px;flex-direction:row;padding:0 16px;align-items:center;border-top:1px solid rgba(255,255,255,0.1)}
   .sidebar-logo,.sidebar-bottom{display:none}
   .sidebar-nav{flex-direction:row;justify-content:space-around;gap:0}
   .nav-item span:not(.nav-icon){display:none}
-  .nav-item{padding:8px 12px;flex-direction:column;gap:2px;font-size:9px}
-  .nav-item .nav-icon{width:auto}
+  .nav-item{padding:8px 12px;flex-direction:column;gap:2px}
   .main{margin-left:0;padding-bottom:60px}
   .main-header{padding:16px 20px}
   .page-content{padding:20px 16px}
@@ -186,7 +177,6 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sidebar-logo"><div class="logo-mark"></div>Call<span class="accent">forge</span></div>
   <nav class="sidebar-nav">
@@ -212,7 +202,6 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
   </div>
 </aside>
 
-<!-- MAIN -->
 <main class="main">
   <div class="main-header">
     <h1 id="pageTitle">Overview</h1>
@@ -221,11 +210,11 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 
   <div class="page-content">
 
-    <!-- OVERVIEW TAB -->
+    <!-- OVERVIEW -->
     <div class="tab-page active" id="tab-overview">
       <div class="metrics-row">
         <div class="metric-card"><div class="metric-label">Meetings This Month</div><div class="metric-value" id="metricMeetings">0</div><div class="metric-change metric-up">Upload your first call</div></div>
-        <div class="metric-card"><div class="metric-label">Avg Deal Score</div><div class="metric-value" id="metricScore" style="color:var(--gray)">—</div><div class="metric-change metric-warn">No data yet</div></div>
+        <div class="metric-card"><div class="metric-label">Avg Deal Score</div><div class="metric-value" id="metricScore" style="color:var(--gray)">—</div><div class="metric-change metric-warn" id="metricScoreChange">No data yet</div></div>
         <div class="metric-card"><div class="metric-label">Action Items</div><div class="metric-value" id="metricActions">0</div><div class="metric-change metric-warn">None extracted yet</div></div>
         <div class="metric-card"><div class="metric-label">Follow-ups Drafted</div><div class="metric-value" id="metricFollowups">0</div><div class="metric-change metric-up">AI-generated</div></div>
       </div>
@@ -233,20 +222,20 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
         <span class="section-title">Recent Meetings</span>
         <button class="view-all" onclick="switchTab('meetings')">View all →</button>
       </div>
-      <div class="meetings-list" id="recentMeetingsList">
+      <div id="recentMeetingsList">
         <div class="empty-state">
           <div class="empty-icon">🎙</div>
           <h3>No meetings yet</h3>
-          <p>Upload your first sales call and Callforge will forge it into a summary, action items, and a follow-up email.</p>
+          <p>Upload your first sales call and Callforge will forge it into a summary, action items, deal score, and a follow-up email.</p>
           <button class="btn-upload" onclick="switchTab('upload')">⬆ Upload your first call</button>
         </div>
       </div>
     </div>
 
-    <!-- MEETINGS TAB -->
+    <!-- MEETINGS -->
     <div class="tab-page" id="tab-meetings">
       <div class="section-header"><span class="section-title">All Meetings</span></div>
-      <div class="meetings-list" id="allMeetingsList">
+      <div id="allMeetingsList">
         <div class="empty-state">
           <div class="empty-icon">🎙</div>
           <h3>No meetings yet</h3>
@@ -254,8 +243,6 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
           <button class="btn-upload" onclick="switchTab('upload')">⬆ Upload a call</button>
         </div>
       </div>
-
-      <!-- Meeting detail panel -->
       <div class="meeting-detail" id="meetingDetail">
         <button class="back-btn" onclick="closeMeetingDetail()">← Back to meetings</button>
         <div class="detail-header">
@@ -263,7 +250,7 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
           <div class="detail-meta" id="detailMeta"></div>
           <div class="detail-stats">
             <div class="detail-stat"><div class="detail-stat-val" id="detailScore">—</div><div class="detail-stat-label">Deal Score</div></div>
-            <div class="detail-stat"><div class="detail-stat-val" id="detailActions">—</div><div class="detail-stat-label">Action Items</div></div>
+            <div class="detail-stat"><div class="detail-stat-val" id="detailActionCount">—</div><div class="detail-stat-label">Action Items</div></div>
             <div class="detail-stat"><div class="detail-stat-val" id="detailLang">—</div><div class="detail-stat-label">Language</div></div>
           </div>
         </div>
@@ -275,10 +262,14 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
       </div>
     </div>
 
-    <!-- UPLOAD TAB -->
+    <!-- UPLOAD -->
     <div class="tab-page" id="tab-upload">
-      <div class="upload-info-banner">🌎 <span><strong>Auto language detection.</strong> Upload a meeting in English or Spanish — Callforge detects the language and delivers everything in that language.</span></div>
-      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+      <div class="upload-info-banner">🌎 <span><strong>Auto language detection.</strong> Upload in English or Spanish — Callforge detects the language and delivers everything in that language.</span></div>
+      <div class="upload-zone" id="uploadZone"
+           onclick="document.getElementById('fileInput').click()"
+           ondragover="handleDragOver(event)"
+           ondragleave="handleDragLeave(event)"
+           ondrop="handleDrop(event)">
         <div style="font-size:48px;margin-bottom:16px">🎙</div>
         <h3>Drop your meeting recording here</h3>
         <p>Or click to browse your files</p>
@@ -286,6 +277,7 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
         <p class="upload-formats">Supports MP3, MP4, M4A, WAV, WebM · Max 500MB</p>
       </div>
       <input type="file" id="fileInput" accept="audio/*,video/*" style="display:none" onchange="handleFileSelect(event)">
+
       <div class="processing-card" id="processingCard">
         <div class="processing-header">
           <div class="processing-icon">⚒</div>
@@ -294,7 +286,7 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
             <div class="processing-sub" id="processingFileName">your-call.mp3</div>
           </div>
         </div>
-        <div class="progress-step active" id="step1"><div class="step-dot">1</div><span>Uploading audio file</span></div>
+        <div class="progress-step" id="step1"><div class="step-dot">1</div><span>Uploading audio file</span></div>
         <div class="progress-step" id="step2"><div class="step-dot">2</div><span>Detecting language &amp; transcribing audio</span></div>
         <div class="progress-step" id="step3"><div class="step-dot">3</div><span>Generating AI summary &amp; action items</span></div>
         <div class="progress-step" id="step4"><div class="step-dot">4</div><span>Scoring deal health</span></div>
@@ -302,47 +294,27 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
       </div>
     </div>
 
-    <!-- THE FORGED TAB -->
+    <!-- THE FORGED -->
     <div class="tab-page" id="tab-forged">
-      <p style="font-size:13px;color:var(--gray);margin-bottom:20px;line-height:1.6">Four AI specialists working in the background to help you close more deals. Upload a meeting to see their insights.</p>
+      <p style="font-size:13px;color:var(--gray);margin-bottom:20px;line-height:1.6">Your AI coach team — upload a meeting to see their personalized insights.</p>
       <div class="forged-grid">
-        <div class="forged-dash-card">
-          <div class="active-badge">ACTIVE</div>
-          <div class="forged-header"><div class="forged-avatar maya">⚡</div><div><div class="forged-name">Maya the Spark</div><div class="forged-role">Pitch Coach</div></div></div>
-          <p class="forged-insight">Upload a sales call and Maya will analyze your pitch — telling you exactly which lines worked, which fell flat, and how to open stronger next time.</p>
-          <button class="forged-action">View pitch insights →</button>
-        </div>
-        <div class="forged-dash-card">
-          <div class="active-badge">ACTIVE</div>
-          <div class="forged-header"><div class="forged-avatar sam">🔨</div><div><div class="forged-name">Sam the Anvil</div><div class="forged-role">Follow-up Coach</div></div></div>
-          <p class="forged-insight">After every call, Sam drafts a personalized follow-up email in your voice. Upload a meeting and it'll be ready before you leave the room.</p>
-          <button class="forged-action">View drafted emails →</button>
-        </div>
-        <div class="forged-dash-card">
-          <div class="active-badge">ACTIVE</div>
-          <div class="forged-header"><div class="forged-avatar finn">🔧</div><div><div class="forged-name">Finn the Tongs</div><div class="forged-role">Deal Analyst</div></div></div>
-          <p class="forged-insight">Finn tracks deal health across every call — scoring intent, flagging risks, and telling you which deals need attention before it's too late.</p>
-          <button class="forged-action">View pipeline analysis →</button>
-        </div>
-        <div class="forged-dash-card">
-          <div class="active-badge">ACTIVE</div>
-          <div class="forged-header"><div class="forged-avatar aria">⚒</div><div><div class="forged-name">Aria the Hammer</div><div class="forged-role">Objection Coach</div></div></div>
-          <p class="forged-insight">Aria detects every objection across your calls and coaches you on the perfect comeback — so you're never caught off guard twice.</p>
-          <button class="forged-action">View objection coaching →</button>
-        </div>
+        <div class="forged-dash-card"><div class="active-badge">ACTIVE</div><div class="forged-header"><div class="forged-avatar maya">⚡</div><div><div class="forged-name">Maya the Spark</div><div class="forged-role">Pitch Coach</div></div></div><p class="forged-insight">Upload a sales call and Maya will analyze your pitch — which lines landed, which fell flat, and how to open stronger next time.</p><button class="forged-action">View pitch insights →</button></div>
+        <div class="forged-dash-card"><div class="active-badge">ACTIVE</div><div class="forged-header"><div class="forged-avatar sam">🔨</div><div><div class="forged-name">Sam the Anvil</div><div class="forged-role">Follow-up Coach</div></div></div><p class="forged-insight">After every call, Sam drafts a personalized follow-up email in your voice — ready to send before you leave the room.</p><button class="forged-action">View drafted emails →</button></div>
+        <div class="forged-dash-card"><div class="active-badge">ACTIVE</div><div class="forged-header"><div class="forged-avatar finn">🔧</div><div><div class="forged-name">Finn the Tongs</div><div class="forged-role">Deal Analyst</div></div></div><p class="forged-insight">Finn tracks deal health across every call — scoring intent, flagging risks, telling you which deals need attention now.</p><button class="forged-action">View pipeline analysis →</button></div>
+        <div class="forged-dash-card"><div class="active-badge">ACTIVE</div><div class="forged-header"><div class="forged-avatar aria">⚒</div><div><div class="forged-name">Aria the Hammer</div><div class="forged-role">Objection Coach</div></div></div><p class="forged-insight">Aria detects every objection across your calls and coaches you on the perfect comeback — so you're never caught off guard twice.</p><button class="forged-action">View objection coaching →</button></div>
       </div>
     </div>
 
-    <!-- SETTINGS TAB -->
+    <!-- SETTINGS -->
     <div class="tab-page" id="tab-settings">
       <div class="settings-card">
-        <div class="settings-group"><label>Full Name</label><input type="text" id="settingsName" placeholder="Your name"></div>
-        <div class="settings-group"><label>Email</label><input type="email" id="settingsEmail" placeholder="your@email.com" readonly style="opacity:0.6;cursor:not-allowed"></div>
+        <div class="settings-group"><label>Full Name</label><input type="text" id="settingsName"></div>
+        <div class="settings-group"><label>Email</label><input type="email" id="settingsEmail" readonly style="opacity:0.6;cursor:not-allowed"></div>
         <div class="settings-group">
           <label>Preferred Language</label>
           <div style="display:flex;gap:8px">
-            <button onclick="setLang('en')" style="background:var(--cream);color:var(--ink);border:1.5px solid var(--light-gray);padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Cabinet Grotesk';font-size:13px;font-weight:700;transition:all 0.2s" onmouseover="this.style.borderColor='var(--forge)'" onmouseout="this.style.borderColor='var(--light-gray)'">🇺🇸 English</button>
-            <button onclick="setLang('es')" style="background:var(--cream);color:var(--ink);border:1.5px solid var(--light-gray);padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Cabinet Grotesk';font-size:13px;font-weight:700;transition:all 0.2s" onmouseover="this.style.borderColor='var(--forge)'" onmouseout="this.style.borderColor='var(--light-gray)'">🇪🇸 Español</button>
+            <button onclick="setLang('en')" style="background:var(--cream);color:var(--ink);border:1.5px solid var(--light-gray);padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Cabinet Grotesk';font-size:13px;font-weight:700">🇺🇸 English</button>
+            <button onclick="setLang('es')" style="background:var(--cream);color:var(--ink);border:1.5px solid var(--light-gray);padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Cabinet Grotesk';font-size:13px;font-weight:700">🇪🇸 Español</button>
           </div>
         </div>
         <div class="settings-divider"></div>
@@ -358,190 +330,270 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── SUPABASE CONFIG ───────────────────────────────────────────────────────
+// ─── SUPABASE CONFIG ────────────────────────────────────────────────────────
 const SUPABASE_URL  = 'https://yrptztgbwedvszqjonil.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_hDz5RZJ04KKQK_3lrHVysw_9_Uf9dmE';
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-let currentUser = null;
-let currentLang = 'en';
-let allMeetings = [];
-let currentMeetingId = null;
+let currentUser    = null;
+let currentMeeting = null;
+let allMeetings    = [];
+let pollInterval   = null;
 
-// ─── INIT ──────────────────────────────────────────────────────────────────
+// ─── INIT ────────────────────────────────────────────────────────────────────
 async function init() {
-  try { currentLang = localStorage.getItem('cf_lang') || 'en'; } catch(e){}
-  applyLang(currentLang);
-
   const { data: { session } } = await sb.auth.getSession();
   if (!session) { window.location.href = 'index.html'; return; }
-
   currentUser = session.user;
-  const name = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
-  const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
-  document.getElementById('userAvatar').textContent = initials;
-  document.getElementById('userName').textContent = name;
-  document.getElementById('settingsName').value = name;
-  document.getElementById('settingsEmail').value = currentUser.email;
-
+  const name     = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
+  const initials = name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('userAvatar').textContent    = initials;
+  document.getElementById('userName').textContent      = name;
+  document.getElementById('settingsName').value        = name;
+  document.getElementById('settingsEmail').value       = currentUser.email;
   loadMeetings();
 }
 
-// ─── MEETINGS ──────────────────────────────────────────────────────────────
+// ─── MEETINGS ─────────────────────────────────────────────────────────────────
 async function loadMeetings() {
   const { data, error } = await sb
     .from('meetings')
     .select('*')
     .eq('user_id', currentUser.id)
     .order('created_at', { ascending: false });
-
-  if (error) { console.error('Error loading meetings:', error); return; }
+  if (error) { console.error(error); return; }
   allMeetings = data || [];
-  renderMeetings();
+  renderMeetingsList();
   updateMetrics();
 }
 
-function renderMeetings() {
-  const recentEl = document.getElementById('recentMeetingsList');
-  const allEl    = document.getElementById('allMeetingsList');
-  if (allMeetings.length === 0) return;
+function renderMeetingsList() {
+  const ids = ['recentMeetingsList','allMeetingsList'];
+  if (!allMeetings.length) return;
 
   const html = allMeetings.map(m => `
     <div class="meeting-card" onclick="openMeeting('${m.id}')">
       <div class="meeting-icon" style="background:${m.language==='es'?'#fff7ed':'#f0fdf4'}">${m.language==='es'?'🇪🇸':'🇺🇸'}</div>
       <div class="meeting-info">
-        <div class="meeting-title">${m.title || 'Untitled Meeting'}</div>
+        <div class="meeting-title">${m.title || 'Processing...'}</div>
         <div class="meeting-meta">${new Date(m.created_at).toLocaleDateString()} · ${m.status}</div>
       </div>
-      <span class="meeting-status ${m.status==='done'?'status-done':'status-processing'}">${m.status==='done'?'Done':'Processing'}</span>
+      <span class="meeting-status status-${m.status}">${m.status === 'done' ? 'Done' : m.status === 'failed' ? 'Failed' : 'Processing'}</span>
       <div class="meeting-score">
-        <div class="score-val ${m.deal_score>=70?'score-high':'score-low'}">${m.deal_score||'—'}</div>
+        <div class="score-val ${(m.deal_score||0)>=70?'score-high':'score-low'}">${m.deal_score||'—'}</div>
         <div class="score-label">SCORE</div>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 
-  recentEl.innerHTML = html;
-  allEl.innerHTML = html;
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  });
 }
 
 function updateMetrics() {
   document.getElementById('metricMeetings').textContent = allMeetings.length;
-  const scored = allMeetings.filter(m => m.deal_score);
-  const avgScore = scored.length ? Math.round(scored.reduce((a,m) => a+m.deal_score, 0) / scored.length) : null;
-  document.getElementById('metricScore').textContent = avgScore || '—';
-  if (avgScore) document.getElementById('metricScore').style.color = avgScore >= 70 ? 'var(--success)' : 'var(--red)';
-  const totalActions = allMeetings.reduce((a,m) => a + (m.action_items?.length || 0), 0);
-  document.getElementById('metricActions').textContent = totalActions;
-  const followups = allMeetings.filter(m => m.follow_up_email).length;
-  document.getElementById('metricFollowups').textContent = followups;
+  const scored   = allMeetings.filter(m => m.deal_score);
+  const avgScore = scored.length ? Math.round(scored.reduce((a,m)=>a+m.deal_score,0)/scored.length) : null;
+  const scoreEl  = document.getElementById('metricScore');
+  scoreEl.textContent = avgScore || '—';
+  if (avgScore) scoreEl.style.color = avgScore>=70 ? 'var(--success)' : 'var(--red)';
+  document.getElementById('metricActions').textContent   = allMeetings.reduce((a,m)=>a+(m.action_items?.length||0),0);
+  document.getElementById('metricFollowups').textContent = allMeetings.filter(m=>m.follow_up_email).length;
 }
 
 function openMeeting(id) {
-  const m = allMeetings.find(x => x.id === id);
+  const m = allMeetings.find(x=>x.id===id);
   if (!m) return;
-  currentMeetingId = id;
-  document.getElementById('detailTitle').textContent = m.title || 'Untitled Meeting';
-  document.getElementById('detailMeta').textContent = new Date(m.created_at).toLocaleString() + ' · ' + (m.language === 'es' ? 'Spanish' : 'English');
-  document.getElementById('detailScore').textContent = m.deal_score || '—';
-  if (m.deal_score) document.getElementById('detailScore').style.color = m.deal_score >= 70 ? 'var(--success)' : 'var(--red)';
-  document.getElementById('detailActions').textContent = m.action_items?.length || 0;
-  document.getElementById('detailLang').textContent = m.language === 'es' ? '🇪🇸 ES' : '🇺🇸 EN';
-  document.getElementById('summaryText').textContent = m.summary || 'Summary not available.';
-  const actions = m.action_items || [];
-  document.getElementById('actionItemsList').innerHTML = actions.map(a =>
+  currentMeeting = m;
+  if (m.status !== 'done') { showToast('This meeting is still processing. Check back soon!', 'error'); return; }
+  document.getElementById('detailTitle').textContent      = m.title || 'Untitled';
+  document.getElementById('detailMeta').textContent       = new Date(m.created_at).toLocaleString();
+  document.getElementById('detailScore').textContent      = m.deal_score || '—';
+  document.getElementById('detailScore').style.color      = (m.deal_score||0)>=70 ? 'var(--success)' : 'var(--red)';
+  document.getElementById('detailActionCount').textContent = m.action_items?.length || 0;
+  document.getElementById('detailLang').textContent        = m.language==='es' ? '🇪🇸 ES' : '🇺🇸 EN';
+  document.getElementById('summaryText').textContent       = m.summary || 'No summary available.';
+  document.getElementById('actionItemsList').innerHTML     = (m.action_items||[]).map(a =>
     `<div class="action-item"><div class="action-check" onclick="this.style.background='var(--forge)';this.style.borderColor='var(--forge)'"></div>${a}</div>`
   ).join('') || '<p style="font-size:13px;color:var(--gray)">No action items extracted.</p>';
-  document.getElementById('followupEmail').innerHTML = m.follow_up_email || '<em>No follow-up email drafted.</em>';
+  document.getElementById('followupEmail').textContent = m.follow_up_email || 'No follow-up email drafted.';
   document.getElementById('meetingDetail').classList.add('show');
   document.getElementById('allMeetingsList').style.display = 'none';
-  document.querySelector('.section-header').style.display = 'none';
+  document.querySelector('#tab-meetings .section-header').style.display = 'none';
 }
 
 function closeMeetingDetail() {
   document.getElementById('meetingDetail').classList.remove('show');
   document.getElementById('allMeetingsList').style.display = '';
-  document.querySelector('.section-header').style.display = '';
-  currentMeetingId = null;
+  document.querySelector('#tab-meetings .section-header').style.display = '';
+  currentMeeting = null;
 }
 
 function copyEmail() {
-  const m = allMeetings.find(x => x.id === currentMeetingId);
-  if (m?.follow_up_email) {
-    navigator.clipboard.writeText(m.follow_up_email.replace(/<[^>]*>/g, ''));
+  if (currentMeeting?.follow_up_email) {
+    navigator.clipboard.writeText(currentMeeting.follow_up_email);
     showToast('Email copied to clipboard ✓', 'success');
   }
 }
 
-// ─── UPLOAD ───────────────────────────────────────────────────────────────
+// ─── UPLOAD ────────────────────────────────────────────────────────────────────
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.add('drag-over');
+}
+function handleDragLeave(e) {
+  document.getElementById('uploadZone').classList.remove('drag-over');
+}
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) processFile(file);
+}
 function handleFileSelect(e) {
   const file = e.target.files[0];
-  if (!file) return;
-  startProcessing(file.name);
+  if (file) processFile(file);
 }
 
-async function startProcessing(filename) {
+async function processFile(file) {
+  // Validate file type
+  const allowed = ['audio/mpeg','audio/mp4','audio/wav','audio/m4a','audio/webm','video/mp4','video/webm','audio/ogg'];
+  if (!allowed.includes(file.type) && !file.name.match(/\.(mp3|mp4|wav|m4a|webm|ogg)$/i)) {
+    showToast('Please upload an audio or video file (MP3, MP4, WAV, M4A, WebM)', 'error');
+    return;
+  }
+
+  // Show processing UI
   document.getElementById('uploadZone').style.display = 'none';
   const card = document.getElementById('processingCard');
   card.classList.add('show');
-  document.getElementById('processingFileName').textContent = filename;
+  document.getElementById('processingFileName').textContent = file.name;
 
-  // Simulate processing steps for now
-  // TODO: Replace with real API call to your backend processing function
-  const steps = ['step1','step2','step3','step4','step5'];
-  for (let i = 0; i < steps.length; i++) {
-    await new Promise(r => setTimeout(r, 1800));
-    const el = document.getElementById(steps[i]);
-    el.classList.remove('active');
-    el.classList.add('done');
-    el.querySelector('.step-dot').textContent = '✓';
-    if (i < steps.length - 1) {
-      document.getElementById(steps[i+1]).classList.add('active');
-    }
-  }
-
-  await new Promise(r => setTimeout(r, 1000));
-  card.classList.remove('show');
-  document.getElementById('uploadZone').style.display = '';
   // Reset steps
-  steps.forEach(s => {
+  ['step1','step2','step3','step4','step5'].forEach(s => {
     const el = document.getElementById(s);
-    el.classList.remove('active','done');
+    el.className = 'progress-step';
     el.querySelector('.step-dot').textContent = s.replace('step','');
   });
-  document.getElementById('step1').classList.add('active');
-  document.getElementById('fileInput').value = '';
 
-  showToast('⚒ Meeting forged! Check your meetings tab.', 'success');
-  switchTab('overview');
-  loadMeetings();
+  try {
+    // ── STEP 1: Upload to Supabase Storage ──────────────────────────────
+    setStep('step1', 'active');
+    const fileExt  = file.name.split('.').pop();
+    const filePath = `${currentUser.id}/${Date.now()}.${fileExt}`;
+
+    const { error: uploadError } = await sb.storage
+      .from('recordings')
+      .upload(filePath, file, { cacheControl: '3600', upsert: false });
+
+    if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`);
+    setStep('step1', 'done');
+
+    // ── Create meeting record in database ───────────────────────────────
+    const { data: meeting, error: dbError } = await sb.from('meetings').insert({
+      user_id:  currentUser.id,
+      audio_url: filePath,
+      status:   'processing',
+      title:    file.name.replace(/\.[^/.]+$/, ''),
+    }).select().single();
+
+    if (dbError) throw new Error(`Database error: ${dbError.message}`);
+
+    setStep('step2', 'active');
+
+    // ── STEP 2-5: Call the AI pipeline serverless function ──────────────
+    // Steps 2-5 all happen inside process-meeting.js
+    // We poll the database to track progress and animate the steps
+    let pollCount  = 0;
+    let stepShown  = 2;
+    const stepDelay = 8000; // advance visual steps every 8 seconds
+
+    const advanceSteps = setInterval(() => {
+      if (stepShown <= 5) {
+        if (stepShown > 2) setStep(`step${stepShown-1}`, 'done');
+        setStep(`step${stepShown}`, 'active');
+        stepShown++;
+      }
+    }, stepDelay);
+
+    // Call the processing endpoint
+    const processRes = await fetch('/api/process-meeting', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        meetingId: meeting.id,
+        audioUrl:  filePath,
+        userEmail: currentUser.email,
+        userName:  currentUser.user_metadata?.full_name || '',
+        userId:    currentUser.id,
+      }),
+    });
+
+    clearInterval(advanceSteps);
+
+    if (!processRes.ok) {
+      const err = await processRes.json();
+      throw new Error(err.error || 'Processing failed');
+    }
+
+    // Mark all steps done
+    ['step1','step2','step3','step4','step5'].forEach(s => setStep(s, 'done'));
+
+    await new Promise(r => setTimeout(r, 1200));
+
+    // Reset upload UI
+    card.classList.remove('show');
+    document.getElementById('uploadZone').style.display = '';
+    document.getElementById('fileInput').value = '';
+
+    showToast('⚒ Meeting forged! Check your meetings.', 'success');
+    loadMeetings();
+    switchTab('meetings');
+
+  } catch (error) {
+    console.error('Upload/processing error:', error);
+    ['step1','step2','step3','step4','step5'].forEach(s => {
+      const el = document.getElementById(s);
+      if (el.classList.contains('active')) el.className = 'progress-step failed';
+    });
+    setTimeout(() => {
+      card.classList.remove('show');
+      document.getElementById('uploadZone').style.display = '';
+      document.getElementById('fileInput').value = '';
+    }, 3000);
+    showToast(error.message || 'Something went wrong. Please try again.', 'error');
+  }
 }
 
-// ─── SETTINGS ─────────────────────────────────────────────────────────────
+function setStep(id, state) {
+  const el   = document.getElementById(id);
+  const dot  = el.querySelector('.step-dot');
+  el.className = `progress-step ${state}`;
+  dot.textContent = state === 'done' ? '✓' : state === 'failed' ? '✗' : id.replace('step','');
+}
+
+// ─── SETTINGS ─────────────────────────────────────────────────────────────────
 async function saveSettings() {
   const name = document.getElementById('settingsName').value.trim();
   if (!name) return;
   const { error } = await sb.auth.updateUser({ data: { full_name: name } });
   if (error) { showToast('Failed to save. Please try again.', 'error'); return; }
-  const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+  const initials = name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
   document.getElementById('userAvatar').textContent = initials;
-  document.getElementById('userName').textContent = name;
+  document.getElementById('userName').textContent   = name;
   showToast('Settings saved ✓', 'success');
 }
 
-// ─── AUTH ──────────────────────────────────────────────────────────────────
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
 async function handleLogout() {
   await sb.auth.signOut();
   window.location.href = 'index.html';
 }
 
-// ─── NAVIGATION ───────────────────────────────────────────────────────────
-const tabTitles = {
-  overview:'Overview', meetings:'Meetings',
-  upload:'Upload Meeting', forged:'The Forged', settings:'Settings'
-};
-
+// ─── NAVIGATION ───────────────────────────────────────────────────────────────
+const tabTitles = { overview:'Overview', meetings:'Meetings', upload:'Upload Meeting', forged:'The Forged', settings:'Settings' };
 function switchTab(tab) {
   document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -551,25 +603,18 @@ function switchTab(tab) {
   closeMeetingDetail();
 }
 
-// ─── LANGUAGE ─────────────────────────────────────────────────────────────
+// ─── LANGUAGE ─────────────────────────────────────────────────────────────────
 function setLang(lang) {
-  currentLang = lang;
   try { localStorage.setItem('cf_lang', lang); } catch(e){}
-  applyLang(lang);
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-lang') === lang));
 }
 
-function applyLang(lang) {
-  document.querySelectorAll('.lang-btn').forEach(btn =>
-    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang)
-  );
-}
-
-// ─── TOAST ─────────────────────────────────────────────────────────────────
+// ─── TOAST ─────────────────────────────────────────────────────────────────────
 function showToast(msg, type='success') {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = `toast show ${type}`;
-  setTimeout(() => t.className = 'toast', 3500);
+  setTimeout(() => t.className = 'toast', 4000);
 }
 
 init();
