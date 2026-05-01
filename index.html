@@ -34,7 +34,7 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 #landing{background:var(--ink);color:var(--paper);position:relative;min-height:100vh}
 #landing::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse at center,rgba(255,107,26,0.15),transparent 70%);pointer-events:none;z-index:0}
 #landing>*{position:relative;z-index:1}
-.tito-container{position:absolute;right:48px;top:120px;width:240px;height:240px;z-index:2;cursor:pointer;animation:titoFloat 4s ease-in-out infinite}
+.tito-container{position:absolute;right:20px;top:160px;width:200px;height:200px;z-index:2;cursor:pointer;animation:titoFloat 4s ease-in-out infinite}
 @keyframes titoFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(2deg)}}
 .tito-image{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 30px rgba(255,107,26,0.3))}
 .tito-speech{position:absolute;top:0;left:-110px;background:#fff;color:var(--ink);padding:10px 16px;border-radius:14px;font-size:13px;font-weight:700;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,0.2);opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none}
@@ -341,8 +341,8 @@ footer{border-top:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:fle
 <script>
 // ─── SUPABASE CONFIG ───────────────────────────────────────────────────────
 // IMPORTANT: Replace these two values with your real keys from your .env file
-const SUPABASE_URL  = 'https://yrptztgbwedvszqjonil.supabase.co';
-const SUPABASE_ANON = 'sb_publishable_hDz5RZJ04KKQK_3lrHVysw_9_Uf9dmE';
+const SUPABASE_URL  = 'PASTE_YOUR_SUPABASE_URL_HERE';
+const SUPABASE_ANON = 'PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE';
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
