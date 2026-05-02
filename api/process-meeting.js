@@ -3,7 +3,6 @@
 // Audio → Whisper → Claude summary/actions/score/email → Supabase
 
 import { createClient } from '@supabase/supabase-js';
-import FormData from 'form-data';
 
 // ── CONFIG ─────────────────────────────────────────────────────────────────
 const SUPABASE_URL         = process.env.SUPABASE_URL;
@@ -41,20 +40,36 @@ export default async function handler(req, res) {
     if (downloadError) throw new Error(`Download failed: ${downloadError.message}`);
 
     const audioBuffer = Buffer.from(await audioData.arrayBuffer());
-    const fileName    = audioUrl.split('/').pop() || 'recording.mp3';
+    const fileName    = audioUrl.split('/').pop() || 'recording.m4a';
 
     // ── STEP 3: Transcribe with OpenAI Whisper ─────────────────────────
-    const formData = new FormData();
-    formData.append('file', audioBuffer, { filename: fileName, contentType: 'audio/mpeg' });
+    // Detect content type from file extension
+    const ext = fileName.split('.').pop().toLowerCase();
+    const contentTypeMap = {
+      'mp3': 'audio/mpeg',
+      'mp4': 'audio/mp4',
+      'm4a': 'audio/mp4',
+      'wav': 'audio/wav',
+      'webm': 'audio/webm',
+      'ogg': 'audio/ogg',
+      'flac': 'audio/flac',
+    };
+    const contentType = contentTypeMap[ext] || 'audio/mp4';
+
+    // Use native FormData with Blob — works correctly in Node 18+
+    const audioBlob  = new Blob([audioBuffer], { type: contentType });
+    const formData   = new FormData();
+    formData.append('file', audioBlob, fileName);
     formData.append('model', 'whisper-1');
-    formData.append('response_format', 'verbose_json'); // gives us language detection
+    formData.append('response_format', 'verbose_json');
     formData.append('temperature', '0');
 
     const whisperRes = await fetch('https://api.openai.com/v1/audio/transcriptions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        ...formData.getHeaders(),
+        // Note: Do NOT set Content-Type header manually
+        // fetch sets it automatically with the correct boundary for multipart
       },
       body: formData,
     });
