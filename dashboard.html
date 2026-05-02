@@ -173,6 +173,87 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
   .detail-grid{grid-template-columns:1fr}
   .detail-stats{grid-template-columns:repeat(3,1fr)}
 }
+
+/* SAM THE SALES AGENT */
+.sam-grid{display:grid;grid-template-columns:360px 1fr;gap:20px;align-items:start}
+.sam-form-card{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:24px;position:sticky;top:80px}
+.sam-form-card h3{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px}
+.sam-form-card p{font-size:12px;color:var(--gray);margin-bottom:20px}
+.sam-form-group{margin-bottom:12px}
+.sam-form-group label{display:block;font-size:11px;font-weight:700;color:var(--ink);margin-bottom:5px;letter-spacing:0.5px;text-transform:uppercase}
+.sam-form-group input,.sam-form-group select,.sam-form-group textarea{width:100%;padding:10px 14px;border:1.5px solid var(--light-gray);border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:13px;color:var(--ink);background:var(--cream);outline:none;transition:all 0.2s;resize:none}
+.sam-form-group input:focus,.sam-form-group select:focus,.sam-form-group textarea:focus{border-color:var(--forge);background:#fff}
+.btn-sam{width:100%;padding:13px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none;background:var(--forge);color:#fff;box-shadow:0 4px 16px rgba(255,107,26,0.3);transition:all 0.2s;margin-top:4px}
+.btn-sam:hover{background:var(--forge-dark);transform:translateY(-1px)}
+.btn-sam:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.sam-results{display:flex;flex-direction:column;gap:14px}
+.sam-empty{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:48px 24px;text-align:center}
+.sam-empty-icon{font-size:48px;margin-bottom:12px}
+.sam-empty h3{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:700;margin-bottom:6px}
+.sam-empty p{font-size:13px;color:var(--gray);line-height:1.6}
+.sam-lang-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:100px;font-size:13px;font-weight:700;margin-bottom:16px}
+.sam-lang-es{background:#fff7ed;color:var(--forge);border:1px solid rgba(255,107,26,0.2)}
+.sam-lang-en{background:#f0fdf4;color:#166534;border:1px solid rgba(34,197,94,0.2)}
+.sam-analysis{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:20px}
+.sam-analysis-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.sam-analysis h3{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700}
+.sam-meta{display:flex;gap:8px;flex-wrap:wrap}
+.sam-tag{background:var(--cream);border:1px solid var(--light-gray);border-radius:100px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--gray)}
+.sam-tag.tier{background:#fff7ed;color:var(--forge);border-color:rgba(255,107,26,0.2)}
+.sam-reasoning{font-size:12px;color:var(--gray);background:var(--cream);border-radius:8px;padding:10px 14px;margin-top:8px;line-height:1.5}
+.sam-message-card{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;overflow:hidden}
+.sam-message-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--light-gray);background:var(--cream)}
+.sam-message-title{font-family:'Clash Display',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+.sam-platform-badge{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--gray);text-transform:uppercase}
+.sam-message-body{padding:18px}
+.sam-subject{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+.sam-subject-val{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px}
+.sam-body-text{font-size:13px;color:var(--ink);line-height:1.7;background:var(--cream);border-radius:8px;padding:14px;white-space:pre-wrap;border-left:3px solid var(--forge)}
+.sam-copy-btn{background:var(--forge);color:#fff;border:none;padding:7px 14px;border-radius:6px;font-family:'Cabinet Grotesk',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.sam-copy-btn:hover{background:var(--forge-dark)}
+.sam-followup-badge{font-size:10px;font-weight:700;background:#fef9c3;color:#854d0e;padding:3px 8px;border-radius:100px}
+.sam-objections{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;overflow:hidden}
+.sam-objection{padding:16px 18px;border-bottom:1px solid var(--light-gray)}
+.sam-objection:last-child{border-bottom:none}
+.sam-objection-q{font-size:12px;font-weight:700;color:var(--red);margin-bottom:6px}
+.sam-objection-a{font-size:13px;color:var(--ink);line-height:1.6}
+.sam-loading{text-align:center;padding:48px 24px}
+.sam-loading-icon{font-size:40px;animation:spin 1.5s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sam-loading p{font-size:13px;color:var(--gray)}
+
+/* FORGED INSIGHTS ON MEETING DETAIL */
+.forged-insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.forged-insight-card{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;overflow:hidden;transition:all 0.2s}
+.forged-insight-card:hover{border-color:var(--forge);box-shadow:0 4px 16px rgba(255,107,26,0.08)}
+.forged-insight-header{padding:14px 16px;border-bottom:1px solid var(--light-gray);display:flex;align-items:center;gap:12px;background:var(--cream)}
+.fi-avatar{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.fi-avatar.maya{background:linear-gradient(135deg,#fef3c7,#fde047)}
+.fi-avatar.sam{background:linear-gradient(135deg,#bfdbfe,#60a5fa)}
+.fi-avatar.finn{background:linear-gradient(135deg,#bbf7d0,#4ade80)}
+.fi-avatar.aria{background:linear-gradient(135deg,#fecaca,#f87171)}
+.fi-name{font-family:'Clash Display',sans-serif;font-size:13px;font-weight:700;margin-bottom:2px}
+.fi-role{font-size:10px;color:var(--forge);font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.forged-insight-body{padding:16px}
+.fi-headline{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;line-height:1.4;border-left:3px solid var(--forge);padding-left:10px}
+.fi-section{margin-bottom:10px}
+.fi-section-label{font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px}
+.fi-list{list-style:none;display:flex;flex-direction:column;gap:4px}
+.fi-list li{font-size:12px;color:var(--ink);display:flex;align-items:flex-start;gap:6px;line-height:1.5}
+.fi-list li::before{content:'▸';color:var(--forge);font-size:10px;flex-shrink:0;margin-top:2px}
+.fi-tip{background:#fff7ed;border-radius:8px;padding:10px 12px;font-size:12px;color:var(--ink);line-height:1.5;margin-top:8px}
+.fi-tip strong{color:var(--forge)}
+.fi-score-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.fi-score-num{font-family:'Clash Display',sans-serif;font-size:28px;font-weight:700;line-height:1}
+.fi-score-high{color:var(--success)}
+.fi-score-mid{color:#f59e0b}
+.fi-score-low{color:var(--red)}
+.fi-badge{padding:3px 9px;border-radius:100px;font-size:10px;font-weight:700}
+.fi-badge-green{background:#dcfce7;color:#166534}
+.fi-badge-yellow{background:#fef9c3;color:#854d0e}
+.fi-badge-red{background:#fee2e2;color:#991b1b}
+.fi-badge-blue{background:#dbeafe;color:#1e40af}
+.fi-loading{text-align:center;padding:24px;color:var(--gray);font-size:13px}
 </style>
 </head>
 <body>
@@ -258,6 +339,10 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
           <div class="detail-section"><h3>✅ Action Items</h3><div id="actionItemsList"></div></div>
           <div class="detail-section"><h3>📝 AI Summary</h3><p class="summary-text" id="summaryText"></p></div>
           <div class="detail-section full"><h3>📧 AI-Generated Follow-up Email</h3><div class="email-block" id="followupEmail"></div><button class="copy-btn" onclick="copyEmail()">Copy email ↗</button></div>
+          <div class="detail-section full" id="forgedInsightsSection" style="display:none">
+            <h3>⚒ The Forged — AI Coach Insights</h3>
+            <div class="forged-insights-grid" id="forgedInsightsGrid"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -305,6 +390,65 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
       </div>
     </div>
 
+    <!-- SAM TAB -->
+    <div class="tab-page" id="tab-sam">
+      <div class="sam-grid">
+        <!-- Input Form -->
+        <div class="sam-form-card">
+          <h3>🔨 Sam the Anvil</h3>
+          <p>Enter prospect details and Sam will detect the right language and generate a full bilingual outreach sequence.</p>
+          <div class="sam-form-group">
+            <label>Full Name *</label>
+            <input type="text" id="samName" placeholder="e.g. María García or John Smith">
+          </div>
+          <div class="sam-form-group">
+            <label>Title / Role</label>
+            <input type="text" id="samTitle" placeholder="e.g. Owner, Sales Manager, VP Sales">
+          </div>
+          <div class="sam-form-group">
+            <label>Company</label>
+            <input type="text" id="samCompany" placeholder="e.g. García Realty Group">
+          </div>
+          <div class="sam-form-group">
+            <label>Location</label>
+            <input type="text" id="samLocation" placeholder="e.g. Miami, FL or Bogotá, Colombia">
+          </div>
+          <div class="sam-form-group">
+            <label>Industry</label>
+            <select id="samIndustry">
+              <option value="">Select industry...</option>
+              <option value="Real Estate">Real Estate</option>
+              <option value="Insurance">Insurance</option>
+              <option value="Financial Services">Financial Services</option>
+              <option value="Auto Sales">Auto Sales</option>
+              <option value="SaaS / Tech">SaaS / Tech</option>
+              <option value="Medical Devices">Medical Devices</option>
+              <option value="Construction / Contracting">Construction / Contracting</option>
+              <option value="Mortgage / Lending">Mortgage / Lending</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="sam-form-group">
+            <label>LinkedIn Bio / Notes</label>
+            <textarea id="samBio" rows="3" placeholder="Paste their LinkedIn bio or any extra context..."></textarea>
+          </div>
+          <button class="btn-sam" id="samBtn" onclick="runSam()">
+            🔨 Generate outreach sequence →
+          </button>
+        </div>
+
+        <!-- Results -->
+        <div class="sam-results" id="samResults">
+          <div class="sam-empty">
+            <div class="sam-empty-icon">🔨</div>
+            <h3>Sam is ready to forge.</h3>
+            <p>Fill in the prospect details on the left and Sam will detect the right language and generate LinkedIn DMs, cold emails, follow-ups, Instagram DMs, and objection responses — all personalized and bilingual.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <!-- SETTINGS -->
     <div class="tab-page" id="tab-settings">
       <div class="settings-card">
@@ -331,8 +475,8 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 
 <script>
 // ─── SUPABASE CONFIG ────────────────────────────────────────────────────────
-const SUPABASE_URL  = 'https://yrptztgbwedvszqjonil.supabase.co';
-const SUPABASE_ANON = 'sb_publishable_hDz5RZJ04KKQK_3lrHVysw_9_Uf9dmE';
+const SUPABASE_URL  = 'PASTE_YOUR_SUPABASE_URL_HERE';
+const SUPABASE_ANON = 'PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE';
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
@@ -419,6 +563,8 @@ function openMeeting(id) {
     `<div class="action-item"><div class="action-check" onclick="this.style.background='var(--forge)';this.style.borderColor='var(--forge)'"></div>${a}</div>`
   ).join('') || '<p style="font-size:13px;color:var(--gray)">No action items extracted.</p>';
   document.getElementById('followupEmail').textContent = m.follow_up_email || 'No follow-up email drafted.';
+  // Load Forged insights for this meeting
+  loadForgedInsights(m.id);
   document.getElementById('meetingDetail').classList.add('show');
   document.getElementById('allMeetingsList').style.display = 'none';
   document.querySelector('#tab-meetings .section-header').style.display = 'none';
@@ -609,12 +755,322 @@ function setLang(lang) {
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-lang') === lang));
 }
 
+
+// ─── FORGED INSIGHTS ──────────────────────────────────────────────────────
+async function loadForgedInsights(meetingId) {
+  const section = document.getElementById('forgedInsightsSection');
+  const grid    = document.getElementById('forgedInsightsGrid');
+  section.style.display = 'none';
+  grid.innerHTML = '<div class="fi-loading">Loading The Forged insights...</div>';
+
+  const { data, error } = await sb
+    .from('forged_insights')
+    .select('*')
+    .eq('meeting_id', meetingId)
+    .order('created_at', { ascending: true });
+
+  if (error || !data?.length) return;
+
+  section.style.display = 'block';
+
+  const coaches = {
+    'Maya the Spark':  { emoji: '⚡', key: 'maya' },
+    'Sam the Anvil':   { emoji: '🔨', key: 'sam'  },
+    'Finn the Tongs':  { emoji: '🔧', key: 'finn' },
+    'Aria the Hammer': { emoji: '⚒',  key: 'aria' },
+  };
+
+  grid.innerHTML = data.map(row => {
+    const coach   = coaches[row.coach_name] || { emoji: '⚒', key: 'maya' };
+    let insight;
+    try { insight = JSON.parse(row.insight); } catch(e) { return ''; }
+    return renderForgedCard(coach, row.coach_name, insight);
+  }).join('');
+}
+
+function renderForgedCard(coach, coachName, insight) {
+  const roleMap = {
+    maya: 'PITCH COACH',
+    sam:  'FOLLOW-UP COACH',
+    finn: 'DEAL ANALYST',
+    aria: 'OBJECTION COACH',
+  };
+
+  let bodyHtml = '';
+
+  // Maya
+  if (coach.key === 'maya') {
+    const scoreColor = (insight.score||0) >= 70 ? 'fi-score-high' : (insight.score||0) >= 50 ? 'fi-score-mid' : 'fi-score-low';
+    bodyHtml = `
+      <div class="fi-score-row">
+        <div class="fi-score-num ${scoreColor}">${insight.score || '—'}</div>
+        <div style="font-size:11px;color:var(--gray)">Pitch Score</div>
+      </div>
+      ${renderFiList('What worked', insight.what_worked)}
+      ${renderFiList('Improve next time', insight.what_to_improve)}
+      ${insight.next_call_tip ? `<div class="fi-tip"><strong>💡 Next call tip:</strong> ${insight.next_call_tip}</div>` : ''}`;
+  }
+
+  // Sam
+  if (coach.key === 'sam') {
+    const urgencyBadge = { high:'fi-badge-red', medium:'fi-badge-yellow', low:'fi-badge-green' }[insight.urgency] || 'fi-badge-gray';
+    const tempBadge    = { warm:'fi-badge-red', cool:'fi-badge-blue', neutral:'fi-badge-yellow' }[insight.relationship_temperature] || 'fi-badge-gray';
+    bodyHtml = `
+      <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+        ${insight.urgency ? `<span class="fi-badge ${urgencyBadge}">${insight.urgency?.toUpperCase()} URGENCY</span>` : ''}
+        ${insight.relationship_temperature ? `<span class="fi-badge ${tempBadge}">${insight.relationship_temperature?.toUpperCase()}</span>` : ''}
+        ${insight.send_within ? `<span class="fi-badge fi-badge-blue">Send within ${insight.send_within}</span>` : ''}
+      </div>
+      ${renderFiList('Reinforce these points', insight.key_points_to_reinforce)}
+      ${renderFiList('Avoid in follow-up', insight.what_to_avoid)}
+      ${insight.subject_line_tip ? `<div class="fi-tip"><strong>📧 Subject tip:</strong> ${insight.subject_line_tip}</div>` : ''}`;
+  }
+
+  // Finn
+  if (coach.key === 'finn') {
+    const winColor = (insight.win_probability||0) >= 60 ? 'fi-score-high' : (insight.win_probability||0) >= 40 ? 'fi-score-mid' : 'fi-score-low';
+    const budgetBadge = { confirmed:'fi-badge-green', likely:'fi-badge-yellow', uncertain:'fi-badge-yellow', objected:'fi-badge-red' }[insight.budget_status] || 'fi-badge-gray';
+    bodyHtml = `
+      <div class="fi-score-row">
+        <div class="fi-score-num ${winColor}">${insight.win_probability || '—'}%</div>
+        <div style="font-size:11px;color:var(--gray)">Win Probability</div>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+        ${insight.budget_status ? `<span class="fi-badge ${budgetBadge}">Budget: ${insight.budget_status}</span>` : ''}
+        ${insight.decision_maker_access ? `<span class="fi-badge fi-badge-blue">DM: ${insight.decision_maker_access}</span>` : ''}
+      </div>
+      ${renderFiList('Buying signals', insight.buying_signals)}
+      ${renderFiList('Risk factors', insight.risk_factors)}
+      ${insight.recommended_action ? `<div class="fi-tip"><strong>🎯 Next action:</strong> ${insight.recommended_action}</div>` : ''}`;
+  }
+
+  // Aria
+  if (coach.key === 'aria') {
+    const handlingBadge = { strong:'fi-badge-green', average:'fi-badge-yellow', needs_work:'fi-badge-red' }[insight.overall_handling] || 'fi-badge-gray';
+    const objHtml = (insight.objections || []).map(obj => {
+      const handledBadge = { good:'fi-badge-green', ok:'fi-badge-yellow', poor:'fi-badge-red' }[obj.how_handled] || 'fi-badge-gray';
+      return `
+        <div style="background:var(--cream);border-radius:8px;padding:10px 12px;margin-bottom:8px">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+            <span style="font-size:12px;font-weight:700;color:var(--ink)">"${obj.objection}"</span>
+            <span class="fi-badge ${handledBadge}">${obj.how_handled?.toUpperCase()}</span>
+          </div>
+          <div style="font-size:11px;color:var(--gray);margin-bottom:4px">${obj.what_was_said || ''}</div>
+          <div style="font-size:12px;color:var(--forge);font-weight:600">Better: ${obj.better_response}</div>
+        </div>`;
+    }).join('');
+    bodyHtml = `
+      <div style="display:flex;gap:6px;margin-bottom:10px">
+        ${insight.overall_handling ? `<span class="fi-badge ${handlingBadge}">Handling: ${insight.overall_handling?.replace('_',' ')?.toUpperCase()}</span>` : ''}
+        ${insight.objections_count ? `<span class="fi-badge fi-badge-blue">${insight.objections_count} objection${insight.objections_count !== 1 ? 's' : ''}</span>` : ''}
+      </div>
+      ${objHtml}
+      ${insight.coaching_tip ? `<div class="fi-tip"><strong>🛡️ Coaching tip:</strong> ${insight.coaching_tip}</div>` : ''}`;
+  }
+
+  return `
+    <div class="forged-insight-card">
+      <div class="forged-insight-header">
+        <div class="fi-avatar ${coach.key}">${coach.emoji}</div>
+        <div>
+          <div class="fi-name">${coachName}</div>
+          <div class="fi-role">${roleMap[coach.key] || ''}</div>
+        </div>
+      </div>
+      <div class="forged-insight-body">
+        <div class="fi-headline">${insight.headline || ''}</div>
+        ${bodyHtml}
+      </div>
+    </div>`;
+}
+
+function renderFiList(label, items) {
+  if (!items?.length) return '';
+  return `
+    <div class="fi-section">
+      <div class="fi-section-label">${label}</div>
+      <ul class="fi-list">
+        ${items.map(i => `<li>${i}</li>`).join('')}
+      </ul>
+    </div>`;
+}
+
 // ─── TOAST ─────────────────────────────────────────────────────────────────────
 function showToast(msg, type='success') {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = `toast show ${type}`;
   setTimeout(() => t.className = 'toast', 4000);
+}
+
+
+// ─── SAM THE SALES AGENT ────────────────────────────────────────────────────
+let samResult = null;
+
+async function runSam() {
+  const name = document.getElementById('samName').value.trim();
+  if (!name) { showToast('Please enter a prospect name', 'error'); return; }
+
+  const prospect = {
+    name,
+    title:    document.getElementById('samTitle').value.trim(),
+    company:  document.getElementById('samCompany').value.trim(),
+    location: document.getElementById('samLocation').value.trim(),
+    industry: document.getElementById('samIndustry').value,
+    bio:      document.getElementById('samBio').value.trim(),
+  };
+
+  const btn       = document.getElementById('samBtn');
+  const resultsEl = document.getElementById('samResults');
+  btn.disabled    = true;
+  btn.textContent = '🔨 Forging outreach...';
+
+  resultsEl.innerHTML = `
+    <div class="sam-loading">
+      <div class="sam-loading-icon">🔨</div>
+      <p>Sam is analyzing ${name} and crafting the perfect outreach...</p>
+    </div>`;
+
+  try {
+    const res = await fetch('/api/sam', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prospect }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Sam failed to generate outreach');
+    }
+
+    samResult = await res.json();
+    renderSamResults(samResult);
+
+  } catch (error) {
+    console.error('Sam error:', error);
+    resultsEl.innerHTML = `
+      <div class="sam-empty">
+        <div class="sam-empty-icon">⚠️</div>
+        <h3>Something went wrong</h3>
+        <p>${error.message}</p>
+      </div>`;
+    showToast(error.message, 'error');
+  }
+
+  btn.disabled    = false;
+  btn.textContent = '🔨 Generate outreach sequence →';
+}
+
+function renderSamResults(data) {
+  const el      = document.getElementById('samResults');
+  const lang    = data.language;
+  const isES    = lang === 'es';
+  const o       = data.outreach;
+  const tier    = data.prospect_tier || 'rep';
+  const tierLabel = { owner: 'Business Owner', manager: 'Sales Manager', rep: 'Sales Rep' }[tier] || tier;
+
+  const confidenceColor = {
+    high:   '#22c55e',
+    medium: '#f59e0b',
+    low:    '#ef4444'
+  }[data.confidence] || '#7a7a8c';
+
+  el.innerHTML = `
+    <!-- Language Analysis -->
+    <div class="sam-analysis">
+      <div class="sam-analysis-header">
+        <div>
+          <h3>Analysis — ${data.prospect?.name || 'Prospect'}</h3>
+          <div class="sam-meta" style="margin-top:6px">
+            <span class="sam-tag tier">${tierLabel}</span>
+            <span class="sam-tag">${data.prospect?.industry || 'Unknown industry'}</span>
+            <span class="sam-tag">${data.prospect?.location || 'Unknown location'}</span>
+          </div>
+        </div>
+        <div>
+          <span class="sam-lang-badge ${isES ? 'sam-lang-es' : 'sam-lang-en'}">
+            ${isES ? '🇪🇸 Reaching out in Spanish' : '🇺🇸 Reaching out in English'}
+          </span>
+          <div style="font-size:11px;color:${confidenceColor};font-weight:700;text-align:right;margin-top:4px">
+            ${data.confidence?.toUpperCase()} CONFIDENCE
+          </div>
+        </div>
+      </div>
+      <div class="sam-reasoning">💡 ${data.reasoning}</div>
+      <div class="sam-reasoning" style="margin-top:8px;background:#fff7ed;border-left:3px solid var(--forge)">
+        🎯 <b>Pain point:</b> ${data.prospect_pain}
+      </div>
+    </div>
+
+    <!-- LinkedIn DM -->
+    ${renderMessageCard('LinkedIn DM', '💼', null, o.linkedin_dm, 'linkedin')}
+
+    <!-- Cold Email -->
+    ${renderMessageCard('Cold Email', '📧', o.cold_email?.subject, o.cold_email?.body, 'email')}
+
+    <!-- Follow-up 1 -->
+    ${renderMessageCard('Follow-up #1', '📧', o.follow_up_1?.subject, o.follow_up_1?.body, 'followup1',
+      `Send after ${o.follow_up_1?.send_after_days || 3} days if no reply`)}
+
+    <!-- Follow-up 2 (breakup) -->
+    ${renderMessageCard('Follow-up #2 — The Breakup', '📧', o.follow_up_2?.subject, o.follow_up_2?.body, 'followup2',
+      `Send after ${o.follow_up_2?.send_after_days || 7} days if still no reply`)}
+
+    <!-- Instagram DM -->
+    ${renderMessageCard('Instagram DM', '📸', null, o.instagram_dm, 'ig')}
+
+    <!-- Reddit -->
+    ${renderMessageCard('Reddit Comment', '💬', null, o.reddit_comment, 'reddit')}
+
+    <!-- Objection Handling -->
+    <div class="sam-objections">
+      <div style="padding:14px 18px;border-bottom:1px solid var(--light-gray);background:var(--cream)">
+        <div style="font-family:'Clash Display',sans-serif;font-size:13px;font-weight:700">
+          🛡️ Objection Responses
+        </div>
+        <div style="font-size:11px;color:var(--gray);margin-top:2px">How to handle common pushbacks</div>
+      </div>
+      ${renderObjection(isES ? '❌ "Muy caro"' : '❌ "Too expensive"', o.objection_responses?.too_expensive)}
+      ${renderObjection(isES ? '❌ "Ya usamos Gong/Otter"' : '❌ "We already use Gong/Otter"', o.objection_responses?.already_use_gong)}
+      ${renderObjection(isES ? '❌ "No me interesa"' : '❌ "Not interested"', o.objection_responses?.not_interested)}
+      ${renderObjection(isES ? '❌ "No tenemos presupuesto"' : '❌ "No budget right now"', o.objection_responses?.no_budget)}
+    </div>
+  `;
+}
+
+function renderMessageCard(title, icon, subject, body, id, badge) {
+  if (!body) return '';
+  return `
+    <div class="sam-message-card">
+      <div class="sam-message-header">
+        <div class="sam-message-title">
+          ${icon} ${title}
+          ${badge ? `<span class="sam-followup-badge">${badge}</span>` : ''}
+        </div>
+        <button class="sam-copy-btn" onclick="copySamMessage('${id}')">Copy ↗</button>
+      </div>
+      <div class="sam-message-body">
+        ${subject ? `<div class="sam-subject">Subject line</div><div class="sam-subject-val">${subject}</div>` : ''}
+        <div class="sam-body-text" id="sam-msg-${id}">${body}</div>
+      </div>
+    </div>`;
+}
+
+function renderObjection(question, answer) {
+  if (!answer) return '';
+  return `
+    <div class="sam-objection">
+      <div class="sam-objection-q">${question}</div>
+      <div class="sam-objection-a">${answer}</div>
+    </div>`;
+}
+
+function copySamMessage(id) {
+  const el = document.getElementById('sam-msg-' + id);
+  if (el) {
+    navigator.clipboard.writeText(el.textContent);
+    showToast('Copied to clipboard ✓', 'success');
+  }
 }
 
 init();

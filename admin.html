@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Callforge — Forge Control</title>
+<!-- No OG tags intentionally — keep this page invisible -->
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#0a0e1a;--paper:#f4f1ea;--cream:#faf7f0;--forge:#ff6b1a;--forge-dark:#e55a0d;--ember:#ffd166;--charcoal:#14192a;--gray:#7a7a8c;--light-gray:#e6e3dc;--white:#fff;--red:#ff4545;--success:#22c55e}
+body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;display:flex}
+
+/* SIDEBAR */
+.sidebar{width:240px;background:var(--ink);min-height:100vh;padding:28px 20px;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto}
+.sidebar-logo{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:700;color:var(--paper);margin-bottom:4px;padding:0 8px;display:flex;align-items:center;gap:8px}
+.sidebar-logo .accent{color:var(--forge)}
+.admin-badge{background:rgba(255,107,26,0.15);border:1px solid rgba(255,107,26,0.3);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--forge);letter-spacing:1px;margin:0 8px 24px;text-align:center}
+.logo-mark{width:26px;height:26px;background:linear-gradient(135deg,var(--forge),var(--ember));border-radius:6px;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 0 16px rgba(255,107,26,0.4);flex-shrink:0}
+.logo-mark::before{content:'';position:absolute;inset:2px;border-radius:4px;background:linear-gradient(135deg,var(--forge),var(--forge-dark))}
+.logo-mark::after{content:'⚒';position:relative;font-size:12px;color:#fff;z-index:1}
+.sidebar-section{font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(244,241,234,0.25);text-transform:uppercase;padding:0 12px;margin:16px 0 6px}
+.sidebar-nav{display:flex;flex-direction:column;gap:3px;flex:1}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:rgba(244,241,234,0.45);font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;transition:all 0.15s}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:var(--paper)}
+.nav-item.active{background:rgba(255,107,26,0.12);color:var(--forge)}
+.nav-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.sidebar-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;margin-top:8px}
+.user-row{display:flex;align-items:center;gap:10px}
+.user-avatar{width:32px;height:32px;background:linear-gradient(135deg,var(--forge),var(--ember));border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#fff;flex-shrink:0}
+.user-info{flex:1;min-width:0}
+.user-name{font-size:12px;color:var(--paper);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-role{font-size:10px;color:rgba(244,241,234,0.3);letter-spacing:1px;text-transform:uppercase}
+.logout-btn{background:none;border:none;color:rgba(244,241,234,0.3);cursor:pointer;font-size:16px;padding:4px}
+.logout-btn:hover{color:var(--red)}
+
+/* MAIN */
+.main{margin-left:240px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+.main-header{background:var(--white);padding:18px 36px;border-bottom:1px solid var(--light-gray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.main-header h1{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;letter-spacing:-0.5px}
+.header-meta{font-size:12px;color:var(--gray)}
+.page-content{padding:28px 36px;flex:1}
+.tab-page{display:none}
+.tab-page.active{display:block}
+
+/* METRICS */
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.metric-card{background:var(--white);border:1px solid var(--light-gray);border-radius:12px;padding:20px;position:relative;overflow:hidden}
+.metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--forge),var(--ember))}
+.metric-label{font-size:10px;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.metric-value{font-family:'Clash Display',sans-serif;font-size:36px;font-weight:700;letter-spacing:-1px;line-height:1;margin-bottom:4px}
+.metric-sub{font-size:11px;color:var(--gray)}
+.metric-up{color:var(--success)}
+
+/* TABLES */
+.data-card{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;overflow:hidden;margin-bottom:20px}
+.data-card-header{padding:16px 20px;border-bottom:1px solid var(--light-gray);display:flex;align-items:center;justify-content:space-between;background:var(--cream)}
+.data-card-title{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700}
+.data-card-meta{font-size:12px;color:var(--gray)}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray);padding:10px 16px;text-align:left;border-bottom:1px solid var(--light-gray);background:var(--cream)}
+.data-table td{font-size:13px;padding:12px 16px;border-bottom:1px solid var(--light-gray);color:var(--ink);vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:#fafaf8}
+.badge{padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-orange{background:#fff7ed;color:#9a3412}
+.badge-gray{background:#f3f4f6;color:#4b5563}
+.badge-blue{background:#dbeafe;color:#1e40af}
+.btn-sm{padding:5px 12px;border-radius:6px;font-family:'Cabinet Grotesk',sans-serif;font-size:11px;font-weight:700;cursor:pointer;border:none;transition:all 0.2s}
+.btn-sm-primary{background:var(--forge);color:#fff}
+.btn-sm-primary:hover{background:var(--forge-dark)}
+.btn-sm-ghost{background:var(--cream);color:var(--ink);border:1px solid var(--light-gray)}
+.btn-sm-ghost:hover{border-color:var(--forge);color:var(--forge)}
+.btn-sm-danger{background:#fee2e2;color:var(--red)}
+.btn-sm-danger:hover{background:#fecaca}
+.empty-row td{text-align:center;padding:32px;color:var(--gray);font-size:13px}
+
+/* SAM */
+.sam-grid{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
+.sam-form-card{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:22px;position:sticky;top:80px}
+.sam-form-card h3{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700;margin-bottom:4px}
+.sam-form-card p{font-size:12px;color:var(--gray);margin-bottom:18px;line-height:1.5}
+.form-group{margin-bottom:11px}
+.form-group label{display:block;font-size:10px;font-weight:700;color:var(--ink);margin-bottom:4px;letter-spacing:0.5px;text-transform:uppercase}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 13px;border:1.5px solid var(--light-gray);border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:13px;color:var(--ink);background:var(--cream);outline:none;transition:all 0.2s;resize:none}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--forge);background:#fff}
+.btn-primary{width:100%;padding:12px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none;background:var(--forge);color:#fff;box-shadow:0 4px 16px rgba(255,107,26,0.3);transition:all 0.2s;margin-top:4px}
+.btn-primary:hover{background:var(--forge-dark);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.sam-results{display:flex;flex-direction:column;gap:12px}
+.sam-empty{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:48px 24px;text-align:center}
+.sam-empty-icon{font-size:40px;margin-bottom:12px}
+.sam-empty h3{font-family:'Clash Display',sans-serif;font-size:17px;margin-bottom:6px}
+.sam-empty p{font-size:13px;color:var(--gray);line-height:1.6;max-width:360px;margin:0 auto}
+.sam-lang-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:100px;font-size:12px;font-weight:700}
+.sam-lang-es{background:#fff7ed;color:var(--forge);border:1px solid rgba(255,107,26,0.2)}
+.sam-lang-en{background:#f0fdf4;color:#166534;border:1px solid rgba(34,197,94,0.2)}
+.sam-analysis{background:var(--white);border:1px solid var(--light-gray);border-radius:12px;padding:18px}
+.sam-analysis-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.sam-analysis h3{font-family:'Clash Display',sans-serif;font-size:14px;font-weight:700;margin-bottom:6px}
+.sam-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.sam-tag{background:var(--cream);border:1px solid var(--light-gray);border-radius:100px;padding:3px 9px;font-size:10px;font-weight:600;color:var(--gray)}
+.sam-tag.tier{background:#fff7ed;color:var(--forge);border-color:rgba(255,107,26,0.2)}
+.sam-note{font-size:12px;color:var(--gray);background:var(--cream);border-radius:7px;padding:9px 12px;line-height:1.5;margin-top:6px}
+.sam-note.pain{background:#fff7ed;border-left:3px solid var(--forge)}
+.sam-msg-card{background:var(--white);border:1px solid var(--light-gray);border-radius:12px;overflow:hidden}
+.sam-msg-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--light-gray);background:var(--cream)}
+.sam-msg-title{font-family:'Clash Display',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px}
+.sam-delay-tag{font-size:10px;font-weight:700;background:#fef9c3;color:#854d0e;padding:2px 7px;border-radius:100px}
+.sam-msg-body{padding:16px}
+.sam-subject-label{font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.sam-subject-val{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px}
+.sam-body-text{font-size:13px;color:var(--ink);line-height:1.7;background:var(--cream);border-radius:8px;padding:12px 14px;white-space:pre-wrap;border-left:3px solid var(--forge)}
+.copy-btn{background:var(--forge);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-family:'Cabinet Grotesk',sans-serif;font-size:11px;font-weight:700;cursor:pointer}
+.copy-btn:hover{background:var(--forge-dark)}
+.sam-objections{background:var(--white);border:1px solid var(--light-gray);border-radius:12px;overflow:hidden}
+.obj-header{padding:12px 16px;border-bottom:1px solid var(--light-gray);background:var(--cream);font-family:'Clash Display',sans-serif;font-size:12px;font-weight:700}
+.obj-item{padding:14px 16px;border-bottom:1px solid var(--light-gray)}
+.obj-item:last-child{border-bottom:none}
+.obj-q{font-size:11px;font-weight:700;color:var(--red);margin-bottom:5px}
+.obj-a{font-size:13px;color:var(--ink);line-height:1.6}
+.sam-loading{text-align:center;padding:48px}
+.sam-loading-icon{font-size:36px;animation:sam-spin 1.5s linear infinite;margin-bottom:10px}
+@keyframes sam-spin{to{transform:rotate(360deg)}}
+.sam-loading p{font-size:13px;color:var(--gray)}
+
+/* PASSWORD RESET */
+.reset-card{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:24px;max-width:480px}
+.reset-card h3{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px}
+.reset-card p{font-size:13px;color:var(--gray);margin-bottom:20px;line-height:1.6}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--ink);color:var(--paper);padding:13px 22px;border-radius:12px;font-size:13px;font-weight:600;z-index:2000;transition:all 0.4s;opacity:0;border-left:4px solid var(--forge)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.success{border-left-color:var(--success)}
+.toast.error{border-left-color:var(--red)}
+
+/* ACCESS DENIED */
+.access-denied{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--ink);flex-direction:column;gap:16px;text-align:center;padding:40px}
+.access-denied h1{font-family:'Clash Display',sans-serif;font-size:32px;color:var(--paper)}
+.access-denied p{font-size:14px;color:var(--gray);max-width:360px;line-height:1.6}
+.access-denied .forge-icon{font-size:48px;margin-bottom:8px}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .sidebar{position:fixed;bottom:0;left:0;right:0;top:auto;width:100%;height:60px;flex-direction:row;padding:0 16px;align-items:center;border-top:1px solid rgba(255,255,255,0.1)}
+  .sidebar-logo,.admin-badge,.sidebar-section,.sidebar-bottom{display:none}
+  .sidebar-nav{flex-direction:row;justify-content:space-around}
+  .nav-item span:not(.nav-icon){display:none}
+  .nav-item{padding:8px;flex-direction:column;gap:2px}
+  .main{margin-left:0;padding-bottom:60px}
+  .main-header{padding:14px 20px}
+  .page-content{padding:16px}
+  .metrics-row{grid-template-columns:repeat(2,1fr)}
+  .sam-grid{grid-template-columns:1fr}
+}
+
+/* FORGE PROSPECTOR */
+.prospector-grid{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start}
+.prospector-form{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:22px;position:sticky;top:80px}
+.prospector-form h3{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700;margin-bottom:4px}
+.prospector-form p{font-size:12px;color:var(--gray);margin-bottom:18px;line-height:1.5}
+.source-toggles{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.source-toggle{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer}
+.source-toggle input{accent-color:var(--forge);width:16px;height:16px}
+.prospect-results{display:flex;flex-direction:column;gap:10px}
+.prospect-empty{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:48px;text-align:center}
+.prospect-empty-icon{font-size:40px;margin-bottom:12px}
+.prospect-empty h3{font-family:'Clash Display',sans-serif;font-size:17px;margin-bottom:6px}
+.prospect-empty p{font-size:13px;color:var(--gray);line-height:1.6;max-width:360px;margin:0 auto}
+.prospect-stats{background:var(--white);border:1px solid var(--light-gray);border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.prospect-stat{text-align:center}
+.prospect-stat-val{font-family:'Clash Display',sans-serif;font-size:24px;font-weight:700;line-height:1}
+.prospect-stat-label{font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px}
+.prospect-actions{display:flex;gap:8px}
+.prospect-card{background:var(--white);border:1px solid var(--light-gray);border-radius:12px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px;transition:all 0.15s}
+.prospect-card:hover{border-color:var(--forge);box-shadow:0 2px 12px rgba(255,107,26,0.08)}
+.prospect-card.selected{border-color:var(--forge);background:#fff7f1}
+.prospect-lang{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.prospect-lang.es{background:#fff7ed}
+.prospect-lang.en{background:#f0fdf4}
+.prospect-info{flex:1;min-width:0}
+.prospect-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.prospect-biz{font-size:12px;color:var(--gray);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prospect-email{font-size:11px;color:var(--forge);font-weight:600}
+.prospect-meta{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
+.prospect-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:100px;background:var(--cream);color:var(--gray);border:1px solid var(--light-gray)}
+.prospect-tag.es{background:#fff7ed;color:var(--forge);border-color:rgba(255,107,26,0.2)}
+.prospect-tag.verified{background:#dcfce7;color:#166534;border-color:rgba(34,197,94,0.2)}
+.prospect-btns{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.prospect-loading{text-align:center;padding:48px}
+.prospect-loading-icon{font-size:36px;animation:spin 1.5s linear infinite;margin-bottom:10px}
+
+/* CSV IMPORT */
+.csv-upload-zone{border:2px dashed var(--light-gray);border-radius:14px;padding:48px;text-align:center;cursor:pointer;background:var(--white);transition:all 0.2s;margin-bottom:16px}
+.csv-upload-zone:hover,.csv-upload-zone.drag-over{border-color:var(--forge);background:#fff7f1}
+.csv-upload-zone h3{font-family:'Clash Display',sans-serif;font-size:18px;margin-bottom:8px}
+.csv-upload-zone p{font-size:13px;color:var(--gray);margin-bottom:16px}
+.csv-preview{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;overflow:hidden;margin-bottom:16px}
+.csv-preview-header{padding:14px 18px;border-bottom:1px solid var(--light-gray);background:var(--cream);display:flex;align-items:center;justify-content:space-between}
+.csv-preview-title{font-family:'Clash Display',sans-serif;font-size:14px;font-weight:700}
+.csv-queue{display:flex;flex-direction:column;gap:8px;padding:16px}
+</style>
+</head>
+<body>
+
+<!-- ACCESS DENIED (shown if not admin) -->
+<div class="access-denied" id="accessDenied" style="display:none">
+  <div class="forge-icon">⚒</div>
+  <h1>Access Denied</h1>
+  <p>This page is restricted to Callforge founders only. If you believe this is an error, contact hello@callforge.to</p>
+  <button onclick="window.location.href='index.html'" style="background:var(--forge);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:8px">Go to callforge.to →</button>
+</div>
+
+<!-- MAIN ADMIN UI (hidden until auth check passes) -->
+<div id="adminUI" style="display:none;width:100%;display:none">
+
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-mark"></div>Call<span class="accent">forge</span></div>
+  <div class="admin-badge">⚒ FORGE CONTROL</div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">Overview</div>
+    <a class="nav-item active" onclick="switchTab('dashboard')"><span class="nav-icon">📊</span><span>Dashboard</span></a>
+
+    <div class="sidebar-section">Users</div>
+    <a class="nav-item" onclick="switchTab('waitlist')"><span class="nav-icon">📋</span><span>Waitlist</span></a>
+    <a class="nav-item" onclick="switchTab('users')"><span class="nav-icon">👥</span><span>Users</span></a>
+    <a class="nav-item" onclick="switchTab('passwords')"><span class="nav-icon">🔐</span><span>Password Reset</span></a>
+
+    <div class="sidebar-section">Agents</div>
+    <a class="nav-item" onclick="switchTab('prospector')"><span class="nav-icon">🔍</span><span>Forge Prospector</span></a>
+    <a class="nav-item" onclick="switchTab('csv')"><span class="nav-icon">📎</span><span>CSV Import</span></a>
+    <a class="nav-item" onclick="switchTab('sam')"><span class="nav-icon">🔨</span><span>Sam — Outreach</span></a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="user-row">
+      <div class="user-avatar" id="adminAvatar">?</div>
+      <div class="user-info">
+        <div class="user-name" id="adminName">Loading...</div>
+        <div class="user-role">FOUNDER</div>
+      </div>
+      <button class="logout-btn" onclick="handleLogout()" title="Sign out">↩</button>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="main-header">
+    <h1 id="pageTitle">Dashboard</h1>
+    <span class="header-meta" id="headerMeta">Forge Control Panel</span>
+  </div>
+
+  <div class="page-content">
+
+    <!-- DASHBOARD TAB -->
+    <div class="tab-page active" id="tab-dashboard">
+      <div class="metrics-row">
+        <div class="metric-card">
+          <div class="metric-label">Waitlist Signups</div>
+          <div class="metric-value" id="mWaitlist">—</div>
+          <div class="metric-sub metric-up">All time</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Registered Users</div>
+          <div class="metric-value" id="mUsers">—</div>
+          <div class="metric-sub metric-up">All time</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Meetings Processed</div>
+          <div class="metric-value" id="mMeetings">—</div>
+          <div class="metric-sub">All time</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Meetings Today</div>
+          <div class="metric-value" id="mToday">—</div>
+          <div class="metric-sub">Last 24 hours</div>
+        </div>
+      </div>
+
+      <!-- Recent Waitlist -->
+      <div class="data-card">
+        <div class="data-card-header">
+          <span class="data-card-title">📋 Recent Waitlist Signups</span>
+          <button class="btn-sm btn-sm-ghost" onclick="switchTab('waitlist')">View all →</button>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Company</th><th>Team Size</th><th>Language</th><th>Joined</th></tr></thead>
+          <tbody id="recentWaitlistTable"><tr class="empty-row"><td colspan="6">Loading...</td></tr></tbody>
+        </table>
+      </div>
+
+      <!-- Recent Users -->
+      <div class="data-card">
+        <div class="data-card-header">
+          <span class="data-card-title">👥 Recent Users</span>
+          <button class="btn-sm btn-sm-ghost" onclick="switchTab('users')">View all →</button>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Meetings</th><th>Joined</th></tr></thead>
+          <tbody id="recentUsersTable"><tr class="empty-row"><td colspan="5">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- WAITLIST TAB -->
+    <div class="tab-page" id="tab-waitlist">
+      <div class="data-card">
+        <div class="data-card-header">
+          <span class="data-card-title">📋 All Waitlist Signups</span>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="data-card-meta" id="waitlistCount">Loading...</span>
+            <button class="btn-sm btn-sm-ghost" onclick="exportWaitlistCSV()">Export CSV ↓</button>
+            <button class="btn-sm btn-sm-primary" onclick="loadWaitlist()">Refresh ↺</button>
+          </div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Company</th><th>Team Size</th><th>Language</th><th>Joined</th><th>Actions</th></tr></thead>
+          <tbody id="waitlistTable"><tr class="empty-row"><td colspan="7">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- USERS TAB -->
+    <div class="tab-page" id="tab-users">
+      <div class="data-card">
+        <div class="data-card-header">
+          <span class="data-card-title">👥 All Registered Users</span>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="data-card-meta" id="usersCount">Loading...</span>
+            <button class="btn-sm btn-sm-primary" onclick="loadUsers()">Refresh ↺</button>
+          </div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Meetings Used</th><th>Joined</th><th>Actions</th></tr></thead>
+          <tbody id="usersTable"><tr class="empty-row"><td colspan="6">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PASSWORD RESET TAB -->
+    <div class="tab-page" id="tab-passwords">
+      <div class="reset-card">
+        <h3>🔐 Send Password Reset</h3>
+        <p>Send a password reset email to any user. They'll receive a link to set a new password. This uses Supabase's built-in secure reset flow.</p>
+        <div class="form-group">
+          <label>User Email</label>
+          <input type="email" id="resetEmail" placeholder="user@company.com">
+        </div>
+        <button class="btn-primary" style="margin-top:8px" onclick="sendPasswordReset()">
+          Send password reset email →
+        </button>
+      </div>
+      <div style="margin-top:20px;padding:16px;background:var(--white);border:1px solid var(--light-gray);border-radius:12px;max-width:480px">
+        <div style="font-size:12px;font-weight:700;color:var(--gray);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">How it works</div>
+        <div style="font-size:13px;color:var(--gray);line-height:1.7">
+          1. Enter the user's email above<br>
+          2. Click send — they get an email immediately<br>
+          3. They click the link and set a new password<br>
+          4. They're redirected to callforge.to/dashboard.html<br>
+          <br>
+          The link expires in 24 hours for security.
+        </div>
+      </div>
+    </div>
+
+    <!-- PROSPECTOR TAB -->
+    <div class="tab-page" id="tab-prospector">
+      <div class="prospector-grid">
+        <div class="prospector-form">
+          <h3>🔍 Forge Prospector</h3>
+          <p>Find bilingual business owners automatically. The Prospector searches Google Maps and Sunbiz.org and sends results directly to Sam.</p>
+          <div class="form-group"><label>Industry *</label>
+            <select id="proIndustry">
+              <option value="">Select industry...</option>
+              <option>Real Estate</option>
+              <option>Insurance</option>
+              <option>Mortgage</option>
+              <option>Financial Services</option>
+              <option>Auto Sales</option>
+              <option>Construction</option>
+              <option>Medical Devices</option>
+              <option>SaaS / Tech</option>
+            </select>
+          </div>
+          <div class="form-group"><label>City *</label><input type="text" id="proCity" placeholder="e.g. Miami"></div>
+          <div class="form-group"><label>State</label><input type="text" id="proState" placeholder="e.g. FL" maxlength="2"></div>
+          <div class="form-group"><label>Max Results</label>
+            <select id="proLimit">
+              <option value="25">25 prospects</option>
+              <option value="50" selected>50 prospects</option>
+              <option value="100">100 prospects</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Data Sources</label>
+            <div class="source-toggles">
+              <label class="source-toggle"><input type="checkbox" id="srcGoogle" checked> 🗺️ Google Maps</label>
+              <label class="source-toggle"><input type="checkbox" id="srcSunbiz" checked> 🏛️ Sunbiz.org (FL only)</label>
+            </div>
+          </div>
+          <button class="btn-primary" id="proBtn" onclick="runProspector()">🔍 Find prospects →</button>
+          <div style="margin-top:12px;text-align:center;font-size:11px;color:var(--gray)">
+            Results sorted: 🇪🇸 Spanish first
+          </div>
+        </div>
+        <div class="prospect-results" id="prospectResults">
+          <div class="prospect-empty">
+            <div class="prospect-empty-icon">🔍</div>
+            <h3>The Forge Prospector is ready.</h3>
+            <p>Enter an industry and city. The Prospector will find business owners, detect their language, guess their email, and send them straight to Sam for outreach generation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSV IMPORT TAB -->
+    <div class="tab-page" id="tab-csv">
+      <div style="max-width:800px">
+        <div style="margin-bottom:20px">
+          <div style="font-family:'Clash Display',sans-serif;font-size:18px;font-weight:700;margin-bottom:6px">📎 Bulk CSV Import</div>
+          <div style="font-size:13px;color:var(--gray);line-height:1.6">Import your Apollo.io export and Sam will process every prospect automatically — detecting language and generating outreach sequences.</div>
+        </div>
+
+        <div class="data-card" style="margin-bottom:16px">
+          <div class="data-card-header"><span class="data-card-title">Expected Apollo CSV columns</span></div>
+          <div style="padding:14px 18px;font-size:12px;color:var(--gray);line-height:1.8">
+            <b>Required:</b> First Name, Last Name<br>
+            <b>Recommended:</b> Title, Company, Email, City, State, Industry, LinkedIn URL
+          </div>
+        </div>
+
+        <div class="csv-upload-zone" id="csvZone"
+             onclick="document.getElementById('csvFileInput').click()"
+             ondragover="csvDragOver(event)" ondragleave="csvDragLeave(event)" ondrop="csvDrop(event)">
+          <div style="font-size:40px;margin-bottom:12px">📎</div>
+          <h3>Drop your Apollo CSV here</h3>
+          <p>Or click to browse</p>
+          <button class="btn-primary" style="width:auto;padding:10px 24px" onclick="event.stopPropagation();document.getElementById('csvFileInput').click()">Choose CSV file</button>
+          <div style="font-size:11px;color:var(--gray);margin-top:12px">Supports Apollo.io, Hunter.io, and standard CSV exports</div>
+        </div>
+        <input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="handleCSVUpload(event)">
+
+        <div id="csvPreview" style="display:none">
+          <div class="csv-preview">
+            <div class="csv-preview-header">
+              <span class="csv-preview-title" id="csvPreviewTitle">0 prospects ready</span>
+              <div style="display:flex;gap:8px">
+                <span id="csvLangStats" style="font-size:12px;color:var(--gray)"></span>
+                <button class="btn-sm btn-sm-ghost" onclick="clearCSV()">Clear ✕</button>
+              </div>
+            </div>
+            <div class="csv-queue" id="csvQueue"></div>
+          </div>
+          <button class="btn-primary" id="csvProcessBtn" onclick="processAllCSV()">
+            🔨 Process all with Sam →
+          </button>
+        </div>
+
+        <div id="csvResults" style="display:none;margin-top:20px">
+          <div class="data-card-header" style="background:var(--white);border:1px solid var(--light-gray);border-radius:14px 14px 0 0;padding:14px 18px">
+            <span class="data-card-title">Sam's Output Queue</span>
+            <button class="btn-sm btn-sm-ghost" onclick="exportAllToCSV()">Export all ↓</button>
+          </div>
+          <div id="csvResultsQueue" style="display:flex;flex-direction:column;gap:10px;margin-top:10px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SAM TAB -->
+    <div class="tab-page" id="tab-sam">
+      <div class="sam-grid">
+        <div class="sam-form-card">
+          <h3>🔨 Sam the Anvil</h3>
+          <p>Enter a prospect's details. Sam detects the right language and generates a complete bilingual outreach sequence.</p>
+          <!-- Outreach Type Toggle -->
+          <div style="display:flex;gap:8px;margin-bottom:16px">
+            <button id="btnStandard" onclick="setOutreachType('standard')"
+              style="flex:1;padding:10px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:2px solid var(--forge);background:var(--forge);color:#fff;transition:all 0.2s">
+              📧 Standard Outreach
+            </button>
+            <button id="btnDemo" onclick="setOutreachType('demo')"
+              style="flex:1;padding:10px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:2px solid var(--light-gray);background:var(--cream);color:var(--gray);transition:all 0.2s">
+              🎙 Live Demo Invite
+            </button>
+          </div>
+          <div id="demoModeExplainer" style="display:none;background:#fff7ed;border:1px solid rgba(255,107,26,0.2);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--ink);line-height:1.6">
+            🔥 <b>Chris's strategy:</b> Invite the owner to sell <i>us</i> their product. We run the call through Callforge live and show them their own pitch analyzed in real time. They sell — we demo — everyone wins.
+          </div>
+          <div class="form-group"><label>Full Name *</label><input type="text" id="samName" placeholder="e.g. María García or John Smith"></div>
+          <div class="form-group"><label>Title / Role</label><input type="text" id="samTitle" placeholder="e.g. Owner, Sales Manager, VP Sales"></div>
+          <div class="form-group"><label>Company</label><input type="text" id="samCompany" placeholder="e.g. García Realty Group"></div>
+          <div class="form-group"><label>Location</label><input type="text" id="samLocation" placeholder="e.g. Miami, FL or Bogotá, Colombia"></div>
+          <div class="form-group">
+            <label>Industry</label>
+            <select id="samIndustry">
+              <option value="">Select industry...</option>
+              <option>Real Estate</option>
+              <option>Insurance</option>
+              <option>Financial Services</option>
+              <option>Auto Sales</option>
+              <option>SaaS / Tech</option>
+              <option>Medical Devices</option>
+              <option>Construction / Contracting</option>
+              <option>Mortgage / Lending</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>LinkedIn Bio / Notes</label><textarea id="samBio" rows="3" placeholder="Paste their LinkedIn bio or any extra context..."></textarea></div>
+          <button class="btn-primary" id="samBtn" onclick="runSam()">🔨 Generate outreach sequence →</button>
+        </div>
+
+        <div class="sam-results" id="samResults">
+          <div class="sam-empty">
+            <div class="sam-empty-icon">🔨</div>
+            <h3>Sam is ready.</h3>
+            <p>Fill in the prospect details and Sam will detect the right language and generate a full outreach sequence — LinkedIn, cold email, follow-ups, Instagram, objection responses.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+</div><!-- end adminUI -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CONFIG ────────────────────────────────────────────────────────────────
+const SUPABASE_URL  = 'PASTE_YOUR_SUPABASE_URL_HERE';
+const SUPABASE_ANON = 'PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+// ─── FOUNDER WHITELIST ─────────────────────────────────────────────────────
+const FOUNDERS = [
+  'qstuard01@gmail.com',
+  'anamarinamata1997@gmail.com',
+  'christopher.marchica@gmail.com',
+];
+
+let currentUser = null;
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+
+  if (!session) {
+    window.location.href = 'index.html';
+    return;
+  }
+
+  const email = session.user.email.toLowerCase();
+  if (!FOUNDERS.includes(email)) {
+    document.getElementById('accessDenied').style.display = 'flex';
+    return;
+  }
+
+  currentUser = session.user;
+  document.getElementById('adminUI').style.display = 'flex';
+
+  const name     = currentUser.user_metadata?.full_name || email.split('@')[0];
+  const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('adminAvatar').textContent = initials;
+  document.getElementById('adminName').textContent   = name;
+
+  // Load all data
+  loadDashboardMetrics();
+  loadRecentWaitlist();
+  loadRecentUsers();
+}
+
+// ─── METRICS ───────────────────────────────────────────────────────────────
+async function loadDashboardMetrics() {
+  const [wl, users, meetings, today] = await Promise.all([
+    sb.from('waitlist').select('*', { count: 'exact', head: true }),
+    sb.from('profiles').select('*', { count: 'exact', head: true }),
+    sb.from('meetings').select('*', { count: 'exact', head: true }),
+    sb.from('meetings').select('*', { count: 'exact', head: true })
+      .gte('created_at', new Date(Date.now() - 86400000).toISOString()),
+  ]);
+  document.getElementById('mWaitlist').textContent  = wl.count  ?? '—';
+  document.getElementById('mUsers').textContent     = users.count ?? '—';
+  document.getElementById('mMeetings').textContent  = meetings.count ?? '—';
+  document.getElementById('mToday').textContent     = today.count ?? '0';
+}
+
+// ─── WAITLIST ──────────────────────────────────────────────────────────────
+async function loadWaitlist() {
+  const tbody = document.getElementById('waitlistTable');
+  tbody.innerHTML = '<tr class="empty-row"><td colspan="7">Loading...</td></tr>';
+  const { data, count } = await sb.from('waitlist')
+    .select('*', { count: 'exact' })
+    .order('created_at', { ascending: false });
+  document.getElementById('waitlistCount').textContent = `${count || 0} total`;
+  if (!data?.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No waitlist signups yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(w => `
+    <tr>
+      <td><b>${w.name || '—'}</b></td>
+      <td>${w.email}</td>
+      <td>${w.company || '—'}</td>
+      <td>${w.team_size ? `<span class="badge badge-blue">${w.team_size}</span>` : '—'}</td>
+      <td>${w.preferred_language ? `<span class="badge badge-orange">${w.preferred_language.toUpperCase()}</span>` : '—'}</td>
+      <td>${formatDate(w.created_at)}</td>
+      <td>
+        <button class="btn-sm btn-sm-primary" onclick="loadSamWithProspect('${w.name}','',w.company || '')">Sam →</button>
+        <button class="btn-sm btn-sm-ghost" onclick="copyToClipboard('${w.email}')" style="margin-left:4px">Copy email</button>
+      </td>
+    </tr>`).join('');
+}
+
+async function loadRecentWaitlist() {
+  const tbody = document.getElementById('recentWaitlistTable');
+  const { data } = await sb.from('waitlist')
+    .select('*').order('created_at', { ascending: false }).limit(5);
+  if (!data?.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No signups yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(w => `
+    <tr>
+      <td><b>${w.name || '—'}</b></td>
+      <td>${w.email}</td>
+      <td>${w.company || '—'}</td>
+      <td>${w.team_size || '—'}</td>
+      <td>${w.preferred_language?.toUpperCase() || '—'}</td>
+      <td>${formatDate(w.created_at)}</td>
+    </tr>`).join('');
+}
+
+function exportWaitlistCSV() {
+  sb.from('waitlist').select('*').order('created_at', { ascending: false })
+    .then(({ data }) => {
+      if (!data?.length) { showToast('No data to export', 'error'); return; }
+      const headers = ['Name','Email','Company','Team Size','Language','Joined'];
+      const rows    = data.map(w => [
+        w.name || '', w.email, w.company || '',
+        w.team_size || '', w.preferred_language || '',
+        formatDate(w.created_at)
+      ]);
+      const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = `callforge-waitlist-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      showToast('Waitlist exported ✓', 'success');
+    });
+}
+
+// ─── USERS ─────────────────────────────────────────────────────────────────
+async function loadUsers() {
+  const tbody = document.getElementById('usersTable');
+  tbody.innerHTML = '<tr class="empty-row"><td colspan="6">Loading...</td></tr>';
+  const { data, count } = await sb.from('profiles')
+    .select('*', { count: 'exact' })
+    .order('created_at', { ascending: false });
+  document.getElementById('usersCount').textContent = `${count || 0} total`;
+  if (!data?.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No users yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(u => `
+    <tr>
+      <td><b>${u.full_name || '—'}</b></td>
+      <td>${u.email}</td>
+      <td><span class="badge badge-green">${(u.plan || 'trial').toUpperCase()}</span></td>
+      <td>${u.meetings_used || 0}</td>
+      <td>${formatDate(u.created_at)}</td>
+      <td>
+        <button class="btn-sm btn-sm-ghost" onclick="prefillReset('${u.email}')">Reset password</button>
+        <button class="btn-sm btn-sm-primary" onclick="loadSamWithProspect('${u.full_name || u.email}','','')">Sam →</button>
+      </td>
+    </tr>`).join('');
+}
+
+async function loadRecentUsers() {
+  const tbody = document.getElementById('recentUsersTable');
+  const { data } = await sb.from('profiles')
+    .select('*').order('created_at', { ascending: false }).limit(5);
+  if (!data?.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No users yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(u => `
+    <tr>
+      <td><b>${u.full_name || '—'}</b></td>
+      <td>${u.email}</td>
+      <td><span class="badge badge-green">${(u.plan || 'trial').toUpperCase()}</span></td>
+      <td>${u.meetings_used || 0}</td>
+      <td>${formatDate(u.created_at)}</td>
+    </tr>`).join('');
+}
+
+// ─── PASSWORD RESET ────────────────────────────────────────────────────────
+function prefillReset(email) {
+  switchTab('passwords');
+  document.getElementById('resetEmail').value = email;
+}
+
+async function sendPasswordReset() {
+  const email = document.getElementById('resetEmail').value.trim();
+  if (!email) { showToast('Please enter an email address', 'error'); return; }
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://callforge.to/dashboard.html',
+  });
+  if (error) { showToast(error.message, 'error'); return; }
+  showToast(`Password reset sent to ${email} ✓`, 'success');
+  document.getElementById('resetEmail').value = '';
+}
+
+// ─── SAM THE SALES AGENT ───────────────────────────────────────────────────
+function loadSamWithProspect(name, title, company) {
+  switchTab('sam');
+  document.getElementById('samName').value    = name;
+  document.getElementById('samTitle').value   = title;
+  document.getElementById('samCompany').value = company;
+}
+
+
+// ─── FORGE PROSPECTOR ──────────────────────────────────────────────────────
+let prospectorResults = [];
+let selectedProspects = new Set();
+
+async function runProspector() {
+  const industry = document.getElementById('proIndustry').value;
+  const city     = document.getElementById('proCity').value.trim();
+  const state    = document.getElementById('proState').value.trim();
+  const limit    = parseInt(document.getElementById('proLimit').value);
+
+  if (!industry || !city) {
+    showToast('Please enter an industry and city', 'error');
+    return;
+  }
+
+  const sources = [];
+  if (document.getElementById('srcGoogle').checked) sources.push('google');
+  if (document.getElementById('srcSunbiz').checked) sources.push('sunbiz');
+
+  const btn     = document.getElementById('proBtn');
+  const results = document.getElementById('prospectResults');
+  btn.disabled    = true;
+  btn.textContent = '🔍 Searching...';
+
+  results.innerHTML = `
+    <div class="prospect-loading">
+      <div class="prospect-loading-icon">🔍</div>
+      <p>Forge Prospector is searching Google Maps${sources.includes('sunbiz') ? ' and Sunbiz.org' : ''}...<br>
+      <span style="font-size:11px;color:var(--gray)">This can take 20-30 seconds</span></p>
+    </div>`;
+
+  try {
+    const res = await fetch('/api/prospector', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ industry, city, state, sources, limit }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Prospector failed');
+    }
+
+    const data        = await res.json();
+    prospectorResults = data.prospects || [];
+    selectedProspects = new Set();
+    renderProspectorResults(data);
+
+  } catch (err) {
+    results.innerHTML = `
+      <div class="prospect-empty">
+        <div class="prospect-empty-icon">⚠️</div>
+        <h3>Search failed</h3>
+        <p>${err.message}<br><br>Make sure GOOGLE_MAPS_API_KEY is set in Vercel environment variables.</p>
+      </div>`;
+    showToast(err.message, 'error');
+  }
+
+  btn.disabled    = false;
+  btn.textContent = '🔍 Find prospects →';
+}
+
+function renderProspectorResults(data) {
+  const el = document.getElementById('prospectResults');
+
+  if (!data.prospects?.length) {
+    el.innerHTML = `
+      <div class="prospect-empty">
+        <div class="prospect-empty-icon">🔍</div>
+        <h3>No prospects found</h3>
+        <p>Try a different industry, city, or enable more data sources.</p>
+      </div>`;
+    return;
+  }
+
+  const statsHtml = `
+    <div class="prospect-stats">
+      <div style="display:flex;gap:24px">
+        <div class="prospect-stat">
+          <div class="prospect-stat-val" style="color:var(--forge)">${data.total}</div>
+          <div class="prospect-stat-label">Total Found</div>
+        </div>
+        <div class="prospect-stat">
+          <div class="prospect-stat-val" style="color:#22c55e">${data.spanish}</div>
+          <div class="prospect-stat-label">🇪🇸 Spanish</div>
+        </div>
+        <div class="prospect-stat">
+          <div class="prospect-stat-val" style="color:#3b82f6">${data.english}</div>
+          <div class="prospect-stat-label">🇺🇸 English</div>
+        </div>
+      </div>
+      <div class="prospect-actions">
+        <button class="btn-sm btn-sm-ghost" onclick="selectAllProspects()">Select all</button>
+        <button class="btn-sm btn-sm-primary" onclick="sendSelectedToSam()">Send selected to Sam →</button>
+        <button class="btn-sm btn-sm-ghost" onclick="exportProspectsCSV()">Export CSV ↓</button>
+      </div>
+    </div>`;
+
+  const cardsHtml = data.prospects.map((p, i) => `
+    <div class="prospect-card" id="pcard-${i}" onclick="toggleProspect(${i})">
+      <div class="prospect-lang ${p.language}">${p.language === 'es' ? '🇪🇸' : '🇺🇸'}</div>
+      <div class="prospect-info">
+        <div class="prospect-name">${p.owner_name || 'Owner — name not found'}</div>
+        <div class="prospect-biz">${p.business_name}</div>
+        <div class="prospect-email">${p.best_email || 'Email not found'}</div>
+        <div class="prospect-meta">
+          <span class="prospect-tag ${p.language}">${p.language === 'es' ? '🇪🇸 Spanish' : '🇺🇸 English'}</span>
+          <span class="prospect-tag">${p.source}</span>
+          ${p.phone ? `<span class="prospect-tag">📞 ${p.phone}</span>` : ''}
+          ${p.lang_confidence === 'high' ? '<span class="prospect-tag verified">High confidence</span>' : ''}
+        </div>
+      </div>
+      <div class="prospect-btns">
+        <button class="btn-sm btn-sm-primary" onclick="event.stopPropagation();sendOneToSam(${i})">Sam →</button>
+        ${p.website ? `<a href="${p.website}" target="_blank" class="btn-sm btn-sm-ghost" onclick="event.stopPropagation()" style="text-decoration:none;text-align:center">Site ↗</a>` : ''}
+      </div>
+    </div>`).join('');
+
+  el.innerHTML = statsHtml + cardsHtml;
+}
+
+function toggleProspect(i) {
+  const card = document.getElementById(`pcard-${i}`);
+  if (selectedProspects.has(i)) {
+    selectedProspects.delete(i);
+    card.classList.remove('selected');
+  } else {
+    selectedProspects.add(i);
+    card.classList.add('selected');
+  }
+}
+
+function selectAllProspects() {
+  prospectorResults.forEach((_, i) => {
+    selectedProspects.add(i);
+    document.getElementById(`pcard-${i}`)?.classList.add('selected');
+  });
+}
+
+function sendOneToSam(i) {
+  const p = prospectorResults[i];
+  if (!p) return;
+  loadSamWithProspect(
+    p.owner_name || p.business_name,
+    p.title || 'Owner',
+    p.business_name,
+    p.city,
+    p.industry
+  );
+  switchTab('sam');
+  showToast(`${p.owner_name || p.business_name} sent to Sam ✓`, 'success');
+}
+
+function sendSelectedToSam() {
+  if (!selectedProspects.size) {
+    showToast('Select some prospects first', 'error');
+    return;
+  }
+  const first = [...selectedProspects][0];
+  sendOneToSam(first);
+  showToast(`${selectedProspects.size} prospect(s) queued — processing first one`, 'success');
+}
+
+function exportProspectsCSV() {
+  if (!prospectorResults.length) return;
+  const headers = ['Business Name','Owner Name','Title','Email','Phone','Website','City','State','Industry','Language','Source'];
+  const rows    = prospectorResults.map(p => [
+    p.business_name, p.owner_name||'', p.title||'Owner',
+    p.best_email||'', p.phone||'', p.website||'',
+    p.city, p.state, p.industry, p.language, p.source
+  ]);
+  downloadCSV([headers, ...rows], 'forge-prospects.csv');
+}
+
+function loadSamWithProspect(name, title, company, city, industry) {
+  document.getElementById('samName').value    = name    || '';
+  document.getElementById('samTitle').value   = title   || '';
+  document.getElementById('samCompany').value = company || '';
+  document.getElementById('samLocation').value = city   || '';
+  if (industry) {
+    const sel = document.getElementById('samIndustry');
+    for (let opt of sel.options) {
+      if (opt.value === industry) { sel.value = industry; break; }
+    }
+  }
+}
+
+// ─── CSV IMPORT ────────────────────────────────────────────────────────────
+let csvProspects   = [];
+let csvSamResults  = [];
+
+function csvDragOver(e) {
+  e.preventDefault();
+  document.getElementById('csvZone').classList.add('drag-over');
+}
+function csvDragLeave() {
+  document.getElementById('csvZone').classList.remove('drag-over');
+}
+function csvDrop(e) {
+  e.preventDefault();
+  document.getElementById('csvZone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) parseCSVFile(file);
+}
+function handleCSVUpload(e) {
+  const file = e.target.files[0];
+  if (file) parseCSVFile(file);
+}
+
+function parseCSVFile(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const text  = e.target.result;
+    const lines = text.split('\n').filter(l => l.trim());
+    if (lines.length < 2) { showToast('CSV appears empty', 'error'); return; }
+
+    const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim().toLowerCase());
+    csvProspects  = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const vals    = parseCSVLine(lines[i]);
+      const row     = {};
+      headers.forEach((h, idx) => { row[h] = (vals[idx] || '').replace(/"/g, '').trim(); });
+
+      const firstName = row['first name'] || row['firstname'] || row['first_name'] || '';
+      const lastName  = row['last name']  || row['lastname']  || row['last_name']  || '';
+      const fullName  = `${firstName} ${lastName}`.trim();
+      if (!fullName) continue;
+
+      csvProspects.push({
+        name:     fullName,
+        title:    row['title'] || row['job title'] || 'Owner',
+        company:  row['company'] || row['company name'] || '',
+        email:    row['email'] || row['email address'] || '',
+        location: `${row['city'] || ''} ${row['state'] || ''}`.trim(),
+        industry: row['industry'] || '',
+        linkedin: row['linkedin url'] || row['linkedin'] || '',
+      });
+    }
+
+    const spanish = csvProspects.filter(p => {
+      const lang = detectCSVLanguage(p.name);
+      return lang === 'es';
+    }).length;
+
+    document.getElementById('csvPreviewTitle').textContent =
+      `${csvProspects.length} prospects ready`;
+    document.getElementById('csvLangStats').textContent =
+      `🇪🇸 ${spanish} Spanish · 🇺🇸 ${csvProspects.length - spanish} English`;
+
+    const queueEl = document.getElementById('csvQueue');
+    queueEl.innerHTML = csvProspects.slice(0, 10).map((p, i) => `
+      <div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--light-gray)">
+        <div style="font-size:16px">${detectCSVLanguage(p.name) === 'es' ? '🇪🇸' : '🇺🇸'}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:700">${p.name}</div>
+          <div style="font-size:11px;color:var(--gray)">${p.title} · ${p.company}</div>
+        </div>
+        <div style="font-size:11px;color:var(--forge)">${p.email || 'No email'}</div>
+      </div>`).join('') +
+      (csvProspects.length > 10 ? `<div style="text-align:center;font-size:12px;color:var(--gray);padding:8px">+ ${csvProspects.length - 10} more</div>` : '');
+
+    document.getElementById('csvPreview').style.display  = 'block';
+    document.getElementById('csvZone').style.display     = 'none';
+  };
+  reader.readAsText(file);
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current  = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    if (line[i] === '"') {
+      inQuotes = !inQuotes;
+    } else if (line[i] === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += line[i];
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+function detectCSVLanguage(name) {
+  const HISPANIC = ['garcia','martinez','lopez','rodriguez','gonzalez','hernandez',
+    'perez','sanchez','ramirez','torres','flores','rivera','gomez','diaz','reyes',
+    'morales','jimenez','ruiz','alvarez','romero','vargas','castillo','mendoza',
+    'ramos','ortiz','delgado','chavez','herrera','medina','aguilar','garza'];
+  const nameLower = name.toLowerCase();
+  return HISPANIC.some(s => nameLower.includes(s)) ? 'es' : 'en';
+}
+
+function clearCSV() {
+  csvProspects  = [];
+  csvSamResults = [];
+  document.getElementById('csvPreview').style.display  = 'none';
+  document.getElementById('csvResults').style.display  = 'none';
+  document.getElementById('csvZone').style.display     = '';
+  document.getElementById('csvFileInput').value        = '';
+}
+
+async function processAllCSV() {
+  if (!csvProspects.length) return;
+
+  const btn = document.getElementById('csvProcessBtn');
+  btn.disabled    = true;
+  btn.textContent = '🔨 Processing...';
+
+  csvSamResults = [];
+  document.getElementById('csvResults').style.display = 'block';
+  const queueEl = document.getElementById('csvResultsQueue');
+  queueEl.innerHTML = `
+    <div style="text-align:center;padding:24px;color:var(--gray)">
+      <div style="font-size:32px;animation:spin 1.5s linear infinite;margin-bottom:8px">🔨</div>
+      Processing ${csvProspects.length} prospects with Sam...<br>
+      <span style="font-size:11px">This will take ${Math.ceil(csvProspects.length * 0.5)} - ${csvProspects.length} minutes</span>
+    </div>`;
+
+  // Process in batches of 5 to avoid overwhelming the API
+  for (let i = 0; i < csvProspects.length; i++) {
+    const prospect = csvProspects[i];
+    btn.textContent = `🔨 Processing ${i + 1} of ${csvProspects.length}...`;
+
+    try {
+      const res = await fetch('/api/sam', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          prospect: {
+            name:          prospect.name,
+            title:         prospect.title,
+            company:       prospect.company,
+            location:      prospect.location,
+            industry:      prospect.industry,
+            outreach_type: currentOutreachType,
+          }
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        csvSamResults.push({ prospect, result: data, index: i });
+      }
+    } catch(e) {
+      console.error(`Failed prospect ${i}:`, e);
+    }
+
+    // Small delay between requests
+    await new Promise(r => setTimeout(r, 800));
+  }
+
+  renderCSVResults();
+  btn.disabled    = false;
+  btn.textContent = '🔨 Process all with Sam →';
+  showToast(`✓ ${csvSamResults.length} prospects processed by Sam!`, 'success');
+}
+
+function renderCSVResults() {
+  const el = document.getElementById('csvResultsQueue');
+  el.innerHTML = csvSamResults.map((item, i) => {
+    const { prospect, result } = item;
+    const isES  = result.language === 'es';
+    const o     = result.outreach || {};
+    return `
+      <div class="sam-msg-card">
+        <div class="sam-msg-header">
+          <div class="sam-msg-title">
+            ${isES ? '🇪🇸' : '🇺🇸'} ${prospect.name}
+            <span style="font-size:10px;color:var(--gray);font-weight:400">· ${prospect.company}</span>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button class="copy-btn" onclick="copyText('csv-li-${i}')">Copy DM</button>
+            <button class="copy-btn" onclick="copyText('csv-em-${i}')">Copy Email</button>
+          </div>
+        </div>
+        <div class="sam-msg-body">
+          <div class="sam-subject-label">LinkedIn DM</div>
+          <div class="sam-body-text" id="csv-li-${i}" style="margin-bottom:10px">${o.linkedin_dm || 'N/A'}</div>
+          <div class="sam-subject-label">Cold Email Subject</div>
+          <div class="sam-subject-val">${o.cold_email?.subject || 'N/A'}</div>
+          <div class="sam-body-text" id="csv-em-${i}">${o.cold_email?.body || 'N/A'}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function exportAllToCSV() {
+  if (!csvSamResults.length) return;
+  const headers = ['Name','Company','Language','LinkedIn DM','Email Subject','Email Body','Follow-up 1','Follow-up 2'];
+  const rows    = csvSamResults.map(({ prospect, result }) => {
+    const o = result.outreach || {};
+    return [
+      prospect.name, prospect.company, result.language,
+      o.linkedin_dm || '', o.cold_email?.subject || '', o.cold_email?.body || '',
+      o.follow_up_1?.body || '', o.follow_up_2?.body || ''
+    ];
+  });
+  downloadCSV([headers, ...rows], 'sam-outreach-sequences.csv');
+}
+
+function downloadCSV(rows, filename) {
+  const csv  = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = filename;
+  a.click();
+  showToast(`${filename} downloaded ✓`, 'success');
+}
+
+let currentOutreachType = 'standard';
+
+function setOutreachType(type) {
+  currentOutreachType = type;
+  const btnStandard = document.getElementById('btnStandard');
+  const btnDemo     = document.getElementById('btnDemo');
+  const explainer   = document.getElementById('demoModeExplainer');
+
+  if (type === 'demo') {
+    btnDemo.style.background     = 'var(--forge)';
+    btnDemo.style.color          = '#fff';
+    btnDemo.style.borderColor    = 'var(--forge)';
+    btnStandard.style.background = 'var(--cream)';
+    btnStandard.style.color      = 'var(--gray)';
+    btnStandard.style.borderColor = 'var(--light-gray)';
+    explainer.style.display      = 'block';
+  } else {
+    btnStandard.style.background  = 'var(--forge)';
+    btnStandard.style.color       = '#fff';
+    btnStandard.style.borderColor = 'var(--forge)';
+    btnDemo.style.background      = 'var(--cream)';
+    btnDemo.style.color           = 'var(--gray)';
+    btnDemo.style.borderColor     = 'var(--light-gray)';
+    explainer.style.display       = 'none';
+  }
+}
+
+async function runSam() {
+  const name = document.getElementById('samName').value.trim();
+  if (!name) { showToast('Please enter a prospect name', 'error'); return; }
+
+  const prospect = {
+    name,
+    title:         document.getElementById('samTitle').value.trim(),
+    company:       document.getElementById('samCompany').value.trim(),
+    location:      document.getElementById('samLocation').value.trim(),
+    industry:      document.getElementById('samIndustry').value,
+    bio:           document.getElementById('samBio').value.trim(),
+    outreach_type: currentOutreachType,
+  };
+
+  const btn       = document.getElementById('samBtn');
+  const resultsEl = document.getElementById('samResults');
+  btn.disabled    = true;
+  btn.textContent = '🔨 Forging outreach...';
+
+  resultsEl.innerHTML = `
+    <div class="sam-loading">
+      <div class="sam-loading-icon">🔨</div>
+      <p>Sam is analyzing ${name} and crafting the perfect outreach...</p>
+    </div>`;
+
+  try {
+    const res = await fetch('/api/sam', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prospect }),
+    });
+    if (!res.ok) { const e = await res.json(); throw new Error(e.error || 'Sam failed'); }
+    const data = await res.json();
+    renderSamResults(data);
+  } catch (err) {
+    resultsEl.innerHTML = `<div class="sam-empty"><div class="sam-empty-icon">⚠️</div><h3>Something went wrong</h3><p>${err.message}</p></div>`;
+    showToast(err.message, 'error');
+  }
+
+  btn.disabled    = false;
+  btn.textContent = '🔨 Generate outreach sequence →';
+}
+
+function renderDemoResults(data) {
+  const el   = document.getElementById('samResults');
+  const isES = data.language === 'es';
+  const o    = data.outreach;
+  const confColor = { high:'#22c55e', medium:'#f59e0b', low:'#ef4444' }[data.confidence] || '#7a7a8c';
+
+  el.innerHTML = `
+    <div class="sam-analysis">
+      <div class="sam-analysis-top">
+        <div>
+          <h3>${data.prospect?.name || 'Prospect'} — Live Demo Invite</h3>
+          <div class="sam-tags" style="margin-top:6px">
+            <span class="sam-tag tier">🎙 Demo Mode</span>
+            ${data.prospect?.industry ? `<span class="sam-tag">${data.prospect.industry}</span>` : ''}
+            ${data.prospect?.location ? `<span class="sam-tag">${data.prospect.location}</span>` : ''}
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div class="sam-lang-badge ${isES ? 'sam-lang-es' : 'sam-lang-en'}">
+            ${isES ? '🇪🇸 Spanish' : '🇺🇸 English'}
+          </div>
+          <div style="font-size:10px;color:${confColor};font-weight:700;margin-top:4px">${(data.confidence||'').toUpperCase()} CONFIDENCE</div>
+        </div>
+      </div>
+      <div class="sam-note" style="background:#fff7ed;border-left:3px solid var(--forge)">
+        🔥 <b>Strategy:</b> Invite them to pitch us. We run the call through Callforge live. They see their own pitch analyzed in real time. Chris's idea.
+      </div>
+    </div>
+
+    ${msgCard('💼 LinkedIn DM', null, o.linkedin_dm, 'li')}
+    ${msgCard('📧 Cold Email', o.cold_email?.subject, o.cold_email?.body, 'em')}
+    ${msgCard('📅 Calendar Invite Description', null, o.calendar_invite_description, 'cal')}
+    ${msgCard('📧 Post-Demo Follow-up', o.post_demo_followup?.subject, o.post_demo_followup?.body, 'pd')}
+    ${msgCard('📧 Follow-up if No Reply', o.follow_up_1?.subject, o.follow_up_1?.body, 'f1',
+      `Send after ${o.follow_up_1?.send_after_days || 3} days`)}
+
+    <div class="sam-objections">
+      <div class="obj-header">🛡️ Objection Responses — Demo Mode</div>
+      ${objRow(isES ? '❌ "¿Por qué debería presentarte mi producto?"' : '❌ "Why would I pitch you?"', o.objection_responses?.why_would_i_pitch_you)}
+      ${objRow(isES ? '❌ "No tengo tiempo para esto"' : '❌ "I don't have time for this"', o.objection_responses?.not_enough_time)}
+      ${objRow(isES ? '❌ "¿Qué es Callforge?"' : '❌ "What is Callforge?"', o.objection_responses?.what_is_callforge)}
+      ${objRow(isES ? '❌ "¿Qué gano yo con esto?"' : '❌ "What's in it for me?"', o.objection_responses?.whats_in_it_for_me)}
+    </div>
+  `;
+}
+
+function renderSamResults(data) {
+  if (data.mode === 'demo') {
+    renderDemoResults(data);
+    return;
+  }
+  const el    = document.getElementById('samResults');
+  const isES  = data.language === 'es';
+  const o     = data.outreach;
+  const tier  = data.prospect_tier || 'rep';
+  const tierLabel = { owner:'Business Owner', manager:'Sales Manager', rep:'Sales Rep' }[tier] || tier;
+  const confColor = { high:'#22c55e', medium:'#f59e0b', low:'#ef4444' }[data.confidence] || '#7a7a8c';
+
+  el.innerHTML = `
+    <div class="sam-analysis">
+      <div class="sam-analysis-top">
+        <div>
+          <h3>${data.prospect?.name || 'Prospect'}</h3>
+          <div class="sam-tags">
+            <span class="sam-tag tier">${tierLabel}</span>
+            ${data.prospect?.industry ? `<span class="sam-tag">${data.prospect.industry}</span>` : ''}
+            ${data.prospect?.location ? `<span class="sam-tag">${data.prospect.location}</span>` : ''}
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div class="sam-lang-badge ${isES ? 'sam-lang-es' : 'sam-lang-en'}">
+            ${isES ? '🇪🇸 Spanish' : '🇺🇸 English'}
+          </div>
+          <div style="font-size:10px;color:${confColor};font-weight:700;margin-top:4px">${(data.confidence||'').toUpperCase()} CONFIDENCE</div>
+        </div>
+      </div>
+      <div class="sam-note">💡 ${data.reasoning}</div>
+      <div class="sam-note pain" style="margin-top:6px">🎯 <b>Pain point:</b> ${data.prospect_pain}</div>
+    </div>
+    ${msgCard('💼 LinkedIn DM', null, o.linkedin_dm, 'li')}
+    ${msgCard('📧 Cold Email', o.cold_email?.subject, o.cold_email?.body, 'em')}
+    ${msgCard('📧 Follow-up #1', o.follow_up_1?.subject, o.follow_up_1?.body, 'f1', `Send after ${o.follow_up_1?.send_after_days||3} days`)}
+    ${msgCard('📧 Follow-up #2 — Breakup', o.follow_up_2?.subject, o.follow_up_2?.body, 'f2', `Send after ${o.follow_up_2?.send_after_days||7} days`)}
+    ${msgCard('📸 Instagram DM', null, o.instagram_dm, 'ig')}
+    ${msgCard('💬 Reddit Comment', null, o.reddit_comment, 're')}
+    <div class="sam-objections">
+      <div class="obj-header">🛡️ Objection Responses</div>
+      ${objRow(isES ? '❌ "Muy caro"' : '❌ "Too expensive"', o.objection_responses?.too_expensive)}
+      ${objRow(isES ? '❌ "Ya usamos Gong/Otter"' : '❌ "We already use Gong/Otter"', o.objection_responses?.already_use_gong)}
+      ${objRow(isES ? '❌ "No me interesa"' : '❌ "Not interested"', o.objection_responses?.not_interested)}
+      ${objRow(isES ? '❌ "Sin presupuesto"' : '❌ "No budget right now"', o.objection_responses?.no_budget)}
+    </div>`;
+}
+
+function msgCard(title, subject, body, id, badge) {
+  if (!body) return '';
+  return `
+    <div class="sam-msg-card">
+      <div class="sam-msg-header">
+        <div class="sam-msg-title">${title} ${badge ? `<span class="sam-delay-tag">${badge}</span>` : ''}</div>
+        <button class="copy-btn" onclick="copyText('sam-body-${id}')">Copy ↗</button>
+      </div>
+      <div class="sam-msg-body">
+        ${subject ? `<div class="sam-subject-label">Subject line</div><div class="sam-subject-val">${subject}</div>` : ''}
+        <div class="sam-body-text" id="sam-body-${id}">${body}</div>
+      </div>
+    </div>`;
+}
+function objRow(q, a) {
+  if (!a) return '';
+  return `<div class="obj-item"><div class="obj-q">${q}</div><div class="obj-a">${a}</div></div>`;
+}
+function copyText(id) {
+  const el = document.getElementById(id);
+  if (el) { navigator.clipboard.writeText(el.textContent); showToast('Copied ✓', 'success'); }
+}
+
+// ─── UTILS ─────────────────────────────────────────────────────────────────
+function formatDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+}
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text);
+  showToast('Copied ✓', 'success');
+}
+async function handleLogout() {
+  await sb.auth.signOut();
+  window.location.href = 'index.html';
+}
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast show ${type}`;
+  setTimeout(() => t.className = 'toast', 3500);
+}
+
+const tabTitles = {
+  prospector: 'Forge Prospector',
+  csv:        'CSV Import',
+  dashboard: 'Dashboard',
+  waitlist:  'Waitlist Manager',
+  users:     'User Manager',
+  passwords: 'Password Reset',
+  sam:       'Sam — Sales Outreach',
+};
+function switchTab(tab) {
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelectorAll('.nav-item')[['dashboard','waitlist','users','passwords','prospector','csv','sam'].indexOf(tab)]?.classList.add('active');
+  document.getElementById('pageTitle').textContent = tabTitles[tab] || '';
+  document.getElementById('headerMeta').textContent = 'Forge Control Panel';
+  // Load data when switching to a tab
+  if (tab === 'waitlist')  loadWaitlist();
+  if (tab === 'users')     loadUsers();
+}
+
+init();
+</script>
+</body>
+</html>

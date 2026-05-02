@@ -177,7 +177,154 @@ Respond ONLY with valid JSON — no markdown, no backticks:
 
     const followUpEmail = `Subject: ${emailDraft.subject}\n\n${emailDraft.body}`;
 
-    // ── STEP 6: Save everything to Supabase ────────────────────────────
+    // ── STEP 6: The Forged — Generate 4 AI coach insights ─────────────
+    const forgedPrompts = {
+      maya: {
+        name: 'Maya the Spark',
+        role: 'Pitch Coach',
+        prompt: `You are Maya the Spark, a bilingual pitch coach analyzing a ${isSpanish ? 'Spanish' : 'English'} sales call.
+
+TRANSCRIPT:
+${transcript}
+
+CALL SUMMARY: ${analysis.summary}
+
+Analyze the PITCH quality of this call. Focus on: opening strength, value proposition clarity, storytelling, enthusiasm, pacing, and how well the rep captured attention.
+
+Respond ONLY with valid JSON, no markdown:
+{
+  "headline": "One punchy sentence summarizing pitch performance (e.g. 'Strong opener, weak value prop')",
+  "score": 74,
+  "what_worked": ["Specific thing that worked", "Another thing that worked"],
+  "what_to_improve": ["Specific thing to improve with exact suggestion"],
+  "best_moment": "Timestamp or description of their best pitch moment",
+  "next_call_tip": "One specific actionable tip for their next call"
+}`
+      },
+      sam: {
+        name: 'Sam the Anvil',
+        role: 'Follow-up Coach',
+        prompt: `You are Sam the Anvil, a bilingual follow-up specialist analyzing a ${isSpanish ? 'Spanish' : 'English'} sales call.
+
+TRANSCRIPT:
+${transcript}
+
+FOLLOW-UP EMAIL DRAFTED: ${followUpEmail}
+
+Analyze the FOLLOW-UP OPPORTUNITIES from this call. Focus on: timing recommendations, relationship warmth, what to emphasize, what to avoid, and how to keep momentum.
+
+Respond ONLY with valid JSON, no markdown:
+{
+  "headline": "One sentence about the follow-up situation (e.g. 'Hot lead — follow up within 2 hours')",
+  "urgency": "high", "medium", or "low",
+  "send_within": "e.g. '2 hours' or '24 hours' or '3 days'",
+  "key_points_to_reinforce": ["Point from the call to reinforce", "Another point"],
+  "what_to_avoid": ["Thing to avoid in follow-up"],
+  "subject_line_tip": "Specific advice on the subject line",
+  "relationship_temperature": "warm", "cool", or "neutral"
+}`
+      },
+      finn: {
+        name: 'Finn the Tongs',
+        role: 'Deal Analyst',
+        prompt: `You are Finn the Tongs, a bilingual deal analyst reviewing a ${isSpanish ? 'Spanish' : 'English'} sales call.
+
+TRANSCRIPT:
+${transcript}
+
+DEAL SCORE: ${analysis.deal_score}/100
+
+Provide deep deal analysis. Focus on: buying signals detected, risk factors, decision maker access, budget signals, competition mentioned, deal timeline, and probability.
+
+Respond ONLY with valid JSON, no markdown:
+{
+  "headline": "One sentence deal status (e.g. 'Strong opportunity — decision maker engaged, budget confirmed')",
+  "win_probability": 65,
+  "buying_signals": ["Specific buying signal detected", "Another signal"],
+  "risk_factors": ["Specific risk to watch", "Another risk"],
+  "next_milestone": "What needs to happen to advance this deal",
+  "decision_maker_access": "direct", "indirect", or "unknown",
+  "budget_status": "confirmed", "likely", "uncertain", or "objected",
+  "competition_mentioned": true or false,
+  "recommended_action": "Specific next action to advance the deal"
+}`
+      },
+      aria: {
+        name: 'Aria the Hammer',
+        role: 'Objection Coach',
+        prompt: `You are Aria the Hammer, a bilingual objection handling specialist analyzing a ${isSpanish ? 'Spanish' : 'English'} sales call.
+
+TRANSCRIPT:
+${transcript}
+
+KEY OBJECTIONS FROM ANALYSIS: ${analysis.key_objections?.join(', ') || 'none noted'}
+
+Analyze ALL objections raised and provide specific coaching on handling them better. Focus on: objections raised, how they were handled, better responses, and patterns to watch for.
+
+Respond ONLY with valid JSON, no markdown:
+{
+  "headline": "One sentence about objection handling (e.g. '2 objections — price handled well, timeline fumbled')",
+  "objections_count": 2,
+  "objections": [
+    {
+      "objection": "What the prospect said",
+      "how_handled": "good", "ok", or "poor",
+      "what_was_said": "What the rep actually said",
+      "better_response": "A stronger way to handle this objection next time"
+    }
+  ],
+  "overall_handling": "strong", "average", or "needs_work",
+  "pattern_to_watch": "A recurring objection pattern to prepare for",
+  "coaching_tip": "One specific tip to handle objections better on the next call"
+}`
+      }
+    };
+
+    // Run all 4 Forged coaches in parallel for speed
+    const forgedResults = await Promise.allSettled(
+      Object.entries(forgedPrompts).map(async ([key, coach]) => {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'x-api-key': ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01',
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-6',
+            max_tokens: 800,
+            messages: [{ role: 'user', content: coach.prompt }],
+          }),
+        });
+        const data    = await res.json();
+        const raw     = data.content[0].text.trim()
+          .replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+        const insight = JSON.parse(raw);
+        return { key, coach_name: coach.name, role: coach.role, insight };
+      })
+    );
+
+    // Save Forged insights to Supabase (non-fatal if fails)
+    const forgedInsights = forgedResults
+      .filter(r => r.status === 'fulfilled')
+      .map(r => r.value);
+
+    if (forgedInsights.length > 0) {
+      try {
+        await sb.from('forged_insights').insert(
+          forgedInsights.map(f => ({
+            meeting_id:  meetingId,
+            user_id:     userId,
+            coach_name:  f.coach_name,
+            insight:     JSON.stringify(f.insight),
+          }))
+        );
+      } catch (forgedSaveErr) {
+        console.error('Forged insights save failed (non-fatal):', forgedSaveErr);
+      }
+    }
+
+    // ── STEP 7: Save everything to Supabase ────────────────────────────
     const { error: updateError } = await sb.from('meetings').update({
       title:            analysis.title,
       transcript:       transcript,
@@ -191,7 +338,7 @@ Respond ONLY with valid JSON — no markdown, no backticks:
 
     if (updateError) throw new Error(`Supabase update failed: ${updateError.message}`);
 
-    // ── STEP 7: Send "meeting ready" email via Resend ──────────────────
+    // ── STEP 8: Send "meeting ready" email via Resend ──────────────────
     if (userEmail && RESEND_API_KEY) {
       try {
         await fetch(`${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'https://callforge.to'}/api/send-email`, {
@@ -216,7 +363,7 @@ Respond ONLY with valid JSON — no markdown, no backticks:
       }
     }
 
-    // ── STEP 8: Return success ─────────────────────────────────────────
+    // ── STEP 9: Return success ─────────────────────────────────────────
     return res.status(200).json({
       success:        true,
       meetingId,
@@ -226,6 +373,7 @@ Respond ONLY with valid JSON — no markdown, no backticks:
       deal_score:     analysis.deal_score,
       follow_up_email: followUpEmail,
       language,
+      forged_insights: forgedInsights,
     });
 
   } catch (error) {
