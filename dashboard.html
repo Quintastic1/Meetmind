@@ -254,6 +254,18 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 .fi-badge-red{background:#fee2e2;color:#991b1b}
 .fi-badge-blue{background:#dbeafe;color:#1e40af}
 .fi-loading{text-align:center;padding:24px;color:var(--gray);font-size:13px}
+
+/* HUBSPOT INTEGRATION */
+.hs-connect-card{background:var(--white);border:1px solid var(--light-gray);border-radius:14px;padding:24px;margin-bottom:16px}
+.hs-connect-card h3{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.hs-connect-card p{font-size:13px;color:var(--gray);margin-bottom:16px;line-height:1.6}
+.hs-status{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:700;margin-bottom:14px}
+.hs-status.connected{background:#dcfce7;color:#166534}
+.hs-status.disconnected{background:#fee2e2;color:#991b1b}
+.hs-token-input{width:100%;padding:10px 14px;border:1.5px solid var(--light-gray);border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:13px;color:var(--ink);background:var(--cream);outline:none;margin-bottom:10px}
+.hs-token-input:focus{border-color:var(--forge);background:#fff}
+.hs-btn-row{display:flex;gap:8px}
+.hs-sync-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:100px;font-size:11px;font-weight:700;background:#dcfce7;color:#166534;margin-top:8px}
 </style>
 </head>
 <body>
@@ -497,6 +509,7 @@ async function init() {
   document.getElementById('settingsName').value        = name;
   document.getElementById('settingsEmail').value       = currentUser.email;
   loadMeetings();
+  initHubSpot();
 }
 
 // ─── MEETINGS ─────────────────────────────────────────────────────────────────
@@ -563,6 +576,29 @@ function openMeeting(id) {
     `<div class="action-item"><div class="action-check" onclick="this.style.background='var(--forge)';this.style.borderColor='var(--forge)'"></div>${a}</div>`
   ).join('') || '<p style="font-size:13px;color:var(--gray)">No action items extracted.</p>';
   document.getElementById('followupEmail').textContent = m.follow_up_email || 'No follow-up email drafted.';
+
+  // Add HubSpot sync button if connected
+  const hsBtn = document.getElementById('hsSyncMeetingBtn');
+  if (hsBtn) hsBtn.remove();
+  if (hubspotToken) {
+    const syncBtn = document.createElement('button');
+    syncBtn.id = 'hsSyncMeetingBtn';
+    syncBtn.className = 'btn-sm btn-sm-primary';
+    syncBtn.style.marginTop = '12px';
+    syncBtn.innerHTML = '🔗 Sync to HubSpot';
+    syncBtn.onclick = async () => {
+      syncBtn.textContent = 'Syncing...';
+      syncBtn.disabled = true;
+      const result = await syncMeetingToHubSpot(m);
+      if (result?.hubspot_url) {
+        syncBtn.innerHTML = '✅ Synced — <a href="' + result.hubspot_url + '" target="_blank" style="color:inherit">View in HubSpot ↗</a>';
+      } else {
+        syncBtn.textContent = '🔗 Sync to HubSpot';
+        syncBtn.disabled = false;
+      }
+    };
+    document.getElementById('followupEmail').after(syncBtn);
+  }
   // Load Forged insights for this meeting
   loadForgedInsights(m.id);
   document.getElementById('meetingDetail').classList.add('show');
@@ -696,6 +732,7 @@ async function processFile(file) {
 
     showToast('⚒ Meeting forged! Check your meetings.', 'success');
     loadMeetings();
+  initHubSpot();
     switchTab('meetings');
 
   } catch (error) {
@@ -893,6 +930,108 @@ function renderFiList(label, items) {
         ${items.map(i => `<li>${i}</li>`).join('')}
       </ul>
     </div>`;
+}
+
+
+// ─── HUBSPOT INTEGRATION ──────────────────────────────────────────────────────
+let hubspotToken = localStorage.getItem('callforge_hs_token') || null;
+
+function initHubSpot() {
+  if (hubspotToken) {
+    showHubSpotConnected();
+  }
+}
+
+async function connectHubSpot() {
+  const token = document.getElementById('hsToken').value.trim();
+  if (!token) { showToast('Please paste your HubSpot token', 'error'); return; }
+  if (!token.startsWith('pat-')) { showToast('Invalid token format — should start with pat-', 'error'); return; }
+
+  const btn = document.getElementById('hsConnectBtn');
+  btn.textContent = 'Connecting...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/hubspot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'test', hubspot_token: token }),
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      hubspotToken = token;
+      localStorage.setItem('callforge_hs_token', token);
+      showHubSpotConnected();
+      showToast('HubSpot connected successfully! ✓', 'success');
+    } else {
+      showToast(data.error || 'Connection failed', 'error');
+    }
+  } catch(e) {
+    showToast('Connection failed — check your token', 'error');
+  }
+
+  btn.textContent = 'Connect HubSpot →';
+  btn.disabled = false;
+}
+
+function showHubSpotConnected() {
+  document.getElementById('hsStatus').className = 'hs-status connected';
+  document.getElementById('hsStatus').textContent = '✅ Connected to HubSpot';
+  document.getElementById('hsConnectForm').style.display = 'none';
+  document.getElementById('hsConnectedInfo').style.display = 'block';
+}
+
+function disconnectHubSpot() {
+  hubspotToken = null;
+  localStorage.removeItem('callforge_hs_token');
+  document.getElementById('hsStatus').className = 'hs-status disconnected';
+  document.getElementById('hsStatus').textContent = '⚪ Not connected';
+  document.getElementById('hsConnectForm').style.display = 'block';
+  document.getElementById('hsConnectedInfo').style.display = 'none';
+  document.getElementById('hsToken').value = '';
+  showToast('HubSpot disconnected', 'success');
+}
+
+async function syncMeetingToHubSpot(meeting) {
+  if (!hubspotToken) return null;
+  try {
+    const res = await fetch('/api/hubspot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action:        'sync',
+        hubspot_token: hubspotToken,
+        meeting,
+        prospect: {
+          name:  meeting.title?.split('—')[0]?.trim() || 'Unknown',
+          email: null,
+        }
+      }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Synced to HubSpot ✓', 'success');
+      return data;
+    }
+  } catch(e) {
+    console.error('HubSpot sync failed (non-fatal):', e);
+  }
+  return null;
+}
+
+async function syncLastMeeting() {
+  if (!meetings?.length) { showToast('No meetings to sync', 'error'); return; }
+  const btn = document.getElementById('hsSyncBtn');
+  btn.textContent = 'Syncing...';
+  btn.disabled = true;
+  const result = await syncMeetingToHubSpot(meetings[0]);
+  if (result?.hubspot_url) {
+    showToast('Synced! Opening HubSpot...', 'success');
+    setTimeout(() => window.open(result.hubspot_url, '_blank'), 1000);
+  }
+  btn.textContent = 'Sync last meeting →';
+  btn.disabled = false;
 }
 
 // ─── TOAST ─────────────────────────────────────────────────────────────────────
