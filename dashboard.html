@@ -478,6 +478,25 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
         <div class="settings-divider"></div>
         <button class="btn-danger" onclick="handleLogout()">Sign out →</button>
       </div>
+
+      <!-- HUBSPOT INTEGRATION -->
+      <div class="hs-connect-card">
+        <h3>🔗 HubSpot CRM Integration</h3>
+        <p>Connect your HubSpot account and every processed call will automatically sync — contact found or created, deal updated, and call summary logged as a note.</p>
+        <div id="hsStatus" class="hs-status disconnected">⚪ Not connected</div>
+        <div id="hsConnectForm">
+          <input type="password" id="hsToken" class="hs-token-input" placeholder="Paste your HubSpot Private App token (pat-na2-...)">
+          <div class="hs-btn-row">
+            <button class="btn-sm btn-sm-primary" onclick="connectHubSpot()" id="hsConnectBtn">Connect HubSpot →</button>
+            <a href="https://app.hubspot.com/private-apps" target="_blank" class="btn-sm btn-sm-ghost" style="text-decoration:none;text-align:center">Get token ↗</a>
+          </div>
+        </div>
+        <div id="hsConnectedInfo" style="display:none">
+          <div style="font-size:13px;color:var(--gray);margin-bottom:10px">Your HubSpot is connected. All new meetings will sync automatically.</div>
+          <button class="btn-sm btn-sm-primary" onclick="syncLastMeeting()" id="hsSyncBtn">Sync last meeting →</button>
+          <button class="btn-sm" style="background:#fee2e2;color:#991b1b;margin-left:8px;padding:5px 12px;border-radius:6px;border:none;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;font-size:11px;font-weight:700" onclick="disconnectHubSpot()">Disconnect</button>
+        </div>
+      </div>
     </div>
 
   </div>
