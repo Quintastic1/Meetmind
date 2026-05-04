@@ -190,9 +190,11 @@ Respond ONLY with valid JSON — no markdown, no backticks:
     const emailClean = emailRaw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     const emailDraft = JSON.parse(emailClean);
 
-    const followUpEmail = `Subject: ${emailDraft.subject}
-
-${emailDraft.body}`;
+    // Sanitize email - decode any URL encoding from Claude response
+    const emailSubject = (emailDraft.subject || '').replace(/%20/g, ' ').replace(/%0A/g, ' ');
+    let emailBody = (emailDraft.body || '');
+    try { emailBody = decodeURIComponent(emailBody.replace(/\+/g, ' ')); } catch(e) {}
+    const followUpEmail = `Subject: ${emailSubject}\n\n${emailBody}`;
 
     // ── STEP 6: The Forged — Generate 4 AI coach insights ─────────────
     const forgedPrompts = {
