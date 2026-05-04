@@ -92,7 +92,7 @@ ${transcript}
 
 Respond with exactly this JSON structure:
 {
-  "title": "Brief descriptive title for this call (e.g. 'Acme Corp Discovery Call' or 'Mendoza & Asociados — Q4 Renewal')",
+  "title": "MUST follow this exact format: [Prospect First Name Last Name] · [Main Topic Discussed in 3-5 words]. Examples: 'Ana Mata · Discussed bilingual sales tools', 'Carlos García · Explored insurance pricing options', 'John Smith · Follow-up on Q4 proposal'. Use the prospect's REAL name from the transcript — not the company name.",
   "summary": "3-4 sentence summary of what happened on the call, key points discussed, and current status of the deal.",
   "action_items": [
     "Specific action item 1 with owner and deadline if mentioned",
@@ -190,7 +190,9 @@ Respond ONLY with valid JSON — no markdown, no backticks:
     const emailClean = emailRaw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     const emailDraft = JSON.parse(emailClean);
 
-    const followUpEmail = `Subject: ${emailDraft.subject}\n\n${emailDraft.body}`;
+    const followUpEmail = `Subject: ${emailDraft.subject}
+
+${emailDraft.body}`;
 
     // ── STEP 6: The Forged — Generate 4 AI coach insights ─────────────
     const forgedPrompts = {

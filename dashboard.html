@@ -2,7 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Callforge">
+<meta name="theme-color" content="#0a0e1a">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/Tito.png">
 <title>Callforge — Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -504,6 +510,38 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 
 <div class="toast" id="toast"></div>
 
+<!-- UPGRADE MODAL -->
+<div class="modal-overlay" id="upgradeModal" style="display:none;position:fixed;inset:0;background:rgba(10,14,26,0.7);z-index:1000;display:none;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:20px;padding:36px;max-width:420px;width:90%;text-align:center;position:relative">
+    <div style="font-size:48px;margin-bottom:12px">⚒</div>
+    <div style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;margin-bottom:8px">You've used all 5 free calls</div>
+    <div style="font-size:14px;color:#7a7a8c;margin-bottom:24px;line-height:1.6">
+      Your free trial includes 5 meetings. Upgrade to keep forging your calls into closed deals.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+      <div style="background:#faf7f0;border:1.5px solid #e6e3dc;border-radius:10px;padding:14px;text-align:left">
+        <div style="font-weight:700;font-size:13px;margin-bottom:2px">Starter — $49/mo</div>
+        <div style="font-size:12px;color:#7a7a8c">20 meetings per month</div>
+      </div>
+      <div style="background:#fff7ed;border:2px solid #ff6b1a;border-radius:10px;padding:14px;text-align:left;position:relative">
+        <div style="position:absolute;top:-10px;right:12px;background:#ff6b1a;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px">MOST POPULAR</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:2px">Pro — $99/mo</div>
+        <div style="font-size:12px;color:#7a7a8c">Unlimited meetings + all 4 Forged coaches</div>
+      </div>
+      <div style="background:#faf7f0;border:1.5px solid #e6e3dc;border-radius:10px;padding:14px;text-align:left">
+        <div style="font-weight:700;font-size:13px;margin-bottom:2px">Team — $299/mo</div>
+        <div style="font-size:12px;color:#7a7a8c">Up to 10 seats, everything in Pro</div>
+      </div>
+    </div>
+    <button onclick="window.location.href='mailto:hello@callforge.to?subject=Upgrade my plan'" style="width:100%;padding:14px;border-radius:10px;background:#ff6b1a;color:#fff;font-family:'Cabinet Grotesk',sans-serif;font-size:15px;font-weight:700;border:none;cursor:pointer;margin-bottom:10px">
+      Upgrade now → hello@callforge.to
+    </button>
+    <button onclick="document.getElementById('upgradeModal').style.display='none'" style="background:none;border:none;color:#7a7a8c;font-size:13px;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif">
+      Maybe later
+    </button>
+  </div>
+</div>
+
 <script>
 // ─── SUPABASE CONFIG ────────────────────────────────────────────────────────
 const SUPABASE_URL  = 'https://yrptztgbwedvszqjonil.supabase.co';
@@ -553,7 +591,7 @@ function renderMeetingsList() {
       <div class="meeting-icon" style="background:${m.language==='es'?'#fff7ed':'#f0fdf4'}">${m.language==='es'?'🇪🇸':'🇺🇸'}</div>
       <div class="meeting-info">
         <div class="meeting-title">${m.title || 'Processing...'}</div>
-        <div class="meeting-meta">${new Date(m.created_at).toLocaleDateString()} · ${m.status}</div>
+        <div class="meeting-meta">${new Date(m.created_at).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'})} · ${m.deal_score ? m.deal_score + '/100' : m.status}</div>
       </div>
       <span class="meeting-status status-${m.status}">${m.status === 'done' ? 'Done' : m.status === 'failed' ? 'Failed' : 'Processing'}</span>
       <div class="meeting-score">
@@ -594,7 +632,13 @@ function openMeeting(id) {
   document.getElementById('actionItemsList').innerHTML     = (m.action_items||[]).map(a =>
     `<div class="action-item"><div class="action-check" onclick="this.style.background='var(--forge)';this.style.borderColor='var(--forge)'"></div>${a}</div>`
   ).join('') || '<p style="font-size:13px;color:var(--gray)">No action items extracted.</p>';
-  document.getElementById('followupEmail').textContent = m.follow_up_email || 'No follow-up email drafted.';
+  // Decode and display follow-up email cleanly
+  const rawEmail = m.follow_up_email || 'No follow-up email drafted.';
+  const cleanEmail = rawEmail
+    .replace(/%20/g, ' ')
+    .replace(/%0A/g, '\n')
+    .replace(/%[0-9A-Fa-f]{2}/g, c => { try { return decodeURIComponent(c); } catch(e) { return c; } });
+  document.getElementById('followupEmail').textContent = cleanEmail;
 
   // Add HubSpot sync button if connected
   const hsBtn = document.getElementById('hsSyncMeetingBtn');
@@ -634,8 +678,15 @@ function closeMeetingDetail() {
 
 function copyEmail() {
   if (currentMeeting?.follow_up_email) {
-    navigator.clipboard.writeText(currentMeeting.follow_up_email);
-    showToast('Email copied to clipboard ✓', 'success');
+    // Decode URL encoding before copying
+    const raw   = currentMeeting.follow_up_email;
+    const clean = raw
+      .replace(/%20/g, ' ')
+      .replace(/%0A/g, '\n')
+      .replace(/%0D/g, '')
+      .replace(/%[0-9A-Fa-f]{2}/g, c => { try { return decodeURIComponent(c); } catch(e) { return c; } });
+    navigator.clipboard.writeText(clean);
+    showToast('Email copied ✓', 'success');
   }
 }
 
@@ -659,6 +710,31 @@ function handleFileSelect(e) {
 }
 
 async function processFile(file) {
+  // ── TRIAL LIMIT CHECK ──────────────────────────────────────────────────
+  const ADMIN_EMAILS = [
+    'qstuard01@gmail.com',
+    'anamarinamata1997@gmail.com',
+    'christopher.marchica@gmail.com',
+  ];
+  const FREE_TRIAL_LIMIT = 5;
+  const userEmail = currentUser?.email?.toLowerCase() || '';
+  const isAdmin   = ADMIN_EMAILS.includes(userEmail);
+  const userPlan  = currentUser?.user_metadata?.plan || 'trial';
+
+  if (!isAdmin && userPlan === 'trial') {
+    // Count how many meetings this user has already processed
+    const { count } = await sb
+      .from('meetings')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', currentUser.id);
+
+    if (count >= FREE_TRIAL_LIMIT) {
+      // Show upgrade modal instead of processing
+      showUpgradeModal(count);
+      return;
+    }
+  }
+
   // Validate file type
   const allowed = ['audio/mpeg','audio/mp4','audio/wav','audio/m4a','audio/webm','video/mp4','video/webm','audio/ogg'];
   if (!allowed.includes(file.type) && !file.name.match(/\.(mp3|mp4|wav|m4a|webm|ogg)$/i)) {
@@ -955,9 +1031,27 @@ function renderFiList(label, items) {
 // ─── HUBSPOT INTEGRATION ──────────────────────────────────────────────────────
 let hubspotToken = localStorage.getItem('callforge_hs_token') || null;
 
-function initHubSpot() {
-  if (hubspotToken) {
+async function initHubSpot() {
+  // Try Supabase first (persists across devices)
+  const { data: profile } = await sb
+    .from('profiles')
+    .select('hubspot_token, plan, meetings_used')
+    .eq('id', currentUser.id)
+    .single();
+
+  if (profile?.hubspot_token) {
+    hubspotToken = profile.hubspot_token;
+    localStorage.setItem('callforge_hs_token', hubspotToken);
     showHubSpotConnected();
+  } else if (hubspotToken) {
+    // Fallback to localStorage
+    showHubSpotConnected();
+  }
+
+  // Update user plan from Supabase
+  if (profile?.plan) {
+    currentUser.user_metadata = currentUser.user_metadata || {};
+    currentUser.user_metadata.plan = profile.plan;
   }
 }
 
@@ -980,7 +1074,10 @@ async function connectHubSpot() {
 
     if (data.success) {
       hubspotToken = token;
+      // Save to localStorage for immediate use
       localStorage.setItem('callforge_hs_token', token);
+      // Save to Supabase so it persists across devices
+      await sb.from('profiles').update({ hubspot_token: token }).eq('id', currentUser.id);
       showHubSpotConnected();
       showToast('HubSpot connected successfully! ✓', 'success');
     } else {
@@ -1001,9 +1098,10 @@ function showHubSpotConnected() {
   document.getElementById('hsConnectedInfo').style.display = 'block';
 }
 
-function disconnectHubSpot() {
+async function disconnectHubSpot() {
   hubspotToken = null;
   localStorage.removeItem('callforge_hs_token');
+  await sb.from('profiles').update({ hubspot_token: null }).eq('id', currentUser.id);
   document.getElementById('hsStatus').className = 'hs-status disconnected';
   document.getElementById('hsStatus').textContent = '⚪ Not connected';
   document.getElementById('hsConnectForm').style.display = 'block';
@@ -1052,6 +1150,50 @@ async function syncLastMeeting() {
   btn.textContent = 'Sync last meeting →';
   btn.disabled = false;
 }
+
+
+// ─── PWA INSTALL PROMPT ────────────────────────────────────────────────────
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show install banner after 30 seconds if not installed
+  setTimeout(showInstallBanner, 30000);
+});
+
+function showInstallBanner() {
+  if (!deferredPrompt) return;
+  const banner = document.createElement('div');
+  banner.id = 'installBanner';
+  banner.style.cssText = `
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+    background:var(--ink);color:var(--paper);padding:12px 20px;
+    border-radius:12px;font-size:13px;font-weight:600;z-index:2000;
+    display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,0.3);
+    border-left:4px solid var(--forge);white-space:nowrap;
+  `;
+  banner.innerHTML = `
+    <span>⚒ Add Callforge to your home screen</span>
+    <button onclick="installPWA()" style="background:var(--forge);color:#fff;border:none;padding:6px 14px;border-radius:6px;font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer">Install</button>
+    <button onclick="document.getElementById('installBanner').remove()" style="background:none;border:none;color:var(--gray);cursor:pointer;font-size:16px">✕</button>
+  `;
+  document.body.appendChild(banner);
+}
+
+async function installPWA() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById('installBanner')?.remove();
+  if (outcome === 'accepted') showToast('Callforge added to home screen! ⚒', 'success');
+}
+
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  showToast('Callforge installed! ⚒', 'success');
+});
 
 // ─── TOAST ─────────────────────────────────────────────────────────────────────
 function showToast(msg, type='success') {
@@ -1231,7 +1373,22 @@ function copySamMessage(id) {
   }
 }
 
+function showUpgradeModal(count) {
+  const modal = document.getElementById('upgradeModal');
+  modal.style.display = 'flex';
+}
+
 init();
+</script>
+<script>
+// Register service worker for PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('Callforge SW registered'))
+      .catch(err => console.log('SW registration failed:', err));
+  });
+}
 </script>
 </body>
 </html>

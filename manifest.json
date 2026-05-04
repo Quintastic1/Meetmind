@@ -1,0 +1,43 @@
+{
+  "name": "Callforge",
+  "short_name": "Callforge",
+  "description": "Forge every call into a closed deal",
+  "start_url": "/dashboard.html",
+  "display": "standalone",
+  "background_color": "#0a0e1a",
+  "theme_color": "#0a0e1a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/Tito.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/Tito.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Upload Meeting",
+      "short_name": "Upload",
+      "description": "Upload a new call recording",
+      "url": "/dashboard.html#upload",
+      "icons": [{ "src": "/Tito.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "My Meetings",
+      "short_name": "Meetings",
+      "description": "View your processed meetings",
+      "url": "/dashboard.html#meetings",
+      "icons": [{ "src": "/Tito.png", "sizes": "192x192" }]
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "lang": "en",
+  "dir": "ltr"
+}
