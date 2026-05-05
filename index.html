@@ -104,60 +104,13 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:24px 4
 .forged-section .subheading{font-size:16px;color:rgba(244,241,234,0.55);margin-bottom:48px;font-weight:300;max-width:560px;margin-left:auto;margin-right:auto}
 .forged-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;text-align:left}
 .forged-card{background:linear-gradient(180deg,var(--charcoal),#0e1320);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:24px;transition:all 0.3s;position:relative;overflow:hidden}
-.forged-card{
-  background:linear-gradient(180deg,var(--charcoal),#0e1320);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:18px;
-  padding:24px;
-  transition:all 0.3s;
-  position:relative;
-  overflow:hidden;
-}
-
-.forged-card:hover{
-  border-color:rgba(255,107,26,0.45);
-  transform:translateY(-6px);
-  box-shadow:
-    0 16px 40px rgba(255,107,26,0.12),
-    0 0 0 1px rgba(255,107,26,0.15);
-}
-
-.forged-card::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:3px;
-  background:linear-gradient(90deg,var(--forge),var(--ember));
-}
-
-.char-avatar{
-  width:88px;
-  height:88px;
-  margin-bottom:18px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  animation:charBob 3s ease-in-out infinite;
-}
-
-.char-avatar img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  display:block;
-  filter:drop-shadow(0 6px 18px rgba(255,107,26,0.28));
-  transition:transform 0.25s ease;
-}
-
-.forged-card:hover .char-avatar img{
-  transform:scale(1.06);
-}
-
-.forged-card:hover .char-avatar img{
-  transform:scale(1.06);
-}
+.forged-card:hover{border-color:rgba(255,107,26,0.4);transform:translateY(-6px);box-shadow:0 16px 40px rgba(255,107,26,0.15)}
+.forged-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--forge),var(--ember))}
+.char-avatar{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:38px;margin-bottom:16px;animation:charBob 3s ease-in-out infinite}
+.char-avatar.maya{background:linear-gradient(135deg,#fef3c7,#fde047);box-shadow:0 6px 20px rgba(253,224,71,0.4)}
+.char-avatar.sam{background:linear-gradient(135deg,#bfdbfe,#60a5fa);box-shadow:0 6px 20px rgba(96,165,250,0.4);animation-delay:0.5s}
+.char-avatar.finn{background:linear-gradient(135deg,#bbf7d0,#4ade80);box-shadow:0 6px 20px rgba(74,222,128,0.4);animation-delay:1s}
+.char-avatar.aria{background:linear-gradient(135deg,#fecaca,#f87171);box-shadow:0 6px 20px rgba(248,113,113,0.4);animation-delay:1.5s}
 @keyframes charBob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
 .char-name{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:700;margin-bottom:4px}
 .char-title{font-size:11px;letter-spacing:1.5px;color:var(--forge);text-transform:uppercase;margin-bottom:12px;font-weight:700}
@@ -229,7 +182,8 @@ footer{border-top:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:fle
 <body>
 <div id="landing">
   <nav>
-    <div class="nav-logo"><div class="logo-mark"></div>Callforge</div>
+    <div class="nav-logo"><div class="logo-mark"></div>Call<span class="accent">forge</span></div>
+    <div class="nav-links">
       <a href="#waitlist" data-i18n="nav.waitlist">Waitlist</a>
       <a href="#forged" data-i18n="nav.forged">The Forged</a>
       <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
@@ -311,13 +265,10 @@ footer{border-top:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:fle
     <h2 data-i18n="forged.title">The Forged.</h2>
     <p class="subheading" data-i18n="forged.subtitle">Four AI specialists hammered into shape to help you close more deals. Built into every Pro and Team plan.</p>
     <div class="forged-grid">
-      <div class="forged-card"><div class="char-avatar maya"><img src="maya.PNG" alt="Maya the Spark"><div class="char-name" data-i18n="forged.maya.name">Maya the Spark</div><div class="char-title" data-i18n="forged.maya.title">PITCH COACH</div><p class="char-desc" data-i18n="forged.maya.desc">Reviews your calls and tells you exactly which lines worked, which fell flat, and how to open stronger next time.</p><div class="char-quote" data-i18n="forged.maya.quote">"Your last pitch lost them at minute 12 — try this instead."</div></div>
-      <div class="forged-card"><div class="char-avatar sam"><img src="sam.PNG" alt="Sam the Anvil">
-</div><div class="char-name" data-i18n="forged.sam.name">Sam the Anvil</div><div class="char-title" data-i18n="forged.sam.title">FOLLOW-UP COACH</div><p class="char-desc" data-i18n="forged.sam.desc">Drafts your follow-up emails the moment the call ends. Reads tone, picks the right close, signs off in your voice.</p><div class="char-quote" data-i18n="forged.sam.quote">"Send within 2 hours. I drafted it. Just hit send."</div></div>
-      <div class="forged-card"><div class="char-avatar finn"><img src="finn.PNG" alt="Finn the Tongs">
-</div><div class="char-name" data-i18n="forged.finn.name">Finn the Tongs</div><div class="char-title" data-i18n="forged.finn.title">DEAL ANALYST</div><p class="char-desc" data-i18n="forged.finn.desc">Tracks every deal in your pipeline. Scores intent. Flags risks. Tells you which deals to push and which to drop.</p><div class="char-quote" data-i18n="forged.finn.quote">"Acme is heating up. Mendoza is cooling. Focus here."</div></div>
-      <div class="forged-card"><div class="char-avatar aria"><img src="aria.PNG" alt="Aria the Hammer">
-</div><div class="char-name" data-i18n="forged.aria.name">Aria the Hammer</div><div class="char-title" data-i18n="forged.aria.title">OBJECTION COACH</div><p class="char-desc" data-i18n="forged.aria.desc">Detects every objection raised on your calls and rehearses the perfect comeback for next time.</p><div class="char-quote" data-i18n="forged.aria.quote">"They mentioned price 4 times. Here's how to reframe it."</div></div>
+      <div class="forged-card"><div class="char-avatar maya">⚡</div><div class="char-name" data-i18n="forged.maya.name">Maya the Spark</div><div class="char-title" data-i18n="forged.maya.title">PITCH COACH</div><p class="char-desc" data-i18n="forged.maya.desc">Reviews your calls and tells you exactly which lines worked, which fell flat, and how to open stronger next time.</p><div class="char-quote" data-i18n="forged.maya.quote">"Your last pitch lost them at minute 12 — try this instead."</div></div>
+      <div class="forged-card"><div class="char-avatar sam">⚖️</div><div class="char-name" data-i18n="forged.sam.name">Sam the Anvil</div><div class="char-title" data-i18n="forged.sam.title">FOLLOW-UP COACH</div><p class="char-desc" data-i18n="forged.sam.desc">Drafts your follow-up emails the moment the call ends. Reads tone, picks the right close, signs off in your voice.</p><div class="char-quote" data-i18n="forged.sam.quote">"Send within 2 hours. I drafted it. Just hit send."</div></div>
+      <div class="forged-card"><div class="char-avatar finn">🔧</div><div class="char-name" data-i18n="forged.finn.name">Finn the Tongs</div><div class="char-title" data-i18n="forged.finn.title">DEAL ANALYST</div><p class="char-desc" data-i18n="forged.finn.desc">Tracks every deal in your pipeline. Scores intent. Flags risks. Tells you which deals to push and which to drop.</p><div class="char-quote" data-i18n="forged.finn.quote">"Acme is heating up. Mendoza is cooling. Focus here."</div></div>
+      <div class="forged-card"><div class="char-avatar aria">🔨</div><div class="char-name" data-i18n="forged.aria.name">Aria the Hammer</div><div class="char-title" data-i18n="forged.aria.title">OBJECTION COACH</div><p class="char-desc" data-i18n="forged.aria.desc">Detects every objection raised on your calls and rehearses the perfect comeback for next time.</p><div class="char-quote" data-i18n="forged.aria.quote">"They mentioned price 4 times. Here's how to reframe it."</div></div>
     </div>
   </section>
 
@@ -362,7 +313,7 @@ footer{border-top:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:fle
 <div class="modal-overlay" id="authModal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-logo"><div class="logo-mark"></div>Callforge</div>
+    <div class="modal-logo"><div class="logo-mark"></div>Call<span class="accent">forge</span></div>
     <div id="signupForm">
       <h2 data-i18n="signup.title">Start your free trial</h2>
       <p data-i18n="signup.subtitle">14 days free · No credit card required</p>
