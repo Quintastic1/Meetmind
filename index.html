@@ -36,10 +36,10 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 #landing>*{position:relative;z-index:1}
 .tito-container{
   position:absolute;
-  top:160px;
-  right:20px;
-  width:300px;
-  height:300px;
+  top:120px;
+  right:0;
+  width:320px;
+  height:320px;
   z-index:10;
   pointer-events:none;
 }
@@ -51,17 +51,15 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
     transform:translateY(-12px) rotate(2deg)
   }
 }
-
 #tito-animation{
-  width:240px;
-  height:240px;
+  width:320px;
+  height:320px;
   position:absolute;
   top:0;
   right:0;
-  overflow:hidden;
+  overflow:visible;
   filter:drop-shadow(0 14px 40px rgba(255,107,26,0.45));
 }
-
 #tito-animation svg{
   width:100% !important;
   height:100% !important;
@@ -127,7 +125,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:24px 4
   padding:140px 48px 120px;
   max-width:1200px;
   margin:0 auto;
-  text-align:left;
+  text-align:center;
   position:relative;
   min-height:650px;
 }
@@ -141,7 +139,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:24px 4
   color:rgba(244,241,234,0.55);
   line-height:1.7;
   max-width:700px;
-  padding-right:220px;
   margin:0 auto 40px;
   font-weight:300;
 }
@@ -373,7 +370,7 @@ footer{border-top:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:fle
     <p class="hero-note" data-i18n="hero.note">Early waitlist gets 25% off the first 6 months · No card required</p>
   <div class="tito-container">
   <div class="tito-speech" data-i18n="tito.greeting">¡Hola! I'm Tito 👋</div>
-<div id="tito-animation" style="position:absolute;top:0;right:0;width:140px;height:140px;"></div>
+<div id="tito-animation"></div>
 </div>
   </section>
 
