@@ -34,14 +34,70 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 #landing{background:var(--ink);color:var(--paper);position:relative;min-height:100vh}
 #landing::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse at center,rgba(255,107,26,0.15),transparent 70%);pointer-events:none;z-index:0}
 #landing>*{position:relative;z-index:1}
-.tito-container{position:absolute;right:20px;top:160px;width:200px;height:200px;z-index:2;cursor:pointer;animation:titoFloat 4s ease-in-out infinite}
-@keyframes titoFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(2deg)}}
-.tito-image{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 30px rgba(255,107,26,0.3))}
-.tito-speech{position:absolute;top:0;left:-110px;background:#fff;color:var(--ink);padding:10px 16px;border-radius:14px;font-size:13px;font-weight:700;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,0.2);opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none}
-.tito-speech::after{content:'';position:absolute;bottom:-8px;right:24px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:10px solid #fff}
-.tito-container:hover .tito-speech{opacity:1;transform:translateY(0)}
-.tito-container:hover .tito-image{transform:scale(1.05);transition:transform 0.3s}
-nav{display:flex;align-items:center;justify-content:space-between;padding:24px 48px;border-bottom:1px solid rgba(255,255,255,0.07)}
+.tito-container{
+  position:absolute;
+  right:80px;
+  top:140px;
+  width:180px;
+  height:180px;
+  z-index:2;
+  animation:titoFloat 4s ease-in-out infinite;
+}
+
+@keyframes titoFloat{
+  0%,100%{
+    transform:translateY(0) rotate(-2deg)
+  }
+  50%{
+    transform:translateY(-12px) rotate(2deg)
+  }
+}
+
+#tito-animation{
+  width:100%;
+  height:100%;
+  filter:drop-shadow(0 10px 30px rgba(255,107,26,0.3));
+}
+
+.tito-speech{
+  position:absolute;
+  top:0;
+  left:-110px;
+  background:#fff;
+  color:var(--ink);
+  padding:10px 16px;
+  border-radius:14px;
+  font-size:13px;
+  font-weight:700;
+  white-space:nowrap;
+  box-shadow:0 6px 20px rgba(0,0,0,0.2);
+  opacity:0;
+  transform:translateY(10px);
+  transition:all 0.3s;
+  pointer-events:none
+}
+
+.tito-speech::after{
+  content:'';
+  position:absolute;
+  bottom:-8px;
+  right:24px;
+  width:0;
+  height:0;
+  border-left:8px solid transparent;
+  border-right:8px solid transparent;
+  border-top:10px solid #fff
+}
+
+.tito-container:hover .tito-speech{
+  opacity:1;
+  transform:translateY(0)
+}
+
+.tito-container:hover #tito-animation{
+  transform:scale(1.05);
+  transition:transform 0.3s
+}nav{display:flex;align-items:center;justify-content:space-between;padding:24px 48px;border-bottom:1px solid rgba(255,255,255,0.07)}
 .nav-logo{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;display:flex;align-items:center;gap:8px}
 .logo-mark{width:28px;height:28px;background:linear-gradient(135deg,var(--forge),var(--ember));border-radius:7px;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 0 20px rgba(255,107,26,0.4)}
 .logo-mark::before{content:'';position:absolute;inset:2px;border-radius:5px;background:linear-gradient(135deg,var(--forge),var(--forge-dark))}
