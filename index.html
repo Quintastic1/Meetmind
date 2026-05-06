@@ -230,9 +230,99 @@ footer{border-top:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:fle
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 .toast.success{border-left-color:var(--success)}
 .toast.error{border-left-color:var(--red)}
-@media(max-width:900px){.tito-container{position:relative;right:auto;top:auto;margin:0 auto 30px;width:180px;height:180px}.tito-speech{display:none}.hero{padding:60px 20px 48px}}
-@media(max-width:768px){nav{padding:16px 20px;flex-wrap:wrap;gap:8px}.nav-links a:not(:last-child){display:none}.stats-bar{padding:24px 20px;flex-wrap:wrap}.stat{flex:1 1 40%;border-right:none}.features{padding:48px 20px}.features-grid{grid-template-columns:1fr}.forged-section{padding:48px 20px}.forged-grid{grid-template-columns:1fr 1fr;gap:12px}.pricing{padding:48px 20px}.waitlist-section{padding:40px 20px}.waitlist-card{padding:28px 20px}.form-row{grid-template-columns:1fr}.founders-note{padding:40px 20px}.founders-note-card{padding:28px 20px}footer{padding:24px 20px;flex-direction:column;text-align:center}}
-@media(max-width:480px){.forged-grid{grid-template-columns:1fr}}
+@media(max-width:900px){
+  .tito-container{
+    position:absolute;
+    right:40px;
+    top:120px;
+    width:160px;
+    height:160px;
+    margin:0;
+  }
+
+  .tito-speech{
+    display:none
+  }
+
+  .hero{
+    padding:60px 20px 48px
+  }
+}
+
+@media(max-width:768px){
+  nav{
+    padding:16px 20px;
+    flex-wrap:wrap;
+    gap:8px
+  }
+
+  .nav-links a:not(:last-child){
+    display:none
+  }
+
+  .stats-bar{
+    padding:24px 20px;
+    flex-wrap:wrap
+  }
+
+  .stat{
+    flex:1 1 40%;
+    border-right:none
+  }
+
+  .features{
+    padding:48px 20px
+  }
+
+  .features-grid{
+    grid-template-columns:1fr
+  }
+
+  .forged-section{
+    padding:48px 20px
+  }
+
+  .forged-grid{
+    grid-template-columns:1fr 1fr;
+    gap:12px
+  }
+
+  .pricing{
+    padding:48px 20px
+  }
+
+  .waitlist-section{
+    padding:40px 20px
+  }
+
+  .waitlist-card{
+    padding:28px 20px
+  }
+
+  .form-row{
+    grid-template-columns:1fr
+  }
+
+  .founders-note{
+    padding:40px 20px
+  }
+
+  .founders-note-card{
+    padding:28px 20px
+  }
+
+  footer{
+    padding:24px 20px;
+    flex-direction:column;
+    text-align:center
+  }
+}
+
+@media(max-width:480px){
+  .forged-grid{
+    grid-template-columns:1fr
+  }
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
 </head>
