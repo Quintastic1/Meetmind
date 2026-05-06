@@ -346,17 +346,21 @@ footer{border-top:1px solid rgba(255,255,255,0.07);padding:32px 48px;display:fle
 <body>
 <div id="landing">
   <nav>
-<div class="nav-logo"><div class="logo-mark"></div>Call<span class="accent" style="margin-left:-3px;">forge</span></div>    
+<div class="nav-logo"><div class="logo-mark"></div>Call<span class="accent" style="margin-left:-3px;">forge</span></div>
+
+<div class="nav-links">
   <a href="#waitlist" data-i18n="nav.waitlist">Waitlist</a>
-      <a href="#forged" data-i18n="nav.forged">The Forged</a>
-      <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
-      <div class="lang-switcher">
-        <button class="lang-btn active" onclick="setLang('en')" data-lang="en">EN</button>
-        <button class="lang-btn" onclick="setLang('es')" data-lang="es">ES</button>
-      </div>
-      <button class="btn-secondary" onclick="openModal('login')" data-i18n="nav.signIn">Sign in</button>
-      <button class="btn-primary" onclick="scrollToWaitlist()" data-i18n="nav.joinWaitlist">Join the waitlist</button>
-    </div>
+  <a href="#forged" data-i18n="nav.forged">The Forged</a>
+  <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('en')" data-lang="en">EN</button>
+    <button class="lang-btn" onclick="setLang('es')" data-lang="es">ES</button>
+  </div>
+
+  <button class="btn-secondary" onclick="openModal('login')" data-i18n="nav.signIn">Sign in</button>
+  <button class="btn-primary" onclick="scrollToWaitlist()" data-i18n="nav.joinWaitlist">Join the waitlist</button>
+</div>
  </nav>
 <section class="hero">
     <div class="hero-badge"><div class="hero-badge-dot"></div><span data-i18n="hero.badge">LAUNCHING SOON · JOIN THE WAITLIST</span></div>
