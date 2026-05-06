@@ -36,10 +36,10 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 #landing>*{position:relative;z-index:1}
 .tito-container{
   position:absolute;
-  top:40px;
+  top:180px;
   right:40px;
-  width:140px;
-  height:140px;
+  width:240px;
+  height:240px;
   z-index:10;
   pointer-events:none;
 }
@@ -53,13 +53,13 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 }
 
 #tito-animation{
-  width:140px;
-  height:140px;
+  width:240px;
+  height:240px;
   position:absolute;
   top:0;
   right:0;
   overflow:hidden;
-  filter:drop-shadow(0 10px 30px rgba(255,107,26,0.3));
+  filter:drop-shadow(0 14px 40px rgba(255,107,26,0.45));
 }
 .tito-speech{
   position:absolute;
@@ -129,7 +129,15 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:24px 4
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
 .hero h1{font-family:'Clash Display',sans-serif;font-size:clamp(42px,7vw,84px);font-weight:700;line-height:1;letter-spacing:-2px;margin-bottom:24px}
 .hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--forge),var(--ember));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero p{font-size:18px;color:rgba(244,241,234,0.55);line-height:1.7;max-width:580px;margin:0 auto 40px;font-weight:300}
+.hero p{
+  font-size:18px;
+  color:rgba(244,241,234,0.55);
+  line-height:1.7;
+  max-width:700px;
+  padding-right:220px;
+  margin:0 auto 40px;
+  font-weight:300;
+}
 .hero-cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .hero-cta .btn-primary,.hero-cta .btn-secondary{padding:16px 32px;font-size:15px;border-radius:10px}
 .hero-note{font-size:12px;color:rgba(244,241,234,0.3);margin-top:14px}
