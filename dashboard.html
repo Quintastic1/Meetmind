@@ -344,7 +344,7 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
         </div>
       </div>
       <div class="meeting-detail" id="meetingDetail">
-        <button class="back-btn" onclick="closeMeetingDetail()"><span data-i18n="detail.back">← Back to meetings</span></button>
+        <button class="back-btn" onclick="closeMeetingDetail()">← Back to meetings</button>
         <div class="detail-header">
           <div class="detail-title" id="detailTitle"></div>
           <div class="detail-meta" id="detailMeta"></div>
@@ -355,11 +355,11 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
           </div>
         </div>
         <div class="detail-grid">
-          <div class="detail-section"><h3><span data-i18n="detail.actions">✅ Action Items</span></h3><div id="actionItemsList"></div></div>
-          <div class="detail-section"><h3><span data-i18n="detail.summary">📝 AI Summary</span></h3><p class="summary-text" id="summaryText"></p></div>
+          <div class="detail-section"><h3 data-i18n="detail.actions">✅ Action Items</h3><div id="actionItemsList"></div></div>
+          <div class="detail-section"><h3 data-i18n="detail.summary">📝 AI Summary</h3><p class="summary-text" id="summaryText"></p></div>
           <div class="detail-section full"><h3 data-i18n="detail.email">📧 AI-Generated Follow-up Email</h3><div class="email-block" id="followupEmail"></div><button class="copy-btn" onclick="copyEmail()" data-i18n="detail.copy">Copy email ↗</button></div>
           <div class="detail-section full" id="forgedInsightsSection" style="display:none">
-            <h3>⚒ The Forged — AI Coach Insights</h3>
+            <h3 data-i18n="detail.forged">⚒ The Forged — AI Coach Insights</h3>
             <div class="forged-insights-grid" id="forgedInsightsGrid"></div>
           </div>
         </div>
@@ -927,7 +927,7 @@ const DASH_T = {
     'upload.drop':        'Drop your audio or video file here',
     'upload.or':          'or',
     'upload.browse':      'Browse files',
-    'upload.formats':     '<span data-i18n="upload.formats">MP3, MP4, M4A, WAV, WebM supported</span>',
+    'upload.formats':     'MP3, MP4, M4A, WAV, WebM supported',
     'forged.title':       'The Forged',
     'forged.subtitle':    'Your AI coaching team. They analyze every call.',
     'settings.title':     'Settings',
@@ -940,11 +940,11 @@ const DASH_T = {
     'metric.meetings':    'Total Meetings',
     'metric.score':       'Avg Deal Score',
     'metric.actions':     'Action Items',
-    'detail.summary':     '<span data-i18n="detail.summary">📝 AI Summary</span>',
-    'detail.actions':     '<span data-i18n="detail.actions">✅ Action Items</span>',
+    'detail.summary':     '📝 AI Summary',
+    'detail.actions':     '✅ Action Items',
     'detail.email':       '📧 AI-Generated Follow-up Email',
     'detail.copy':        'Copy email ↗',
-    'detail.back':        '<span data-i18n="detail.back">← Back to meetings</span>',
+    'detail.back':        '← Back to meetings',
     'detail.forged':      '⚒ The Forged — AI Coach Insights',
     'processing.step1':   'Uploading audio file',
     'processing.step2':   'Transcribing with AI',
