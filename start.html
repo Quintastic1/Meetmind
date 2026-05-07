@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<!-- ── SEO + OG TAGS — these power the link preview on iPhone/LinkedIn ── -->
+<title>Start Your Free Trial — Callforge</title>
+<meta name="description" content="14 days free. No credit card required. Forge every call into a closed deal with bilingual AI meeting intelligence.">
+<meta name="author" content="Callforge">
+<meta name="theme-color" content="#ff6b1a">
+
+<!-- Open Graph — controls how the link looks when shared on LinkedIn, iMessage, WhatsApp etc -->
+<meta property="og:type"        content="website">
+<meta property="og:url"         content="https://callforge.to/start">
+<meta property="og:site_name"   content="Callforge">
+<meta property="og:title"       content="🔨 Start Your Free Callforge Trial">
+<meta property="og:description" content="Bilingual AI that records your sales calls, writes the summary, extracts action items, and drafts the follow-up — in English or Spanish. 14 days free. No card required.">
+<meta property="og:image"       content="https://callforge.to/og-image.png">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt"   content="Callforge — Forge every call into a closed deal">
+<meta property="og:locale"      content="en_US">
+
+<!-- Twitter Card -->
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:site"        content="@hellocallforge">
+<meta name="twitter:creator"     content="@hellocallforge">
+<meta name="twitter:title"       content="🔨 Start Your Free Callforge Trial">
+<meta name="twitter:description" content="Bilingual AI meeting intelligence for sales teams. English + Spanish. 14 days free, no card required.">
+<meta name="twitter:image"       content="https://callforge.to/og-image.png">
+
+<!-- PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Callforge">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/Tito.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0a0e1a;--paper:#f4f1ea;--cream:#faf7f0;
+  --forge:#ff6b1a;--forge-dark:#e55a0d;--ember:#ffd166;
+  --charcoal:#14192a;--gray:#7a7a8c;--light-gray:#e6e3dc;
+  --white:#fff;--red:#ff4545;--success:#22c55e;
+}
+
+body{
+  font-family:'Cabinet Grotesk',sans-serif;
+  background:var(--charcoal);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:24px 16px;
+  position:relative;
+  overflow-x:hidden;
+}
+
+/* Background forge glow */
+body::before{
+  content:'';
+  position:fixed;
+  top:-200px;left:50%;
+  transform:translateX(-50%);
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(255,107,26,0.15) 0%,transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
+
+.container{
+  width:100%;max-width:420px;
+  position:relative;z-index:1;
+}
+
+/* Logo */
+.logo{
+  display:flex;align-items:center;
+  justify-content:center;gap:10px;
+  margin-bottom:32px;
+}
+.logo-mark{
+  width:36px;height:36px;
+  background:linear-gradient(135deg,var(--forge),var(--ember));
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  box-shadow:0 0 24px rgba(255,107,26,0.5);
+}
+.logo-mark::after{
+  content:'⚒';
+  font-size:18px;color:#fff;
+  position:relative;z-index:1;
+}
+.logo-text{
+  font-family:'Clash Display',sans-serif;
+  font-size:24px;font-weight:700;
+  color:var(--paper);letter-spacing:-0.5px;
+}
+.logo-text span{color:var(--forge);}
+
+/* Card */
+.card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:20px;
+  padding:32px;
+  backdrop-filter:blur(12px);
+}
+
+.card-eyebrow{
+  font-size:11px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--forge);margin-bottom:8px;
+  text-align:center;
+}
+.card-title{
+  font-family:'Clash Display',sans-serif;
+  font-size:26px;font-weight:700;
+  color:var(--paper);
+  text-align:center;line-height:1.2;
+  margin-bottom:6px;
+}
+.card-subtitle{
+  font-size:14px;color:var(--gray);
+  text-align:center;line-height:1.5;
+  margin-bottom:28px;
+}
+.card-subtitle strong{color:var(--paper);}
+
+/* Badges */
+.badge-row{
+  display:flex;gap:8px;justify-content:center;
+  margin-bottom:24px;flex-wrap:wrap;
+}
+.badge{
+  padding:5px 12px;border-radius:100px;
+  font-size:11px;font-weight:700;
+  display:flex;align-items:center;gap:4px;
+}
+.badge-green{background:rgba(34,197,94,0.15);color:var(--success);border:1px solid rgba(34,197,94,0.2);}
+.badge-orange{background:rgba(255,107,26,0.15);color:var(--forge);border:1px solid rgba(255,107,26,0.2);}
+.badge-gray{background:rgba(255,255,255,0.06);color:var(--gray);border:1px solid rgba(255,255,255,0.08);}
+
+/* Form */
+.form-group{margin-bottom:14px;}
+.form-group label{
+  display:block;
+  font-size:11px;font-weight:700;
+  color:rgba(244,241,234,0.5);
+  letter-spacing:0.5px;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.form-group input{
+  width:100%;
+  padding:13px 16px;
+  background:rgba(255,255,255,0.06);
+  border:1.5px solid rgba(255,255,255,0.1);
+  border-radius:10px;
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:15px;color:var(--paper);
+  outline:none;transition:all 0.2s;
+}
+.form-group input::placeholder{color:rgba(244,241,234,0.25);}
+.form-group input:focus{
+  border-color:var(--forge);
+  background:rgba(255,107,26,0.06);
+}
+
+/* Error */
+.error-msg{
+  font-size:12px;color:var(--red);
+  margin-top:6px;display:none;
+}
+.error-msg.show{display:block;}
+
+/* Submit button */
+.btn-submit{
+  width:100%;padding:15px;
+  border-radius:12px;border:none;
+  background:linear-gradient(135deg,var(--forge),var(--forge-dark));
+  color:#fff;
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:16px;font-weight:700;
+  cursor:pointer;
+  box-shadow:0 8px 32px rgba(255,107,26,0.35);
+  transition:all 0.2s;
+  margin-top:4px;
+  position:relative;overflow:hidden;
+}
+.btn-submit:hover{
+  transform:translateY(-1px);
+  box-shadow:0 12px 40px rgba(255,107,26,0.45);
+}
+.btn-submit:disabled{
+  opacity:0.6;cursor:not-allowed;transform:none;
+}
+.btn-submit::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);
+}
+
+/* Divider */
+.divider{
+  display:flex;align-items:center;gap:12px;
+  margin:20px 0;
+}
+.divider::before,.divider::after{
+  content:'';flex:1;
+  height:1px;background:rgba(255,255,255,0.08);
+}
+.divider span{font-size:12px;color:var(--gray);}
+
+/* Sign in link */
+.signin-link{
+  text-align:center;
+  font-size:13px;color:var(--gray);
+}
+.signin-link a{
+  color:var(--forge);text-decoration:none;font-weight:700;
+}
+.signin-link a:hover{text-decoration:underline;}
+
+/* Success state */
+.success-state{
+  text-align:center;display:none;
+  padding:16px 0;
+}
+.success-icon{font-size:56px;margin-bottom:16px;}
+.success-title{
+  font-family:'Clash Display',sans-serif;
+  font-size:22px;font-weight:700;
+  color:var(--paper);margin-bottom:8px;
+}
+.success-sub{font-size:14px;color:var(--gray);line-height:1.6;margin-bottom:24px;}
+.btn-dashboard{
+  display:inline-block;
+  padding:13px 28px;border-radius:12px;
+  background:var(--forge);color:#fff;
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:15px;font-weight:700;
+  text-decoration:none;
+  box-shadow:0 8px 24px rgba(255,107,26,0.3);
+  transition:all 0.2s;
+}
+.btn-dashboard:hover{transform:translateY(-1px);}
+
+/* Features list */
+.features{
+  margin-top:28px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.feature{
+  display:flex;align-items:center;gap:10px;
+  font-size:13px;color:rgba(244,241,234,0.6);
+}
+.feature-icon{font-size:16px;flex-shrink:0;}
+
+/* Footer */
+.footer{
+  margin-top:24px;text-align:center;
+  font-size:12px;color:rgba(122,122,140,0.6);
+}
+.footer a{color:rgba(122,122,140,0.8);text-decoration:none;}
+.footer a:hover{color:var(--forge);}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(100px);
+  background:var(--ink);color:var(--paper);
+  padding:13px 22px;border-radius:12px;
+  font-size:13px;font-weight:600;
+  z-index:2000;transition:all 0.4s;opacity:0;
+  border-left:4px solid var(--forge);
+  white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.toast.success{border-left-color:var(--success);}
+.toast.error{border-left-color:var(--red);}
+
+/* Responsive */
+@media(max-width:480px){
+  .card{padding:24px 20px;}
+  .card-title{font-size:22px;}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Logo -->
+  <div class="logo">
+    <div class="logo-mark"></div>
+    <div class="logo-text">Call<span>forge</span></div>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Signup form state -->
+    <div id="signupState">
+      <div class="card-eyebrow">⚒ Free Trial</div>
+      <div class="card-title">Start forging your calls.</div>
+      <div class="card-subtitle">
+        <strong>14 days free.</strong> No credit card required.<br>
+        Bilingual AI for English + Spanish sales teams.
+      </div>
+
+      <div class="badge-row">
+        <span class="badge badge-green">✓ 14 days free</span>
+        <span class="badge badge-orange">⚒ No card required</span>
+        <span class="badge badge-gray">🇺🇸 + 🇪🇸 Bilingual</span>
+      </div>
+
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="startName" placeholder="Ana García" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label>Work Email</label>
+        <input type="email" id="startEmail" placeholder="ana@company.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="startPass" placeholder="Min. 8 characters" autocomplete="new-password">
+        <div class="error-msg" id="startError"></div>
+      </div>
+
+      <button class="btn-submit" id="startBtn" onclick="handleStart()">
+        Create free account →
+      </button>
+
+      <div class="divider"><span>or</span></div>
+
+      <div class="signin-link">
+        Already have an account? <a href="/dashboard.html">Sign in →</a>
+      </div>
+
+      <div class="features">
+        <div class="feature"><span class="feature-icon">🎙</span> Records + transcribes in English or Spanish</div>
+        <div class="feature"><span class="feature-icon">⚡</span> AI summary, action items, deal score in 2 min</div>
+        <div class="feature"><span class="feature-icon">📧</span> Follow-up email drafted automatically</div>
+        <div class="feature"><span class="feature-icon">⚒</span> 4 AI coaches — Maya, Sam, Finn & Aria</div>
+        <div class="feature"><span class="feature-icon">🔗</span> HubSpot CRM sync included</div>
+      </div>
+    </div>
+
+    <!-- Success state -->
+    <div class="success-state" id="successState">
+      <div class="success-icon">⚒</div>
+      <div class="success-title">Welcome to Callforge!</div>
+      <div class="success-sub">
+        Your account is ready. Upload your first call and let the Forge do the rest.<br><br>
+        Check your email to confirm your account.
+      </div>
+      <a href="/dashboard.html" class="btn-dashboard">Go to your dashboard →</a>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <a href="https://callforge.to">callforge.to</a> ·
+    <a href="/privacy.html">Privacy</a> ·
+    <a href="/terms.html">Terms</a> ·
+    Built with ⚒ in Florida
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL  = 'https://yrptztgbwedvszqjonil.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_hDz5RZJ04KKQK_3lrHVysw_9_Uf9dmE';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+// Redirect if already logged in
+async function checkSession() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) window.location.href = '/dashboard.html';
+}
+checkSession();
+
+async function handleStart() {
+  const name  = document.getElementById('startName').value.trim();
+  const email = document.getElementById('startEmail').value.trim();
+  const pass  = document.getElementById('startPass').value;
+  const errEl = document.getElementById('startError');
+  errEl.classList.remove('show');
+
+  if (!name)  { errEl.textContent = 'Please enter your name.'; errEl.classList.add('show'); return; }
+  if (!email) { errEl.textContent = 'Please enter your email.'; errEl.classList.add('show'); return; }
+  if (!email.includes('@')) { errEl.textContent = 'Please enter a valid email.'; errEl.classList.add('show'); return; }
+  if (pass.length < 8) { errEl.textContent = 'Password must be at least 8 characters.'; errEl.classList.add('show'); return; }
+
+  const btn = document.getElementById('startBtn');
+  btn.textContent = 'Creating your account...';
+  btn.disabled = true;
+
+  const { data, error } = await sb.auth.signUp({
+    email,
+    password: pass,
+    options: { data: { full_name: name } }
+  });
+
+  if (error) {
+    errEl.textContent = error.message;
+    errEl.classList.add('show');
+    btn.textContent = 'Create free account →';
+    btn.disabled = false;
+    return;
+  }
+
+  // Send welcome email via Resend
+  try {
+    await fetch('/api/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'welcome', to: email, name }),
+    });
+  } catch(e) { console.log('Welcome email non-fatal:', e); }
+
+  // Show success state
+  document.getElementById('signupState').style.display = 'none';
+  document.getElementById('successState').style.display = 'block';
+}
+
+// Allow Enter key to submit
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') handleStart();
+});
+
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast show ${type}`;
+  setTimeout(() => t.className = 'toast', 3500);
+}
+</script>
+
+</body>
+</html>

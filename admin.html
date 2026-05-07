@@ -475,14 +475,20 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
           <h3>🔨 Sam the Anvil</h3>
           <p>Enter a prospect's details. Sam detects the right language and generates a complete bilingual outreach sequence.</p>
           <!-- Outreach Type Toggle -->
-          <div style="display:flex;gap:8px;margin-bottom:16px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
             <button id="btnStandard" onclick="setOutreachType('standard')"
-              style="flex:1;padding:10px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:2px solid var(--forge);background:var(--forge);color:#fff;transition:all 0.2s">
-              📧 Standard Outreach
+              style="padding:10px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:11px;font-weight:700;cursor:pointer;border:2px solid var(--forge);background:var(--forge);color:#fff;transition:all 0.2s">
+              📧 Standard
             </button>
             <button id="btnDemo" onclick="setOutreachType('demo')"
-              style="flex:1;padding:10px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:2px solid var(--light-gray);background:var(--cream);color:var(--gray);transition:all 0.2s">
-              🎙 Live Demo Invite
+              style="padding:10px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:11px;font-weight:700;cursor:pointer;border:2px solid var(--light-gray);background:var(--cream);color:var(--gray);transition:all 0.2s">
+              🎙 Demo Invite
+            </button>
+          </div>
+          <div style="margin-bottom:16px">
+            <button id="btnLaunch" onclick="setOutreachType('launch')"
+              style="width:100%;padding:10px;border-radius:8px;font-family:'Cabinet Grotesk',sans-serif;font-size:11px;font-weight:700;cursor:pointer;border:2px solid var(--light-gray);background:var(--cream);color:var(--gray);transition:all 0.2s">
+              🚀 Launch Day — LinkedIn Connection DM
             </button>
           </div>
           <div id="demoModeExplainer" style="display:none;background:#fff7ed;border:1px solid rgba(255,107,26,0.2);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--ink);line-height:1.6">
@@ -1145,24 +1151,29 @@ function setOutreachType(type) {
   currentOutreachType = type;
   const btnStandard = document.getElementById('btnStandard');
   const btnDemo     = document.getElementById('btnDemo');
+  const btnLaunch   = document.getElementById('btnLaunch');
   const explainer   = document.getElementById('demoModeExplainer');
 
-  if (type === 'demo') {
-    btnDemo.style.background     = 'var(--forge)';
-    btnDemo.style.color          = '#fff';
-    btnDemo.style.borderColor    = 'var(--forge)';
-    btnStandard.style.background = 'var(--cream)';
-    btnStandard.style.color      = 'var(--gray)';
-    btnStandard.style.borderColor = 'var(--light-gray)';
-    explainer.style.display      = 'block';
-  } else {
-    btnStandard.style.background  = 'var(--forge)';
-    btnStandard.style.color       = '#fff';
-    btnStandard.style.borderColor = 'var(--forge)';
-    btnDemo.style.background      = 'var(--cream)';
-    btnDemo.style.color           = 'var(--gray)';
-    btnDemo.style.borderColor     = 'var(--light-gray)';
-    explainer.style.display       = 'none';
+  // Reset all
+  [btnStandard, btnDemo, btnLaunch].forEach(b => {
+    if (!b) return;
+    b.style.background  = 'var(--cream)';
+    b.style.color       = 'var(--gray)';
+    b.style.borderColor = 'var(--light-gray)';
+  });
+  explainer.style.display = 'none';
+
+  // Activate selected
+  const activeBtn = { standard: btnStandard, demo: btnDemo, launch: btnLaunch }[type];
+  if (activeBtn) {
+    activeBtn.style.background  = type === 'launch' ? '#22c55e' : 'var(--forge)';
+    activeBtn.style.color       = '#fff';
+    activeBtn.style.borderColor = type === 'launch' ? '#22c55e' : 'var(--forge)';
+  }
+  if (type === 'demo') explainer.style.display = 'block';
+  if (type === 'launch') {
+    explainer.style.display = 'block';
+    explainer.innerHTML = '🚀 <b>Launch Day Mode:</b> Sends a short personal DM to LinkedIn connections Ana has already made. Warm, founder-to-founder, includes the free trial link: <b>callforge.to/start</b>';
   }
 }
 
@@ -1207,6 +1218,35 @@ async function runSam() {
 
   btn.disabled    = false;
   btn.textContent = '🔨 Generate outreach sequence →';
+}
+
+function renderLaunchResults(data) {
+  const el   = document.getElementById('samResults');
+  const isES = data.language === 'es';
+  const o    = data.outreach || {};
+
+  el.innerHTML = `
+    <div class="sam-analysis">
+      <div class="sam-analysis-top">
+        <div>
+          <h3>🚀 Launch Day DM — ${data.prospect?.name || 'Connection'}</h3>
+          <div class="sam-tags" style="margin-top:6px">
+            <span class="sam-tag tier">Launch Day</span>
+            <span class="sam-tag">callforge.to/start</span>
+          </div>
+        </div>
+        <div class="sam-lang-badge ${isES ? 'sam-lang-es' : 'sam-lang-en'}">
+          ${isES ? '🇪🇸 Spanish' : '🇺🇸 English'}
+        </div>
+      </div>
+      <div class="sam-note" style="background:#f0fdf4;border-left:3px solid #22c55e">
+        🚀 Personal launch day message for someone Ana is already connected with on LinkedIn.
+      </div>
+    </div>
+    ${msgCard('💼 LinkedIn DM', null, o.linkedin_dm, 'li-launch')}
+    ${msgCard('💬 WhatsApp / Text', null, o.whatsapp_msg, 'wa-launch')}
+    ${msgCard('📸 Instagram DM', null, o.instagram_dm, 'ig-launch')}
+  `;
 }
 
 function renderDemoResults(data) {
@@ -1256,10 +1296,8 @@ function renderDemoResults(data) {
 }
 
 function renderSamResults(data) {
-  if (data.mode === 'demo') {
-    renderDemoResults(data);
-    return;
-  }
+  if (data.mode === 'launch') { renderLaunchResults(data); return; }
+  if (data.mode === 'demo')   { renderDemoResults(data);   return; }
   const el    = document.getElementById('samResults');
   const isES  = data.language === 'es';
   const o     = data.outreach;

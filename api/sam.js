@@ -90,6 +90,64 @@ Respond ONLY with valid JSON, no markdown:
   const pain   = langAnalysis.prospect_pain;
 
   // ── OUTREACH GENERATION PROMPT ─────────────────────────────────────────
+  // ── LAUNCH DAY MODE ───────────────────────────────────────────────────
+  if (prospect.outreach_type === 'launch') {
+    const launchPrompt = `You are Sam the Anvil — Callforge's bilingual sales agent. Today is Callforge's official launch day. Generate a short, warm, personal LinkedIn DM to send to someone Ana has connected with on LinkedIn. This person already knows Ana from LinkedIn — this is NOT a cold message. It's a personal note from a founder to someone in her network.
+
+ABOUT CALLFORGE:
+Bilingual AI meeting intelligence for sales teams. Records calls in English or Spanish, generates summaries, action items, deal scores, follow-up emails. Only bilingual tool on the market. Free trial link: callforge.to/start
+
+PROSPECT:
+Name: ${prospect.name}
+Industry: ${prospect.industry || 'sales'}
+Location: ${prospect.location || ''}
+Language: ${isES ? 'SPANISH — write in Spanish' : 'ENGLISH — write in English'}
+
+TONE:
+- This is Ana reaching out personally on launch day
+- Warm, excited, genuine — not salesy at all
+- 2-3 sentences MAX for the DM
+- End with the free trial link: callforge.to/start
+- Feel like a friend sharing something exciting, not a sales pitch
+- In Spanish: casual and warm like a WhatsApp message to a colleague
+
+Generate ONLY valid JSON, no markdown:
+{
+  "linkedin_dm": "2-3 sentence personal launch day DM",
+  "whatsapp_msg": "Even shorter — 1-2 sentences — for WhatsApp/text",
+  "instagram_dm": "1 sentence — casual and fun for Instagram"
+}`;
+
+    const launchRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 400,
+        messages: [{ role: 'user', content: launchPrompt }],
+      }),
+    });
+
+    const launchData = await launchRes.json();
+    const launchRaw  = launchData.content[0].text.trim()
+      .replace(/```json
+?/g,'').replace(/```
+?/g,'').trim();
+    const launchOut  = JSON.parse(launchRaw);
+
+    return res.status(200).json({
+      success:  true,
+      mode:     'launch',
+      language: langAnalysis.language,
+      prospect,
+      outreach: launchOut,
+    });
+  }
+
   // ── DEMO INVITE MODE ──────────────────────────────────────────────────
   const isDemoMode = prospect.outreach_type === 'demo';
 
@@ -228,15 +286,21 @@ Pain point: ${pain}
 Personalization hook: ${hook}
 
 TONE RULES:
-- Sound like a real person, not a robot
-- Short sentences. Conversational.
+- Sound like Ana or Quin — real founders, not a robot or sales rep
+- Short sentences. Conversational. Warm.
 - Never say "I hope this message finds you well"
-- Never use "synergy", "leverage", "circle back", "reach out"
-- Always lead with their pain, not our product
-- One clear CTA per message — never more
-- LinkedIn DMs: max 3 sentences
-- Cold emails: max 150 words body
-- Follow-ups: shorter than original
+- Never use "synergy", "leverage", "circle back", "game-changer", "revolutionary"
+- Always lead with THEIR specific pain — not our product features
+- One clear CTA per message — never more than one ask
+- LinkedIn DMs: max 3 sentences — no exceptions
+- Cold emails: max 120 words body — shorter is better
+- Follow-ups: always shorter than the previous message
+- If writing in Spanish: use natural conversational Spanish, NOT formal/corporate Spanish
+- Spanish tone should feel like a colleague texting, not a bank letter
+- Reference their specific industry pain point — real estate, insurance, etc.
+- The goal of every message is ONE thing: book the demo or start the trial
+- Never pitch features in the first message — ask a question about their pain instead
+- Best opening: state their specific problem before asking anything
 
 Generate ALL outreach in ${isES ? 'SPANISH' : 'ENGLISH'}. Respond ONLY with valid JSON, no markdown:
 

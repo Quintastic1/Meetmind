@@ -46,13 +46,17 @@ export default async function handler(req, res) {
     // Detect content type from file extension
     const ext = fileName.split('.').pop().toLowerCase();
     const contentTypeMap = {
-      'mp3': 'audio/mpeg',
-      'mp4': 'audio/mp4',
-      'm4a': 'audio/mp4',
-      'wav': 'audio/wav',
+      'mp3':  'audio/mpeg',
+      'mp4':  'audio/mp4',
+      'm4a':  'audio/mp4',  // iPhone Voice Memo format
+      'wav':  'audio/wav',
+      'wave': 'audio/wav',
       'webm': 'audio/webm',
-      'ogg': 'audio/ogg',
+      'ogg':  'audio/ogg',
       'flac': 'audio/flac',
+      'aac':  'audio/aac',
+      'caf':  'audio/mp4',  // iPhone Core Audio Format
+      'mov':  'video/quicktime',
     };
     const contentType = contentTypeMap[ext] || 'audio/mp4';
 
@@ -278,23 +282,23 @@ ${transcript}
 
 KEY OBJECTIONS FROM ANALYSIS: ${analysis.key_objections?.join(', ') || 'none noted'}
 
-Analyze ALL objections raised and provide specific coaching on handling them better. Focus on: objections raised, how they were handled, better responses, and patterns to watch for.
+List TOP 3 objections only. Every field must be under 15 words.
 
-Respond ONLY with valid JSON, no markdown:
+Respond ONLY with valid JSON, no markdown, no extra text:
 {
-  "headline": "One sentence about objection handling (e.g. '2 objections — price handled well, timeline fumbled')",
+  "headline": "Short summary under 10 words",
   "objections_count": 2,
   "objections": [
     {
-      "objection": "What the prospect said",
-      "how_handled": "good", "ok", or "poor",
-      "what_was_said": "What the rep actually said",
-      "better_response": "A stronger way to handle this objection next time"
+      "objection": "What prospect said - under 8 words",
+      "how_handled": "good",
+      "what_was_said": "Rep response under 10 words",
+      "better_response": "Better response under 15 words"
     }
   ],
-  "overall_handling": "strong", "average", or "needs_work",
-  "pattern_to_watch": "A recurring objection pattern to prepare for",
-  "coaching_tip": "One specific tip to handle objections better on the next call"
+  "overall_handling": "strong",
+  "pattern_to_watch": "Pattern under 10 words",
+  "coaching_tip": "One tip under 15 words"
 }`
       }
     };
@@ -311,14 +315,35 @@ Respond ONLY with valid JSON, no markdown:
           },
           body: JSON.stringify({
             model: 'claude-sonnet-4-6',
-            max_tokens: 800,
+            max_tokens: 1200,
             messages: [{ role: 'user', content: coach.prompt }],
           }),
         });
-        const data    = await res.json();
-        const raw     = data.content[0].text.trim()
+        const data = await res.json();
+        if (!data.content?.[0]?.text) {
+          console.error(`${key} coach returned no content:`, JSON.stringify(data));
+          throw new Error(`${key} coach: no content in response`);
+        }
+        const raw = data.content[0].text.trim()
           .replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-        const insight = JSON.parse(raw);
+        let insight;
+        try {
+          insight = JSON.parse(raw);
+        } catch(parseErr) {
+          console.error(`${key} JSON parse failed. Raw:`, raw.substring(0, 200));
+          // Try to salvage partial JSON for Aria
+          if (key === 'aria') {
+            insight = {
+              headline: 'Objection analysis available — see summary',
+              objections: [],
+              overall_handling: 'average',
+              coaching_tip: 'Review the call summary for objection details',
+              objections_count: 0,
+            };
+          } else {
+            throw parseErr;
+          }
+        }
         return { key, coach_name: coach.name, role: coach.role, insight };
       })
     );

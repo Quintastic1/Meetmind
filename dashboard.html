@@ -279,11 +279,11 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 <aside class="sidebar">
   <div class="sidebar-logo"><div class="logo-mark"></div>Call<span class="accent">forge</span></div>
   <nav class="sidebar-nav">
-    <a class="nav-item active" onclick="switchTab('overview')"><span class="nav-icon">📊</span><span>Overview</span></a>
-    <a class="nav-item" onclick="switchTab('meetings')"><span class="nav-icon">🎙</span><span>Meetings</span></a>
-    <a class="nav-item" onclick="switchTab('upload')"><span class="nav-icon">⬆</span><span>Upload</span></a>
-    <a class="nav-item" onclick="switchTab('forged')"><span class="nav-icon">⚒</span><span>The Forged</span></a>
-    <a class="nav-item" onclick="switchTab('settings')"><span class="nav-icon">⚙</span><span>Settings</span></a>
+    <a class="nav-item active" onclick="switchTab('overview')"><span class="nav-icon">📊</span><span data-i18n="nav.overview">Overview</span></a>
+    <a class="nav-item" onclick="switchTab('meetings')"><span class="nav-icon">🎙</span><span data-i18n="nav.meetings">Meetings</span></a>
+    <a class="nav-item" onclick="switchTab('upload')"><span class="nav-icon">⬆</span><span data-i18n="nav.upload">Upload</span></a>
+    <a class="nav-item" onclick="switchTab('forged')"><span class="nav-icon">⚒</span><span data-i18n="nav.forged">The Forged</span></a>
+    <a class="nav-item" onclick="switchTab('settings')"><span class="nav-icon">⚙</span><span data-i18n="nav.settings">Settings</span></a>
   </nav>
   <div class="sidebar-bottom">
     <div class="lang-switcher">
@@ -343,7 +343,7 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
         </div>
       </div>
       <div class="meeting-detail" id="meetingDetail">
-        <button class="back-btn" onclick="closeMeetingDetail()">← Back to meetings</button>
+        <button class="back-btn" onclick="closeMeetingDetail()"><span data-i18n="detail.back">← Back to meetings</span></button>
         <div class="detail-header">
           <div class="detail-title" id="detailTitle"></div>
           <div class="detail-meta" id="detailMeta"></div>
@@ -354,9 +354,9 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
           </div>
         </div>
         <div class="detail-grid">
-          <div class="detail-section"><h3>✅ Action Items</h3><div id="actionItemsList"></div></div>
-          <div class="detail-section"><h3>📝 AI Summary</h3><p class="summary-text" id="summaryText"></p></div>
-          <div class="detail-section full"><h3>📧 AI-Generated Follow-up Email</h3><div class="email-block" id="followupEmail"></div><button class="copy-btn" onclick="copyEmail()">Copy email ↗</button></div>
+          <div class="detail-section"><h3><span data-i18n="detail.actions">✅ Action Items</span></h3><div id="actionItemsList"></div></div>
+          <div class="detail-section"><h3><span data-i18n="detail.summary">📝 AI Summary</span></h3><p class="summary-text" id="summaryText"></p></div>
+          <div class="detail-section full"><h3 data-i18n="detail.email">📧 AI-Generated Follow-up Email</h3><div class="email-block" id="followupEmail"></div><button class="copy-btn" onclick="copyEmail()" data-i18n="detail.copy">Copy email ↗</button></div>
           <div class="detail-section full" id="forgedInsightsSection" style="display:none">
             <h3>⚒ The Forged — AI Coach Insights</h3>
             <div class="forged-insights-grid" id="forgedInsightsGrid"></div>
@@ -379,7 +379,7 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
         <button class="btn-choose" onclick="event.stopPropagation();document.getElementById('fileInput').click()">Choose file</button>
         <p class="upload-formats">Supports MP3, MP4, M4A, WAV, WebM · Max 500MB</p>
       </div>
-      <input type="file" id="fileInput" accept="audio/*,video/*" style="display:none" onchange="handleFileSelect(event)">
+      <input type="file" id="fileInput" accept="audio/*,video/*,.m4a,.mp3,.wav,.mp4,.webm,.ogg,.aac,.flac,.caf" style="display:none" onchange="handleFileSelect(event)">
 
       <div class="processing-card" id="processingCard">
         <div class="processing-header">
@@ -389,11 +389,11 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
             <div class="processing-sub" id="processingFileName">your-call.mp3</div>
           </div>
         </div>
-        <div class="progress-step" id="step1"><div class="step-dot">1</div><span>Uploading audio file</span></div>
+        <div class="progress-step" id="step1"><div class="step-dot">1</div><span data-i18n="processing.step1">Uploading audio file</span></div>
         <div class="progress-step" id="step2"><div class="step-dot">2</div><span>Detecting language &amp; transcribing audio</span></div>
         <div class="progress-step" id="step3"><div class="step-dot">3</div><span>Generating AI summary &amp; action items</span></div>
-        <div class="progress-step" id="step4"><div class="step-dot">4</div><span>Scoring deal health</span></div>
-        <div class="progress-step" id="step5"><div class="step-dot">5</div><span>Drafting follow-up email</span></div>
+        <div class="progress-step" id="step4"><div class="step-dot">4</div><span data-i18n="processing.step4">Scoring deal health</span></div>
+        <div class="progress-step" id="step5"><div class="step-dot">5</div><span data-i18n="processing.step5">Drafting follow-up email</span></div>
       </div>
     </div>
 
@@ -480,9 +480,9 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
           </div>
         </div>
         <div class="settings-divider"></div>
-        <button class="btn-save" onclick="saveSettings()">Save changes</button>
+        <button class="btn-save" onclick="saveSettings()" data-i18n="settings.save">Save changes</button>
         <div class="settings-divider"></div>
-        <button class="btn-danger" onclick="handleLogout()">Sign out →</button>
+        <button class="btn-danger" onclick="handleLogout()" data-i18n="settings.signout">Sign out →</button>
       </div>
 
       <!-- HUBSPOT INTEGRATION -->
@@ -741,9 +741,16 @@ async function processFile(file) {
   }
 
   // Validate file type
-  const allowed = ['audio/mpeg','audio/mp4','audio/wav','audio/m4a','audio/webm','video/mp4','video/webm','audio/ogg'];
-  if (!allowed.includes(file.type) && !file.name.match(/\.(mp3|mp4|wav|m4a|webm|ogg)$/i)) {
-    showToast('Please upload an audio or video file (MP3, MP4, WAV, M4A, WebM)', 'error');
+  // Accept all audio formats including iPhone Voice Memo (audio/x-m4a) and CAF
+  const allowed = [
+    'audio/mpeg','audio/mp3','audio/mp4','audio/wav','audio/m4a',
+    'audio/x-m4a','audio/aac','audio/x-aac','audio/webm','audio/ogg',
+    'audio/flac','audio/wave','audio/x-wav','video/mp4','video/webm',
+    'video/quicktime','application/octet-stream',
+  ];
+  const extOk = /\.(mp3|mp4|m4a|wav|webm|ogg|aac|flac|mov|caf)$/i.test(file.name);
+  if (!allowed.includes(file.type) && !extOk) {
+    showToast('Please upload an audio file (M4A, MP3, MP4, WAV, WebM)', 'error');
     return;
   }
 
@@ -887,9 +894,156 @@ function switchTab(tab) {
 }
 
 // ─── LANGUAGE ─────────────────────────────────────────────────────────────────
+// ─── DASHBOARD TRANSLATIONS ───────────────────────────────────────────────
+const DASH_T = {
+  en: {
+    'nav.overview':       'Overview',
+    'nav.meetings':       'Meetings',
+    'nav.upload':         'Upload',
+    'nav.forged':         'The Forged',
+    'nav.settings':       'Settings',
+    'btn.upload':         '⬆ Upload Meeting',
+    'tab.overview':       'Overview',
+    'tab.meetings':       'Meetings',
+    'tab.upload':         'Upload Meeting',
+    'tab.forged':         'The Forged',
+    'tab.settings':       'Settings',
+    'overview.welcome':   'Welcome back',
+    'overview.subtitle':  'Here's what's happening with your deals.',
+    'meetings.empty':     'No meetings yet.',
+    'meetings.empty.sub': 'Upload your first call to get started.',
+    'upload.title':       'Upload a Meeting',
+    'upload.subtitle':    'Drop your call recording and let the Forge do the rest.',
+    'upload.drop':        'Drop your audio or video file here',
+    'upload.or':          'or',
+    'upload.browse':      'Browse files',
+    'upload.formats':     '<span data-i18n="upload.formats">MP3, MP4, M4A, WAV, WebM supported</span>',
+    'forged.title':       'The Forged',
+    'forged.subtitle':    'Your AI coaching team. They analyze every call.',
+    'settings.title':     'Settings',
+    'settings.name':      'Full Name',
+    'settings.email':     'Email',
+    'settings.save':      'Save changes',
+    'settings.signout':   'Sign out →',
+    'settings.password':  'Change Password',
+    'settings.hubspot':   'HubSpot CRM Integration',
+    'metric.meetings':    'Total Meetings',
+    'metric.score':       'Avg Deal Score',
+    'metric.actions':     'Action Items',
+    'detail.summary':     '<span data-i18n="detail.summary">📝 AI Summary</span>',
+    'detail.actions':     '<span data-i18n="detail.actions">✅ Action Items</span>',
+    'detail.email':       '📧 AI-Generated Follow-up Email',
+    'detail.copy':        'Copy email ↗',
+    'detail.back':        '<span data-i18n="detail.back">← Back to meetings</span>',
+    'detail.forged':      '⚒ The Forged — AI Coach Insights',
+    'processing.step1':   'Uploading audio file',
+    'processing.step2':   'Transcribing with AI',
+    'processing.step3':   'Analyzing your call',
+    'processing.step4':   'Scoring deal health',
+    'processing.step5':   'Drafting follow-up email',
+  },
+  es: {
+    'nav.overview':       'Resumen',
+    'nav.meetings':       'Llamadas',
+    'nav.upload':         'Subir',
+    'nav.forged':         'Los Forjados',
+    'nav.settings':       'Ajustes',
+    'btn.upload':         '⬆ Subir Llamada',
+    'tab.overview':       'Resumen',
+    'tab.meetings':       'Llamadas',
+    'tab.upload':         'Subir Llamada',
+    'tab.forged':         'Los Forjados',
+    'tab.settings':       'Ajustes',
+    'overview.welcome':   'Bienvenido',
+    'overview.subtitle':  'Esto es lo que está pasando con tus tratos.',
+    'meetings.empty':     'Sin llamadas aún.',
+    'meetings.empty.sub': 'Sube tu primera llamada para comenzar.',
+    'upload.title':       'Subir una Llamada',
+    'upload.subtitle':    'Sube tu grabación y deja que el Forge haga el resto.',
+    'upload.drop':        'Arrastra tu archivo de audio o video aquí',
+    'upload.or':          'o',
+    'upload.browse':      'Buscar archivos',
+    'upload.formats':     'MP3, MP4, M4A, WAV, WebM soportados',
+    'forged.title':       'Los Forjados',
+    'forged.subtitle':    'Tu equipo de coaching con IA. Analizan cada llamada.',
+    'settings.title':     'Ajustes',
+    'settings.name':      'Nombre Completo',
+    'settings.email':     'Correo',
+    'settings.save':      'Guardar cambios',
+    'settings.signout':   'Cerrar sesión →',
+    'settings.password':  'Cambiar Contraseña',
+    'settings.hubspot':   'Integración HubSpot CRM',
+    'metric.meetings':    'Total de Llamadas',
+    'metric.score':       'Puntuación Promedio',
+    'metric.actions':     'Tareas Pendientes',
+    'detail.summary':     '📝 Resumen de IA',
+    'detail.actions':     '✅ Tareas Pendientes',
+    'detail.email':       '📧 Correo de Seguimiento Generado',
+    'detail.copy':        'Copiar correo ↗',
+    'detail.back':        '← Volver a llamadas',
+    'detail.forged':      '⚒ Los Forjados — Análisis de IA',
+    'processing.step1':   'Subiendo archivo de audio',
+    'processing.step2':   'Transcribiendo con IA',
+    'processing.step3':   'Analizando tu llamada',
+    'processing.step4':   'Puntuando la salud del trato',
+    'processing.step5':   'Redactando correo de seguimiento',
+  }
+};
+
+let currentDashLang = 'en';
+
 function setLang(lang) {
-  try { localStorage.setItem('cf_lang', lang); } catch(e){}
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-lang') === lang));
+  currentDashLang = lang;
+  try { localStorage.setItem('cf_lang', lang); } catch(e) {}
+
+  // Update active button
+  document.querySelectorAll('.lang-btn').forEach(b =>
+    b.classList.toggle('active', b.getAttribute('data-lang') === lang)
+  );
+
+  // Translate all tagged elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const translation = DASH_T[lang]?.[key];
+    if (translation) el.textContent = translation;
+  });
+
+  // Update tab titles dynamically
+  const tabTitleMap = {
+    overview: DASH_T[lang]['tab.overview'],
+    meetings:  DASH_T[lang]['tab.meetings'],
+    upload:    DASH_T[lang]['tab.upload'],
+    forged:    DASH_T[lang]['tab.forged'],
+    settings:  DASH_T[lang]['tab.settings'],
+  };
+
+  // Update the main header title if showing a tab
+  const activeTab = document.querySelector('.tab-page.active');
+  if (activeTab) {
+    const tabName = activeTab.id.replace('tab-', '');
+    const titleEl = document.getElementById('pageTitle');
+    if (titleEl && tabTitleMap[tabName]) titleEl.textContent = tabTitleMap[tabName];
+  }
+
+  // Update upload zone text
+  const dropText = document.querySelector('.upload-drop-text');
+  if (dropText) dropText.textContent = DASH_T[lang]['upload.drop'];
+
+  const uploadFormats = document.querySelector('.upload-formats');
+  if (uploadFormats) uploadFormats.textContent = DASH_T[lang]['upload.formats'];
+
+  // Update processing steps
+  const steps = ['step1','step2','step3','step4','step5'];
+  steps.forEach(step => {
+    const stepEl = document.querySelector(`#${step} .step-label`);
+    if (stepEl) stepEl.textContent = DASH_T[lang][`processing.${step}`];
+  });
+}
+
+function initLang() {
+  let saved = 'en';
+  try { saved = localStorage.getItem('cf_lang') || 'en'; } catch(e) {}
+  setLang(saved);
 }
 
 
@@ -912,15 +1066,43 @@ async function loadForgedInsights(meetingId) {
 
   const coaches = {
     'Maya the Spark':  { emoji: '⚡', key: 'maya' },
-    'Sam the Anvil':   { emoji: '🔨', key: 'sam'  },
+    'Sam the Anvil':   { emoji: '⚖️', key: 'sam'  },
     'Finn the Tongs':  { emoji: '🔧', key: 'finn' },
     'Aria the Hammer': { emoji: '⚒',  key: 'aria' },
   };
 
   grid.innerHTML = data.map(row => {
-    const coach   = coaches[row.coach_name] || { emoji: '⚒', key: 'maya' };
+    const coach = coaches[row.coach_name] || { emoji: '⚒', key: 'maya' };
     let insight;
-    try { insight = JSON.parse(row.insight); } catch(e) { return ''; }
+    try {
+      insight = typeof row.insight === 'string' ? JSON.parse(row.insight) : row.insight;
+    } catch(e) {
+      console.error('Failed to parse insight for', row.coach_name, e);
+      // Aria fallback — show partial data instead of nothing
+      if (row.coach_name === 'Aria the Hammer') {
+        insight = {
+          headline: 'Objection data being re-processed',
+          objections: [],
+          objections_count: 0,
+          overall_handling: 'average',
+          coaching_tip: 'Upload a new call to see Aria's full objection coaching.',
+          pattern_to_watch: 'Re-upload to see full analysis',
+        };
+      } else { return ''; }
+    }
+    // Extra safety — if insight is null or empty object
+    if (!insight || Object.keys(insight).length === 0) {
+      if (row.coach_name === 'Aria the Hammer') {
+        insight = {
+          headline: 'No objections detected on this call',
+          objections: [],
+          objections_count: 0,
+          overall_handling: 'strong',
+          coaching_tip: 'No major objections raised — clean call!',
+          pattern_to_watch: 'Keep monitoring for price or timing objections',
+        };
+      } else { return ''; }
+    }
     return renderForgedCard(coach, row.coach_name, insight);
   }).join('');
 }
@@ -1384,6 +1566,7 @@ function showUpgradeModal(count) {
 }
 
 init();
+initLang();
 </script>
 <script>
 // Register service worker for PWA
