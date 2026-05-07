@@ -4,13 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Callforge">
 <meta name="theme-color" content="#0a0e1a">
 <link rel="manifest" href="/manifest.json">
 <link rel="apple-touch-icon" href="/Tito.png">
 <title>Callforge — Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -18,7 +19,7 @@
 body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;display:flex}
 .sidebar{width:240px;background:var(--ink);min-height:100vh;padding:28px 20px;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto}
 .sidebar-logo{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;color:var(--paper);margin-bottom:36px;padding:0 8px;display:flex;align-items:center;gap:8px}
-.sidebar-logo .accent{color:var(--forge)}
+.sidebar-logo .accent{color:var(--forge)}.logo-text{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:700;color:var(--paper);letter-spacing:-0.5px;white-space:nowrap}
 .logo-mark{width:26px;height:26px;background:linear-gradient(135deg,var(--forge),var(--ember));border-radius:6px;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 0 16px rgba(255,107,26,0.4);flex-shrink:0}
 .logo-mark::before{content:'';position:absolute;inset:2px;border-radius:4px;background:linear-gradient(135deg,var(--forge),var(--forge-dark))}
 .logo-mark::after{content:'⚒';position:relative;font-size:12px;color:#fff;z-index:1}
@@ -277,7 +278,7 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 <body>
 
 <aside class="sidebar">
-  <div class="sidebar-logo"><div class="logo-mark"></div>Call<span class="accent">forge</span></div>
+  <div class="sidebar-logo"><div class="logo-mark"></div><span class="logo-text">Call<span class="accent">forge</span></span></div>
   <nav class="sidebar-nav">
     <a class="nav-item active" onclick="switchTab('overview')"><span class="nav-icon">📊</span><span data-i18n="nav.overview">Overview</span></a>
     <a class="nav-item" onclick="switchTab('meetings')"><span class="nav-icon">🎙</span><span data-i18n="nav.meetings">Meetings</span></a>
@@ -511,7 +512,7 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 <div class="toast" id="toast"></div>
 
 <!-- UPGRADE MODAL -->
-<div class="modal-overlay" id="upgradeModal" style="display:none;position:fixed;inset:0;background:rgba(10,14,26,0.7);z-index:1000;display:none;align-items:center;justify-content:center">
+<div class="modal-overlay" id="upgradeModal" style="display:none;position:fixed;inset:0;background:rgba(10,14,26,0.7);z-index:1000;align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:20px;padding:36px;max-width:420px;width:90%;text-align:center;position:relative">
     <div style="font-size:48px;margin-bottom:12px">⚒</div>
     <div style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;margin-bottom:8px">You've used all 5 free calls</div>
@@ -556,17 +557,27 @@ let pollInterval   = null;
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
 async function init() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session) { window.location.href = 'index.html'; return; }
-  currentUser = session.user;
-  const name     = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
-  const initials = name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
-  document.getElementById('userAvatar').textContent    = initials;
-  document.getElementById('userName').textContent      = name;
-  document.getElementById('settingsName').value        = name;
-  document.getElementById('settingsEmail').value       = currentUser.email;
-  loadMeetings();
-  initHubSpot();
+  try {
+    const { data: { session }, error } = await sb.auth.getSession();
+    if (error) { console.error('Session error:', error); window.location.href = 'index.html'; return; }
+    if (!session) { window.location.href = 'index.html'; return; }
+    currentUser = session.user;
+    const name     = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
+    const initials = name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
+    document.getElementById('userAvatar').textContent = initials;
+    document.getElementById('userName').textContent   = name;
+    const nameEl  = document.getElementById('settingsName');
+    const emailEl = document.getElementById('settingsEmail');
+    if (nameEl)  nameEl.value  = name;
+    if (emailEl) emailEl.value = currentUser.email;
+    loadMeetings();
+    initHubSpot();
+  } catch(e) {
+    console.error('Init failed:', e);
+    document.getElementById('userName').textContent = 'Error — refresh';
+    const banner = document.getElementById('debugBanner');
+    if (banner) { banner.style.display = 'block'; banner.textContent = '⚠ Error: ' + e.message + ' — Check console (F12)'; }
+  }
 }
 
 // ─── MEETINGS ─────────────────────────────────────────────────────────────────
@@ -839,7 +850,6 @@ async function processFile(file) {
 
     showToast('⚒ Meeting forged! Check your meetings.', 'success');
     loadMeetings();
-  initHubSpot();
     switchTab('meetings');
 
   } catch (error) {
@@ -909,7 +919,7 @@ const DASH_T = {
     'tab.forged':         'The Forged',
     'tab.settings':       'Settings',
     'overview.welcome':   'Welcome back',
-    'overview.subtitle':  'Here's what's happening with your deals.',
+    'overview.subtitle':  "Here's what's happening with your deals.",
     'meetings.empty':     'No meetings yet.',
     'meetings.empty.sub': 'Upload your first call to get started.',
     'upload.title':       'Upload a Meeting',
@@ -1085,7 +1095,7 @@ async function loadForgedInsights(meetingId) {
           objections: [],
           objections_count: 0,
           overall_handling: 'average',
-          coaching_tip: 'Upload a new call to see Aria's full objection coaching.',
+          coaching_tip: "Upload a new call to see Aria's full objection coaching.",
           pattern_to_watch: 'Re-upload to see full analysis',
         };
       } else { return ''; }
@@ -1565,8 +1575,8 @@ function showUpgradeModal(count) {
   modal.style.display = 'flex';
 }
 
-init();
-initLang();
+// Initialize app then language
+init().then(() => initLang()).catch(e => { console.error('Init error:', e); initLang(); });
 </script>
 <script>
 // Register service worker for PWA
