@@ -18,15 +18,15 @@
   "rewrites": [
     {
       "source": "/start",
-      "destination": "/start.html"
+      "destination": "/start"
     },
     {
       "source": "/dashboard",
-      "destination": "/dashboard.html"
+      "destination": "/dashboard"
     },
     {
       "source": "/admin",
-      "destination": "/admin.html"
+      "destination": "/admin"
     }
   ],
   "cleanUrls": true
