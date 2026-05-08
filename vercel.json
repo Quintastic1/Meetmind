@@ -28,5 +28,6 @@
       "source": "/admin",
       "destination": "/admin.html"
     }
-  ]
+  ],
+  "cleanUrls": true
 }
