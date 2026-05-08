@@ -27,17 +27,58 @@
       "short_name": "Upload",
       "description": "Upload a new call recording",
       "url": "/dashboard.html#upload",
-      "icons": [{ "src": "/Tito.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/Tito.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "My Meetings",
       "short_name": "Meetings",
       "description": "View your processed meetings",
       "url": "/dashboard.html#meetings",
-      "icons": [{ "src": "/Tito.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/Tito.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ],
-  "categories": ["business", "productivity"],
+  "categories": [
+    "business",
+    "productivity"
+  ],
   "lang": "en",
-  "dir": "ltr"
+  "dir": "ltr",
+  "share_target": {
+    "action": "/dashboard.html",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "recording",
+          "accept": [
+            "audio/*",
+            "video/*",
+            ".m4a",
+            ".mp3",
+            ".wav",
+            ".mp4",
+            ".webm",
+            ".ogg",
+            ".aac",
+            ".caf",
+            ".flac"
+          ]
+        }
+      ]
+    }
+  }
 }

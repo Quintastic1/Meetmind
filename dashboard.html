@@ -273,6 +273,66 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 .hs-token-input:focus{border-color:var(--forge);background:#fff}
 .hs-btn-row{display:flex;gap:8px}
 .hs-sync-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:100px;font-size:11px;font-weight:700;background:#dcfce7;color:#166534;margin-top:8px}
+
+/* PWA INSTALL BANNER */
+.pwa-install-banner{
+  display:none;
+  background:linear-gradient(135deg,var(--charcoal),var(--ink));
+  border:1px solid rgba(255,107,26,0.3);
+  border-radius:14px;padding:16px;
+  margin:0 0 16px;
+  position:relative;
+}
+.pwa-install-banner.show{display:block;}
+.pwa-install-banner h4{
+  font-family:'Clash Display',sans-serif;
+  font-size:14px;font-weight:700;
+  color:var(--paper);margin:0 0 4px;
+}
+.pwa-install-banner p{
+  font-size:12px;color:rgba(244,241,234,0.6);
+  margin:0 0 12px;line-height:1.5;
+}
+.pwa-install-banner .install-steps{
+  font-size:11px;color:rgba(244,241,234,0.5);
+  margin:0 0 12px;line-height:1.8;
+}
+.pwa-install-btn{
+  background:var(--forge);color:#fff;border:none;
+  padding:10px 20px;border-radius:8px;
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;
+  width:100%;
+}
+.pwa-dismiss{
+  position:absolute;top:12px;right:12px;
+  background:none;border:none;color:rgba(244,241,234,0.3);
+  font-size:16px;cursor:pointer;padding:0;
+}
+.share-how-banner{
+  background:linear-gradient(135deg,rgba(255,107,26,0.08),rgba(255,209,102,0.05));
+  border:1px solid rgba(255,107,26,0.2);
+  border-radius:12px;padding:14px 16px;
+  margin-bottom:12px;
+}
+.share-how-banner h4{
+  font-size:13px;font-weight:700;
+  color:var(--ink);margin:0 0 8px;
+}
+.share-how-steps{
+  display:flex;flex-direction:column;gap:6px;
+}
+.share-step{
+  display:flex;align-items:center;gap:10px;
+  font-size:12px;color:var(--gray);
+}
+.share-step-num{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--forge);color:#fff;
+  font-size:10px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
 </style>
 </head>
 <body>
@@ -1352,45 +1412,95 @@ async function syncLastMeeting() {
 // ─── PWA INSTALL PROMPT ────────────────────────────────────────────────────
 let deferredPrompt = null;
 
+// Check if already running as PWA
+const isPWA = window.matchMedia('(display-mode: standalone)').matches ||
+              window.navigator.standalone === true;
+
+// Check if on mobile
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+const isIOS    = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  // Show install banner after 30 seconds if not installed
-  setTimeout(showInstallBanner, 30000);
+  // Show in upload tab immediately
+  showUploadInstallBanner();
 });
 
-function showInstallBanner() {
-  if (!deferredPrompt) return;
-  const banner = document.createElement('div');
-  banner.id = 'installBanner';
-  banner.style.cssText = `
-    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
-    background:var(--ink);color:var(--paper);padding:12px 20px;
-    border-radius:12px;font-size:13px;font-weight:600;z-index:2000;
-    display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,0.3);
-    border-left:4px solid var(--forge);white-space:nowrap;
-  `;
-  banner.innerHTML = `
-    <span>⚒ Add Callforge to your home screen</span>
-    <button onclick="installPWA()" style="background:var(--forge);color:#fff;border:none;padding:6px 14px;border-radius:6px;font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer">Install</button>
-    <button onclick="document.getElementById('installBanner').remove()" style="background:none;border:none;color:var(--gray);cursor:pointer;font-size:16px">✕</button>
-  `;
-  document.body.appendChild(banner);
+function showUploadInstallBanner() {
+  if (isPWA) {
+    // Already installed — show the "how to share" guide instead
+    const howBanner = document.getElementById('shareHowBanner');
+    if (howBanner) howBanner.style.display = 'block';
+    return;
+  }
+
+  if (!isMobile && !deferredPrompt) return;
+
+  const banner = document.getElementById('pwaInstallBanner');
+  if (banner) banner.classList.add('show');
+
+  // Update button for iOS (no deferredPrompt available on iOS)
+  if (isIOS && !deferredPrompt) {
+    const btn = document.getElementById('pwaInstallBtn');
+    if (btn) {
+      btn.textContent = 'How to install on iPhone →';
+      btn.onclick = showIOSInstallGuide;
+    }
+  }
 }
 
-async function installPWA() {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  document.getElementById('installBanner')?.remove();
-  if (outcome === 'accepted') showToast('Callforge added to home screen! ⚒', 'success');
+function showIOSInstallGuide() {
+  showToast('Tap Share ↗ → Add to Home Screen in Safari', 'success');
+  // Also show persistent guide
+  const banner = document.getElementById('pwaInstallBanner');
+  if (banner) {
+    banner.querySelector('.pwa-install-btn').style.display = 'none';
+    banner.querySelector('.install-steps').style.display = 'block';
+  }
+}
+
+async function triggerInstall() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    if (outcome === 'accepted') {
+      showToast('⚒ Callforge installed! Share audio files directly to Callforge.', 'success');
+      dismissInstallBanner();
+    }
+  } else if (isIOS) {
+    showIOSInstallGuide();
+  }
+}
+
+function dismissInstallBanner() {
+  const banner = document.getElementById('pwaInstallBanner');
+  if (banner) banner.classList.remove('show');
+  try { localStorage.setItem('cf_install_dismissed', '1'); } catch(e) {}
 }
 
 window.addEventListener('appinstalled', () => {
   deferredPrompt = null;
-  showToast('Callforge installed! ⚒', 'success');
+  dismissInstallBanner();
+  // Show the share how-to guide
+  const howBanner = document.getElementById('shareHowBanner');
+  if (howBanner) howBanner.style.display = 'block';
+  showToast('⚒ Callforge installed! Now share audio from Voice Memos directly!', 'success');
 });
+
+// Show install banner when user opens upload tab
+function checkInstallBannerOnTabSwitch(tabName) {
+  if (tabName === 'upload') {
+    if (isPWA) {
+      const howBanner = document.getElementById('shareHowBanner');
+      if (howBanner) howBanner.style.display = 'block';
+    } else if (isMobile) {
+      const dismissed = localStorage.getItem('cf_install_dismissed');
+      if (!dismissed) showUploadInstallBanner();
+    }
+  }
+}
 
 // ─── TOAST ─────────────────────────────────────────────────────────────────────
 function showToast(msg, type='success') {
@@ -1575,8 +1685,128 @@ function showUpgradeModal(count) {
   modal.style.display = 'flex';
 }
 
+
+// ── SHARE SHEET HANDLER ──────────────────────────────────────────────────
+// Runs when user shares audio from Voice Memos → Callforge via share sheet
+
+async function checkForSharedFile() {
+  try {
+    // Check URL param — set when SW redirects from share POST
+    const params = new URLSearchParams(window.location.search);
+    const isShared = params.get('shared') === '1';
+
+    // Check share cache for a pending file
+    const cache  = await caches.open('callforge-share');
+    const stored = await cache.match('/shared-recording');
+
+    if (stored) {
+      const blob     = await stored.blob();
+      const fileName = decodeURIComponent(stored.headers.get('X-File-Name') || 'shared-recording.m4a');
+      const fileType = stored.headers.get('Content-Type') || 'audio/m4a';
+      const sharedAt = parseInt(stored.headers.get('X-Shared-At') || '0');
+
+      // Only process if shared within last 5 minutes (avoid stale files)
+      const age = Date.now() - sharedAt;
+      if (age < 5 * 60 * 1000) {
+        console.log('Shared file found:', fileName, fileType);
+
+        // Delete from cache immediately
+        await cache.delete('/shared-recording');
+
+        // Clean up URL
+        window.history.replaceState({}, '', '/dashboard.html');
+
+        // Switch to upload tab and show the shared file UI
+        switchTab('upload');
+
+        // Small delay to let tab render
+        setTimeout(() => {
+          const file = new File([blob], fileName, { type: fileType || 'audio/m4a' });
+          showSharedFileReady(file);
+        }, 400);
+
+        return true;
+      } else {
+        // Stale file — delete it
+        await cache.delete('/shared-recording');
+      }
+    }
+
+    // Also clean up URL if shared param is present but no file
+    if (isShared) {
+      window.history.replaceState({}, '', '/dashboard.html');
+    }
+
+    return false;
+  } catch (err) {
+    console.error('checkForSharedFile error:', err);
+    return false;
+  }
+}
+
+function showSharedFileReady(file) {
+  // Show a beautiful "File received from share sheet" confirmation
+  const uploadZone = document.getElementById('uploadZone');
+  if (!uploadZone) return;
+
+  const sizeMB = (file.size / 1024 / 1024).toFixed(1);
+  uploadZone.innerHTML = `
+    <div style="text-align:center;padding:20px">
+      <div style="font-size:48px;margin-bottom:12px">⚒</div>
+      <div style="font-family:'Clash Display',sans-serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px">
+        Recording received!
+      </div>
+      <div style="font-size:13px;color:var(--gray);margin-bottom:6px">${file.name}</div>
+      <div style="font-size:12px;color:var(--gray);margin-bottom:20px">${sizeMB} MB · ${file.type || 'audio'}</div>
+      <button onclick="startSharedUpload()" style="
+        background:var(--forge);color:#fff;border:none;
+        padding:13px 28px;border-radius:10px;
+        font-family:'Cabinet Grotesk',sans-serif;
+        font-size:15px;font-weight:700;cursor:pointer;
+        box-shadow:0 4px 16px rgba(255,107,26,0.3);
+        width:100%;
+      ">
+        ⚒ Forge this call →
+      </button>
+      <button onclick="location.reload()" style="
+        background:none;border:none;color:var(--gray);
+        font-size:12px;cursor:pointer;margin-top:10px;
+        font-family:'Cabinet Grotesk',sans-serif;
+      ">
+        Cancel
+      </button>
+    </div>
+  `;
+
+  // Store file reference for the forge button
+  window._sharedFile = file;
+}
+
+function startSharedUpload() {
+  if (window._sharedFile) {
+    // Reset upload zone
+    const uploadZone = document.getElementById('uploadZone');
+    if (uploadZone) {
+      uploadZone.innerHTML = uploadZone.innerHTML; // triggers re-render
+    }
+    processFile(window._sharedFile);
+    window._sharedFile = null;
+  }
+}
+
+// Listen for SW message (when file is shared while app is already open)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    if (event.data?.type === 'SHARED_FILE_READY') {
+      console.log('SW notification: shared file ready');
+      // Small delay to let SW store the file
+      setTimeout(checkForSharedFile, 300);
+    }
+  });
+}
+
 // Initialize app then language
-init().then(() => initLang()).catch(e => { console.error('Init error:', e); initLang(); });
+init().then(() => { initLang(); checkForSharedFile(); }).catch(e => { console.error('Init error:', e); initLang(); });
 </script>
 <script>
 // Register service worker for PWA
