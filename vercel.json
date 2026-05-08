@@ -14,27 +14,5 @@
     "OPENAI_API_KEY": "@openai_api_key",
     "ANTHROPIC_API_KEY": "@anthropic_api_key",
     "RESEND_API_KEY": "@resend_api_key"
-  },
-  "routes": [
-    {
-      "src": "/start",
-      "dest": "/start.html"
-    },
-    {
-      "src": "/dashboard",
-      "dest": "/dashboard.html"
-    },
-    {
-      "src": "/admin",
-      "dest": "/admin.html"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ]
+  }
 }
