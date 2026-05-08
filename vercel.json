@@ -15,19 +15,26 @@
     "ANTHROPIC_API_KEY": "@anthropic_api_key",
     "RESEND_API_KEY": "@resend_api_key"
   },
-  "rewrites": [
+  "routes": [
     {
-      "source": "/start",
-      "destination": "/start"
+      "src": "/start",
+      "dest": "/start.html"
     },
     {
-      "source": "/dashboard",
-      "destination": "/dashboard"
+      "src": "/dashboard",
+      "dest": "/dashboard.html"
     },
     {
-      "source": "/admin",
-      "destination": "/admin"
+      "src": "/admin",
+      "dest": "/admin.html"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
     }
-  ],
-  "cleanUrls": true
+  ]
 }
