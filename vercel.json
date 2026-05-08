@@ -6,6 +6,9 @@
     },
     "api/send-email.js": {
       "maxDuration": 30
+    },
+    "api/inbound-email.js": {
+      "maxDuration": 60
     }
   },
   "env": {

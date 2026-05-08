@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Use Callforge ⚒</title>
+<meta name="description" content="Everything you need to know to forge your first call. Step-by-step guide for Callforge.">
+<meta property="og:title" content="How to Use Callforge ⚒">
+<meta property="og:description" content="Your complete guide to forging every sales call into a closed deal.">
+<meta property="og:image" content="https://callforge.to/og-image.png">
+<meta property="og:url" content="https://callforge.to/how-to.html">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --ink:#0a0e1a;
+  --forge:#ff6b1a;
+  --forge-dark:#e55a0d;
+  --ember:#ffd166;
+  --charcoal:#14192a;
+  --gray:#7a7a8c;
+  --light-gray:#e6e3dc;
+  --cream:#faf7f0;
+  --paper:#f4f1ea;
+  --white:#fff;
+  --success:#22c55e;
+}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--charcoal);
+  color:var(--paper);
+  min-height:100vh;
+}
+
+/* NAV */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(20,25,42,0.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  padding:0 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:56px;
+}
+.nav-logo{
+  display:flex;align-items:center;gap:8px;
+  font-size:18px;font-weight:700;
+  color:var(--paper);text-decoration:none;
+}
+.nav-logo .accent{color:var(--forge);}
+.logo-mark{
+  width:28px;height:28px;
+  background:linear-gradient(135deg,var(--forge),var(--ember));
+  border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;
+}
+.nav-cta{
+  background:var(--forge);color:#fff;
+  padding:8px 18px;border-radius:8px;
+  font-size:13px;font-weight:700;
+  text-decoration:none;
+  transition:all 0.2s;
+}
+.nav-cta:hover{background:var(--forge-dark);}
+
+/* HERO */
+.hero{
+  text-align:center;
+  padding:64px 24px 48px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;top:-100px;left:50%;
+  transform:translateX(-50%);
+  width:600px;height:400px;
+  background:radial-gradient(ellipse,rgba(255,107,26,0.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,107,26,0.12);
+  border:1px solid rgba(255,107,26,0.25);
+  color:var(--forge);
+  font-size:11px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:6px 14px;border-radius:100px;
+  margin-bottom:20px;
+}
+.hero h1{
+  font-size:clamp(32px,5vw,52px);
+  font-weight:700;
+  line-height:1.15;
+  letter-spacing:-1px;
+  margin-bottom:16px;
+}
+.hero h1 span{color:var(--forge);}
+.hero p{
+  font-size:16px;color:rgba(244,241,234,0.65);
+  max-width:520px;margin:0 auto 32px;
+  line-height:1.7;
+}
+
+/* TABLE OF CONTENTS */
+.toc{
+  max-width:800px;margin:0 auto;
+  padding:0 24px 48px;
+}
+.toc-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;
+  padding:28px;
+}
+.toc-title{
+  font-size:11px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--forge);margin-bottom:16px;
+}
+.toc-list{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:8px;list-style:none;
+}
+@media(max-width:520px){.toc-list{grid-template-columns:1fr;}}
+.toc-list a{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:8px;
+  text-decoration:none;color:rgba(244,241,234,0.7);
+  font-size:14px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid transparent;
+  transition:all 0.15s;
+}
+.toc-list a:hover{
+  color:var(--paper);
+  background:rgba(255,107,26,0.08);
+  border-color:rgba(255,107,26,0.2);
+}
+.toc-num{
+  width:22px;height:22px;border-radius:50%;
+  background:var(--forge);color:#fff;
+  font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+
+/* MAIN CONTENT */
+.content{
+  max-width:800px;margin:0 auto;
+  padding:0 24px 80px;
+}
+
+/* SECTION */
+.section{
+  margin-bottom:64px;
+  scroll-margin-top:72px;
+}
+.section-header{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:28px;
+  padding-bottom:16px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.section-num{
+  width:40px;height:40px;border-radius:10px;
+  background:linear-gradient(135deg,var(--forge),var(--ember));
+  color:#fff;font-size:16px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.section h2{
+  font-size:22px;font-weight:700;
+  letter-spacing:-0.3px;
+  color:var(--paper);
+}
+.section h2 .sub{
+  display:block;font-size:13px;font-weight:400;
+  color:var(--gray);margin-top:2px;letter-spacing:0;
+}
+
+/* STEP CARD */
+.step-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;
+  padding:22px 24px;
+  margin-bottom:12px;
+  display:flex;gap:16px;
+  transition:border-color 0.15s;
+}
+.step-card:hover{border-color:rgba(255,107,26,0.25);}
+.step-dot{
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(255,107,26,0.12);
+  border:1.5px solid rgba(255,107,26,0.3);
+  color:var(--forge);font-size:13px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+}
+.step-content h4{
+  font-size:15px;font-weight:700;
+  color:var(--paper);margin-bottom:5px;
+}
+.step-content p{
+  font-size:13px;color:rgba(244,241,234,0.6);
+  line-height:1.6;
+}
+.step-content .note{
+  display:inline-flex;align-items:center;gap:5px;
+  margin-top:8px;
+  background:rgba(255,209,102,0.1);
+  border:1px solid rgba(255,209,102,0.2);
+  color:var(--ember);
+  font-size:11px;font-weight:600;
+  padding:4px 10px;border-radius:6px;
+}
+
+/* HIGHLIGHT BOX */
+.highlight-box{
+  background:rgba(255,107,26,0.07);
+  border:1px solid rgba(255,107,26,0.2);
+  border-left:3px solid var(--forge);
+  border-radius:12px;
+  padding:18px 20px;
+  margin-bottom:16px;
+  font-size:13px;color:rgba(244,241,234,0.75);
+  line-height:1.7;
+}
+.highlight-box strong{color:var(--paper);}
+.highlight-box.success{
+  background:rgba(34,197,94,0.07);
+  border-color:rgba(34,197,94,0.2);
+  border-left-color:var(--success);
+}
+.highlight-box.amber{
+  background:rgba(255,209,102,0.07);
+  border-color:rgba(255,209,102,0.2);
+  border-left-color:var(--ember);
+}
+
+/* FORGED CARDS */
+.forged-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;margin-bottom:16px;
+}
+@media(max-width:520px){.forged-grid{grid-template-columns:1fr;}}
+.forged-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;padding:18px;
+}
+.forged-emoji{font-size:24px;margin-bottom:8px;}
+.forged-name{font-size:14px;font-weight:700;color:var(--paper);margin-bottom:2px;}
+.forged-role{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--forge);margin-bottom:8px;}
+.forged-desc{font-size:12px;color:rgba(244,241,234,0.55);line-height:1.6;}
+
+/* PLATFORM CARDS */
+.platform-grid{
+  display:grid;grid-template-columns:1fr;
+  gap:12px;
+}
+.platform-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;padding:20px 22px;
+}
+.platform-header{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;
+}
+.platform-badge{
+  background:rgba(255,107,26,0.12);
+  border:1px solid rgba(255,107,26,0.2);
+  color:var(--forge);font-size:11px;font-weight:700;
+  padding:3px 10px;border-radius:100px;
+  letter-spacing:0.5px;
+}
+.platform-title{font-size:15px;font-weight:700;color:var(--paper);}
+.flow-steps{
+  display:flex;flex-direction:column;gap:8px;
+}
+.flow-step{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:13px;color:rgba(244,241,234,0.65);
+  line-height:1.5;
+}
+.flow-arrow{color:var(--forge);font-weight:700;flex-shrink:0;margin-top:1px;}
+
+/* PRICING TABLE */
+.pricing-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:12px;margin-bottom:16px;
+}
+@media(max-width:600px){.pricing-grid{grid-template-columns:1fr;}}
+.price-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;padding:20px;text-align:center;
+  transition:border-color 0.15s;
+}
+.price-card.featured{
+  border-color:rgba(255,107,26,0.4);
+  background:rgba(255,107,26,0.06);
+}
+.price-name{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray);margin-bottom:8px;}
+.price-amount{font-size:28px;font-weight:700;color:var(--paper);margin-bottom:4px;}
+.price-amount span{font-size:13px;font-weight:400;color:var(--gray);}
+.price-meetings{font-size:12px;color:var(--gray);margin-bottom:12px;}
+.price-features{font-size:12px;color:rgba(244,241,234,0.55);line-height:1.9;text-align:left;}
+.price-features div::before{content:'✓  ';color:var(--success);}
+
+/* FAQ */
+.faq-item{
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  padding:16px 0;
+}
+.faq-q{
+  font-size:15px;font-weight:600;
+  color:var(--paper);margin-bottom:8px;
+  display:flex;align-items:flex-start;gap:10px;
+}
+.faq-q::before{content:'Q';color:var(--forge);font-weight:700;flex-shrink:0;}
+.faq-a{
+  font-size:13px;color:rgba(244,241,234,0.6);
+  line-height:1.7;padding-left:22px;
+}
+
+/* CTA SECTION */
+.cta-section{
+  background:linear-gradient(135deg,rgba(255,107,26,0.12),rgba(255,209,102,0.06));
+  border:1px solid rgba(255,107,26,0.2);
+  border-radius:20px;padding:48px 32px;
+  text-align:center;margin-top:48px;
+}
+.cta-section h2{
+  font-size:28px;font-weight:700;
+  color:var(--paper);margin-bottom:12px;
+}
+.cta-section p{
+  font-size:15px;color:rgba(244,241,234,0.6);
+  margin-bottom:28px;
+}
+.cta-btn{
+  display:inline-block;
+  background:var(--forge);color:#fff;
+  padding:15px 36px;border-radius:12px;
+  font-size:16px;font-weight:700;
+  text-decoration:none;
+  box-shadow:0 8px 32px rgba(255,107,26,0.3);
+  transition:all 0.2s;
+}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,107,26,0.4);}
+
+/* BACK TO TOP */
+.back-top{
+  text-align:center;margin-top:48px;
+}
+.back-top a{
+  color:var(--gray);font-size:13px;text-decoration:none;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.back-top a:hover{color:var(--forge);}
+
+/* FOOTER */
+footer{
+  border-top:1px solid rgba(255,255,255,0.07);
+  padding:24px;text-align:center;
+  font-size:12px;color:rgba(122,122,140,0.6);
+}
+footer a{color:var(--forge);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/index.html" class="nav-logo">
+    <div class="logo-mark">⚒</div>
+    Call<span class="accent">forge</span>
+  </a>
+  <a href="/start.html" class="nav-cta">Start free trial →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="top">
+  <div class="hero-eyebrow">⚒ User Guide</div>
+  <h1>How to use <span>Callforge</span></h1>
+  <p>Everything you need to forge your first call into a closed deal. From uploading to understanding your AI coaching insights.</p>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <div class="toc-card">
+    <div class="toc-title">📋 In this guide</div>
+    <ul class="toc-list">
+      <li><a href="#getting-started"><span class="toc-num">1</span> Getting Started</a></li>
+      <li><a href="#uploading"><span class="toc-num">2</span> Uploading a Call</a></li>
+      <li><a href="#results"><span class="toc-num">3</span> Understanding Results</a></li>
+      <li><a href="#forged"><span class="toc-num">4</span> Meet The Forged</a></li>
+      <li><a href="#hubspot"><span class="toc-num">5</span> HubSpot Integration</a></li>
+      <li><a href="#mobile"><span class="toc-num">6</span> Using on iPhone</a></li>
+      <li><a href="#billing"><span class="toc-num">7</span> Plans & Billing</a></li>
+      <li><a href="#faq"><span class="toc-num">8</span> FAQ</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- SECTION 1: GETTING STARTED -->
+  <div class="section" id="getting-started">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>Getting Started <span class="sub">Create your account and set up your dashboard</span></h2>
+    </div>
+
+    <div class="step-card">
+      <div class="step-dot">1</div>
+      <div class="step-content">
+        <h4>Create your free account</h4>
+        <p>Go to <strong>callforge.to/start.html</strong> and enter your name, work email, and a password. No credit card required. Your 14-day free trial begins immediately.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-dot">2</div>
+      <div class="step-content">
+        <h4>You land on your dashboard</h4>
+        <p>After signing up you'll be taken to your dashboard at <strong>callforge.to/dashboard.html</strong>. Bookmark this page or install it as a PWA for quick access.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-dot">3</div>
+      <div class="step-content">
+        <h4>Choose your language</h4>
+        <p>In the bottom left of the sidebar you'll see <strong>EN / ES</strong> buttons. Switch to Spanish to see the entire dashboard in Spanish — it remembers your preference.</p>
+        <span class="note">🌎 Callforge auto-detects the language of your call regardless of which setting you choose here</span>
+      </div>
+    </div>
+
+    <div class="highlight-box success">
+      <strong>✓ Free trial includes 5 meetings.</strong> That's enough to process your first week of sales calls and see exactly what Callforge can do for your team. No card needed.
+    </div>
+  </div>
+
+  <!-- SECTION 2: UPLOADING -->
+  <div class="section" id="uploading">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>Uploading a Call <span class="sub">Three ways to get your recording into Callforge</span></h2>
+    </div>
+
+    <div class="platform-grid">
+
+      <div class="platform-card">
+        <div class="platform-header">
+          <span class="platform-badge">METHOD 1</span>
+          <span class="platform-title">📁 Direct File Upload</span>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step"><span class="flow-arrow">→</span> Go to Upload tab in your dashboard</div>
+          <div class="flow-step"><span class="flow-arrow">→</span> Tap the upload zone or Browse files</div>
+          <div class="flow-step"><span class="flow-arrow">→</span> Select your audio or video file</div>
+          <div class="flow-step"><span class="flow-arrow">→</span> Callforge processes it automatically</div>
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--gray)">
+          Supports: MP3, MP4, M4A, WAV, WebM, OGG, AAC, FLAC
+        </div>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-header">
+          <span class="platform-badge">METHOD 2</span>
+          <span class="platform-title">📧 Email Upload</span>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step"><span class="flow-arrow">→</span> Go to Upload tab → save "Callforge Upload" contact</div>
+          <div class="flow-step"><span class="flow-arrow">→</span> Open Voice Memos after your call</div>
+          <div class="flow-step"><span class="flow-arrow">→</span> Share → Mail → To: Callforge Upload</div>
+          <div class="flow-step"><span class="flow-arrow">→</span> Hit send — results appear in ~2 min</div>
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--gray)">
+          Best for iPhone users — works from any app
+        </div>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-header">
+          <span class="platform-badge">METHOD 3</span>
+          <span class="platform-title">📱 Install as App (PWA)</span>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step"><span class="flow-arrow">→</span> Open Safari → callforge.to/dashboard.html</div>
+          <div class="flow-step"><span class="flow-arrow">→</span> Tap Share → Add to Home Screen</div>
+          <div class="flow-step"><span class="flow-arrow">→</span> Callforge icon appears on home screen</div>
+          <div class="flow-step"><span class="flow-arrow">→</span> Upload directly from phone camera roll</div>
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--gray)">
+          Stays logged in — fastest mobile experience
+        </div>
+      </div>
+
+    </div>
+
+    <div class="highlight-box amber">
+      <strong>📱 iPhone tip:</strong> If your recording is stored in iCloud and appears greyed out — long press the file → Download — wait for it to fully download to your phone, then upload. iCloud files must be local before uploading.
+    </div>
+  </div>
+
+  <!-- SECTION 3: RESULTS -->
+  <div class="section" id="results">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>Understanding Your Results <span class="sub">What Callforge generates from every call</span></h2>
+    </div>
+
+    <div class="step-card">
+      <div class="step-dot">🎯</div>
+      <div class="step-content">
+        <h4>Deal Health Score (0-100)</h4>
+        <p>An overall score for how likely this deal is to close based on the conversation. <strong>80-100</strong> = strong buying signals. <strong>60-79</strong> = interested but friction. <strong>40-59</strong> = lukewarm. <strong>Under 40</strong> = significant obstacles.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-dot">📝</div>
+      <div class="step-content">
+        <h4>AI Summary</h4>
+        <p>A 3-4 sentence summary of what happened on the call — key points discussed, the current status of the deal, and what the prospect cares about most. Generated in the language of the call.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-dot">✅</div>
+      <div class="step-content">
+        <h4>Action Items</h4>
+        <p>Every commitment made on the call is extracted and listed. Each action item includes the owner and deadline if mentioned. Tap any checkbox to mark it complete.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-dot">📧</div>
+      <div class="step-content">
+        <h4>AI-Generated Follow-up Email</h4>
+        <p>A personalized follow-up email drafted in the voice of the call — warm, specific, and ready to send. Tap <strong>"Copy email"</strong> to copy it to your clipboard. Available in English and Spanish.</p>
+        <span class="note">✏️ Always personalize before sending — the AI gives you a strong draft, you add the human touch</span>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>⏱ Processing takes 45 seconds to 2 minutes</strong> depending on the length of your call. You'll receive an email notification at your Callforge address when results are ready.
+    </div>
+  </div>
+
+  <!-- SECTION 4: THE FORGED -->
+  <div class="section" id="forged">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>Meet The Forged <span class="sub">Your 4 AI coaches — included in Pro and Team plans</span></h2>
+    </div>
+
+    <div class="highlight-box">
+      The Forged are 4 specialized AI coaches that analyze every call from a different angle. They run automatically alongside your summary — no setup needed.
+    </div>
+
+    <div class="forged-grid">
+      <div class="forged-card">
+        <div class="forged-emoji">⚡</div>
+        <div class="forged-name">Maya the Spark</div>
+        <div class="forged-role">Pitch Coach</div>
+        <div class="forged-desc">Scores your pitch 0-100 and tells you exactly which lines worked, which fell flat, and how to open stronger next time.</div>
+      </div>
+      <div class="forged-card">
+        <div class="forged-emoji">⚖️</div>
+        <div class="forged-name">Sam the Anvil</div>
+        <div class="forged-role">Follow-up Coach</div>
+        <div class="forged-desc">Tells you exactly when and how to follow up — urgency level, tone, and what to reinforce in your next message.</div>
+      </div>
+      <div class="forged-card">
+        <div class="forged-emoji">🔧</div>
+        <div class="forged-name">Finn the Tongs</div>
+        <div class="forged-role">Deal Analyst</div>
+        <div class="forged-desc">Gives you a win probability percentage and flags risks in the deal before they become blockers.</div>
+      </div>
+      <div class="forged-card">
+        <div class="forged-emoji">🔨</div>
+        <div class="forged-name">Aria the Hammer</div>
+        <div class="forged-role">Objection Coach</div>
+        <div class="forged-desc">Detects every objection raised on the call and gives you a stronger comeback ready for next time.</div>
+      </div>
+    </div>
+
+    <div class="highlight-box success">
+      <strong>✓ Bilingual coaching:</strong> The Forged analyze and coach in the language of the call. Spanish call = Spanish coaching. English call = English coaching. Automatic.
+    </div>
+  </div>
+
+  <!-- SECTION 5: HUBSPOT -->
+  <div class="section" id="hubspot">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2>HubSpot Integration <span class="sub">Sync every call to your CRM automatically</span></h2>
+    </div>
+
+    <div class="step-card">
+      <div class="step-dot">1</div>
+      <div class="step-content">
+        <h4>Get your HubSpot Private App token</h4>
+        <p>In HubSpot → Settings → Integrations → Private Apps → Create a private app. Name it "Callforge". Add scopes: contacts read/write, deals read/write. Copy the token (starts with pat-na2-).</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-dot">2</div>
+      <div class="step-content">
+        <h4>Connect in Callforge Settings</h4>
+        <p>Go to Settings tab in your dashboard → scroll to HubSpot CRM Integration → paste your token → click Connect HubSpot. You'll see a green ✅ Connected badge.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-dot">3</div>
+      <div class="step-content">
+        <h4>Sync any meeting to HubSpot</h4>
+        <p>Open any processed meeting → scroll to the bottom → tap <strong>"🔗 Sync to HubSpot"</strong>. Callforge will find or create the contact, update the deal stage, log the call summary as a note, and create a task for each action item.</p>
+        <span class="note">🔄 Your token is saved — connect once, works forever across all devices</span>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>What gets synced:</strong> Contact (found or created by name/email) · Deal (created with score-based pipeline stage) · Call summary as engagement note · One task per action item
+    </div>
+  </div>
+
+  <!-- SECTION 6: MOBILE -->
+  <div class="section" id="mobile">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2>Using on iPhone <span class="sub">The easiest ways to upload from your phone</span></h2>
+    </div>
+
+    <div class="platform-grid">
+
+      <div class="platform-card">
+        <div class="platform-header">
+          <span class="platform-badge">RECOMMENDED</span>
+          <span class="platform-title">📧 Email Method</span>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step"><span class="flow-arrow">1</span> Dashboard → Upload tab → tap "Save as Phone Contact"</div>
+          <div class="flow-step"><span class="flow-arrow">2</span> "Callforge Upload ⚒" is now in your contacts</div>
+          <div class="flow-step"><span class="flow-arrow">3</span> After any call → Voice Memos → Share → Mail</div>
+          <div class="flow-step"><span class="flow-arrow">4</span> To: "Callforge Upload" → Send</div>
+          <div class="flow-step"><span class="flow-arrow">5</span> Results appear in dashboard in ~2 minutes</div>
+        </div>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-header">
+          <span class="platform-badge">ALTERNATIVE</span>
+          <span class="platform-title">📱 PWA Upload</span>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step"><span class="flow-arrow">1</span> Install Callforge: Safari → Share → Add to Home Screen</div>
+          <div class="flow-step"><span class="flow-arrow">2</span> Open Callforge from your home screen</div>
+          <div class="flow-step"><span class="flow-arrow">3</span> Tap Upload tab</div>
+          <div class="flow-step"><span class="flow-arrow">4</span> Browse files → select your recording</div>
+          <div class="flow-step"><span class="flow-arrow">5</span> Tap to upload — stays logged in automatically</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="highlight-box amber">
+      <strong>⚠️ iCloud files:</strong> If a recording shows as greyed out in the file picker, it's still in iCloud. Long press → Download, wait for it to download to your phone, then upload. Files must be stored locally to upload.
+    </div>
+
+    <div class="highlight-box">
+      <strong>📱 Recording tip:</strong> Use iPhone's built-in Voice Memos app to record calls on speaker. Ask the prospect's permission first — "Would you mind if I recorded this so I can remember our conversation?" Most people say yes.
+    </div>
+  </div>
+
+  <!-- SECTION 7: BILLING -->
+  <div class="section" id="billing">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <h2>Plans & Billing <span class="sub">Simple pricing that scales with your team</span></h2>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Starter</div>
+        <div class="price-amount">$49<span>/mo</span></div>
+        <div class="price-meetings">20 meetings/month</div>
+        <div class="price-features">
+          <div>AI summary + action items</div>
+          <div>Deal health score</div>
+          <div>Follow-up email draft</div>
+          <div>English + Spanish</div>
+          <div>HubSpot sync</div>
+        </div>
+      </div>
+      <div class="price-card featured">
+        <div class="price-name">Pro ⭐ Most Popular</div>
+        <div class="price-amount">$99<span>/mo</span></div>
+        <div class="price-meetings">Unlimited meetings</div>
+        <div class="price-features">
+          <div>Everything in Starter</div>
+          <div>The Forged (all 4 coaches)</div>
+          <div>Maya · Sam · Finn · Aria</div>
+          <div>Unlimited uploads</div>
+          <div>Priority processing</div>
+        </div>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Team</div>
+        <div class="price-amount">$299<span>/mo</span></div>
+        <div class="price-meetings">Up to 10 seats</div>
+        <div class="price-features">
+          <div>Everything in Pro</div>
+          <div>Up to 10 team members</div>
+          <div>$25/seat after 10</div>
+          <div>Team analytics</div>
+          <div>Priority support</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box success">
+      <strong>✓ Free trial:</strong> 5 meetings free with no credit card. When you hit your 5th meeting an upgrade prompt appears. Cancel anytime — no questions asked.
+    </div>
+
+    <div class="highlight-box amber">
+      <strong>🎉 Early access discount:</strong> Waitlist members get 25% off their first 6 months. Applied automatically at checkout.
+    </div>
+  </div>
+
+  <!-- SECTION 8: FAQ -->
+  <div class="section" id="faq">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <h2>Frequently Asked Questions <span class="sub">The stuff everyone wants to know</span></h2>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What languages does Callforge support?</div>
+      <div class="faq-a">English and Spanish, fully. Callforge automatically detects which language was spoken on the call and delivers your summary, action items, deal score, follow-up email, and Forged coaching all in that language. No setup required.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What file formats are supported?</div>
+      <div class="faq-a">MP3, MP4, M4A, WAV, WebM, OGG, AAC, FLAC, CAF, and MOV. iPhone Voice Memos records in M4A — that works perfectly.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How long does processing take?</div>
+      <div class="faq-a">Typically 45 seconds to 2 minutes depending on the length of your call. A 30-minute call usually processes in about 90 seconds. You'll get an email when it's ready.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Is my call data private?</div>
+      <div class="faq-a">Yes. Your recordings and transcripts are stored securely in your private account. We don't share your data with other users or third parties. You can delete any meeting at any time.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Do I need to tell the other person I'm recording?</div>
+      <div class="faq-a">Yes — and we strongly recommend it. Recording laws vary by state and country. A simple "Would you mind if I recorded this so I can remember our conversation?" is professional, builds trust, and is legally safe. Most people say yes.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Does it work with Zoom and Google Meet?</div>
+      <div class="faq-a">Yes — download your Zoom or Google Meet recording after the call and upload it to Callforge. Native Zoom bot integration (automatic recording without downloading) is coming soon.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Can I use Callforge for my whole team?</div>
+      <div class="faq-a">Absolutely. The Team plan supports up to 10 seats at $299/month with $25 per seat after that. Each team member gets their own dashboard, meetings, and Forged coaching.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What if the AI gets something wrong?</div>
+      <div class="faq-a">The AI is very accurate but not perfect — treat the output as a strong first draft, not gospel. Always review action items and the follow-up email before acting on them. If you find consistent errors, reach out to us at hello@callforge.to.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How do I cancel?</div>
+      <div class="faq-a">Email hello@callforge.to and we'll cancel immediately. No lock-ins, no questions asked. Your data remains accessible for 30 days after cancellation.</div>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h2>Ready to forge your first call? ⚒</h2>
+    <p>14 days free. No credit card. English and Spanish.</p>
+    <a href="/start.html" class="cta-btn">Start your free trial →</a>
+  </div>
+
+  <!-- BACK TO TOP -->
+  <div class="back-top">
+    <a href="#top">↑ Back to top</a>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="https://callforge.to">callforge.to</a> ·
+  <a href="/start.html">Start free trial</a> ·
+  <a href="mailto:hello@callforge.to">hello@callforge.to</a> ·
+  Built with ⚒ in Florida 🇺🇸
+</footer>
+
+</body>
+</html>
