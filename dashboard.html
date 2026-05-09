@@ -865,12 +865,30 @@ async function processFile(file) {
   try {
     // ── STEP 1: Upload to Supabase Storage ──────────────────────────────
     setStep('step1', 'active');
-    const fileExt  = file.name.split('.').pop();
+
+    // Auto-compress large files client-side before uploading
+    let uploadFile = file;
+    const fileSizeMB = file.size / (1024 * 1024);
+
+    if (fileSizeMB > 40) {
+      showToast(`Large file (${fileSizeMB.toFixed(0)}MB) — compressing before upload...`, 'success');
+      try {
+        uploadFile = await compressAudioClientSide(file);
+        const newSizeMB = uploadFile.size / (1024 * 1024);
+        console.log(`Client compressed: ${fileSizeMB.toFixed(0)}MB → ${newSizeMB.toFixed(0)}MB`);
+        showToast(`Compressed to ${newSizeMB.toFixed(0)}MB — uploading ⚒`, 'success');
+      } catch(compErr) {
+        console.log('Client compression failed, trying original:', compErr);
+        uploadFile = file; // fallback to original
+      }
+    }
+
+    const fileExt  = uploadFile.name.split('.').pop() || 'm4a';
     const filePath = `${currentUser.id}/${Date.now()}.${fileExt}`;
 
     const { error: uploadError } = await sb.storage
       .from('recordings')
-      .upload(filePath, file, { cacheControl: '3600', upsert: false });
+      .upload(filePath, uploadFile, { cacheControl: '3600', upsert: false });
 
     if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`);
     setStep('step1', 'done');
@@ -1592,6 +1610,61 @@ function renderEmailUploadCard() {
       <div>4. Hit send — results appear in your dashboard in ~2 min</div>
     </div>
   `;
+}
+
+
+// ─── CLIENT-SIDE AUDIO COMPRESSION ───────────────────────────────────────
+// Uses Web Audio API to decode and re-encode audio at lower bitrate
+// Converts any format to WebM/Opus which Whisper supports and is very small
+async function compressAudioClientSide(file) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) { reject(new Error('AudioContext not supported')); return; }
+
+      // Read file as ArrayBuffer
+      const arrayBuffer = await file.arrayBuffer();
+
+      // Decode audio
+      const audioCtx     = new AudioContext({ sampleRate: 16000 }); // 16kHz for voice
+      const audioBuffer  = await audioCtx.decodeAudioData(arrayBuffer);
+      await audioCtx.close();
+
+      // Re-encode using MediaRecorder at low bitrate
+      const offlineCtx   = new OfflineAudioContext(1, audioBuffer.length, 16000);
+      const source       = offlineCtx.createBufferSource();
+      source.buffer      = audioBuffer;
+      source.connect(offlineCtx.destination);
+      source.start();
+      const renderedBuffer = await offlineCtx.startRendering();
+
+      // Convert to stream and record at low bitrate
+      const dest    = new AudioContext({ sampleRate: 16000 }).createMediaStreamDestination();
+      const src2    = new AudioContext({ sampleRate: 16000 }).createBufferSource();
+      src2.buffer   = renderedBuffer;
+      src2.connect(dest);
+      src2.start();
+
+      const chunks  = [];
+      const options = { mimeType: 'audio/webm;codecs=opus', audioBitsPerSecond: 32000 };
+      const recorder = new MediaRecorder(dest.stream, options);
+
+      recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'audio/webm' });
+        const compressedFile = new File([blob], file.name.replace(/\.[^.]+$/, '.webm'), { type: 'audio/webm' });
+        resolve(compressedFile);
+      };
+      recorder.onerror = reject;
+
+      recorder.start();
+      // Stop after audio duration
+      setTimeout(() => recorder.stop(), (renderedBuffer.duration * 1000) + 500);
+
+    } catch(err) {
+      reject(err);
+    }
+  });
 }
 
 // ─── TOAST ─────────────────────────────────────────────────────────────────────
