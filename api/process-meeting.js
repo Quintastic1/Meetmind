@@ -2,7 +2,16 @@
 // Vercel Serverless Function — Full AI Pipeline
 // Audio → Whisper → Claude summary/actions/score/email → Supabase
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient }  from '@supabase/supabase-js';
+import ffmpegInstaller   from '@ffmpeg-installer/ffmpeg';
+import ffmpeg            from 'fluent-ffmpeg';
+import { tmpdir }        from 'os';
+import { writeFile, readFile, unlink } from 'fs/promises';
+import { join }          from 'path';
+import { randomUUID }    from 'crypto';
+
+// Set ffmpeg path for Vercel
+ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
 // ── CONFIG ─────────────────────────────────────────────────────────────────
 const SUPABASE_URL         = process.env.SUPABASE_URL;
@@ -42,6 +51,63 @@ export default async function handler(req, res) {
     const audioBuffer = Buffer.from(await audioData.arrayBuffer());
     const fileName    = audioUrl.split('/').pop() || 'recording.m4a';
 
+    // ── STEP 3: Transcribe with OpenAI Whisper ──────────────────────
+    // Check file size — Whisper limit is 25MB
+    // If over limit → auto-compress with FFmpeg (customer never knows)
+    const fileSizeMB = audioBuffer.length / (1024 * 1024);
+    console.log(`File size: ${fileSizeMB.toFixed(1)}MB`);
+
+    let whisperBuffer  = audioBuffer;
+    let whisperFileName = fileName;
+
+    if (fileSizeMB > 24) {
+      console.log(`File too large (${fileSizeMB.toFixed(1)}MB) — auto-compressing with FFmpeg...`);
+
+      try {
+        // Write original file to /tmp
+        const tmpId      = randomUUID();
+        const inputPath  = join(tmpdir(), `cf-input-${tmpId}.${ext || 'm4a'}`);
+        const outputPath = join(tmpdir(), `cf-output-${tmpId}.mp3`);
+
+        await writeFile(inputPath, audioBuffer);
+
+        // Compress to MP3 at 32kbps (voice quality, tiny file size)
+        await new Promise((resolve, reject) => {
+          ffmpeg(inputPath)
+            .audioCodec('libmp3lame')
+            .audioBitrate('32k')
+            .audioChannels(1)        // mono — sufficient for voice
+            .audioFrequency(16000)   // 16kHz — Whisper works great at this
+            .format('mp3')
+            .on('end', resolve)
+            .on('error', reject)
+            .save(outputPath);
+        });
+
+        // Read compressed file
+        whisperBuffer   = await readFile(outputPath);
+        whisperFileName = `compressed-${tmpId}.mp3`;
+
+        const newSizeMB = whisperBuffer.length / (1024 * 1024);
+        console.log(`Compressed: ${fileSizeMB.toFixed(1)}MB → ${newSizeMB.toFixed(1)}MB`);
+
+        // Clean up temp files
+        await unlink(inputPath).catch(() => {});
+        await unlink(outputPath).catch(() => {});
+
+        if (newSizeMB > 24) {
+          throw new Error(`File still too large after compression: ${newSizeMB.toFixed(1)}MB`);
+        }
+      } catch (compressErr) {
+        console.error('Compression failed:', compressErr);
+        await sb.from('meetings').update({
+          status: 'failed',
+          summary: `Your recording (${fileSizeMB.toFixed(0)}MB) is too large to process and compression failed. Please convert to MP3 using cloudconvert.com and try again. A 49-minute call as MP3 is typically under 10MB.`,
+        }).eq('id', meetingId);
+        return res.status(200).json({ error: 'Compression failed', details: compressErr.message });
+      }
+    }
+
     // ── STEP 3: Transcribe with OpenAI Whisper ─────────────────────────
     // Detect content type from file extension
     const ext = fileName.split('.').pop().toLowerCase();
@@ -61,9 +127,11 @@ export default async function handler(req, res) {
     const contentType = contentTypeMap[ext] || 'audio/mp4';
 
     // Use native FormData with Blob — works correctly in Node 18+
-    const audioBlob  = new Blob([audioBuffer], { type: contentType });
+    // Use compressed buffer if file was auto-compressed
+    const whisperType = whisperFileName.endsWith('.mp3') ? 'audio/mpeg' : contentType;
+    const audioBlob  = new Blob([whisperBuffer], { type: whisperType });
     const formData   = new FormData();
-    formData.append('file', audioBlob, fileName);
+    formData.append('file', audioBlob, whisperFileName);
     formData.append('model', 'whisper-1');
     formData.append('response_format', 'verbose_json');
     formData.append('temperature', '0');

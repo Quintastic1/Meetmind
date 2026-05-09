@@ -828,6 +828,13 @@ async function processFile(file) {
     }
   }
 
+  // Large file — show auto-compress notice but proceed anyway
+  const fileSizeMB = file.size / (1024 * 1024);
+  if (fileSizeMB > 24) {
+    // Show a friendly notice — server will auto-compress
+    showToast(`Large file (${fileSizeMB.toFixed(0)}MB) — auto-compressing for you ⚒`, 'success');
+  }
+
   // Validate file type
   // Accept all audio formats including iPhone Voice Memo (audio/x-m4a) and CAF
   const allowed = [
@@ -1004,7 +1011,7 @@ const DASH_T = {
     'upload.drop':        'Drop your audio or video file here',
     'upload.or':          'or',
     'upload.browse':      'Browse files',
-    'upload.formats':     'MP3, MP4, M4A, WAV, WebM supported',
+    'upload.formats':     'MP3, MP4, M4A, WAV, WebM · Long calls auto-compressed ⚒',
     'forged.title':       'The Forged',
     'forged.subtitle':    'Your AI coaching team. They analyze every call.',
     'settings.title':     'Settings',
