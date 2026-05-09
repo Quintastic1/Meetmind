@@ -143,81 +143,45 @@ ${meeting.follow_up_email || 'No follow-up drafted'}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Powered by Callforge · callforge.to`;
 
-        const noteRes = await fetch('https://api.hubapi.com/crm/v3/objects/notes', {
+        // Use engagements API for notes — works with crm.objects.contacts.write scope
+        const notePayload = {
+          engagement: {
+            active:    true,
+            type:      'NOTE',
+            timestamp: callDate,
+          },
+          associations: {
+            contactIds: contactId ? [parseInt(contactId)] : [],
+            companyIds: [],
+            dealIds:    dealId ? [parseInt(dealId)] : [],
+            ownerIds:   [],
+          },
+          metadata: {
+            body: noteBody,
+          }
+        };
+
+        const noteRes = await fetch('https://api.hubapi.com/engagements/v1/engagements', {
           method: 'POST',
           headers,
-          body: JSON.stringify({
-            properties: {
-              hs_note_body:      noteBody,
-              hs_timestamp:      callDate.toString(),
-              hs_attachment_ids: '',
-            },
-            associations: [
-              {
-                to: { id: contactId },
-                types: [{
-                  associationCategory: 'HUBSPOT_DEFINED',
-                  associationTypeId: 202
-                }]
-              }
-            ]
-          })
+          body: JSON.stringify(notePayload),
         });
 
         if (noteRes.ok) {
           const noteData = await noteRes.json();
-          results.note = { id: noteData.id, action: 'created' };
+          results.note = { id: noteData.engagement?.id, action: 'created' };
         } else {
-          // Fallback: create as a regular note without association
-          const fallbackNote = await fetch('https://api.hubapi.com/crm/v3/objects/notes', {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({
-              properties: {
-                hs_note_body:  noteBody,
-                hs_timestamp:  callDate.toString(),
-              }
-            })
-          });
-          const fallbackData = await fallbackNote.json();
-          results.note = { id: fallbackData.id, action: 'created_unassociated' };
+          const noteErr = await noteRes.json();
+          console.error('Note creation failed:', noteErr);
+          results.note = { action: 'failed', error: noteErr.message };
         }
 
         // STEP 3: Update or create deal
         let dealId = null;
 
-        // Search for existing deal linked to this contact
-        const dealSearchRes = await fetch('https://api.hubapi.com/crm/v3/objects/deals/search', {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({
-            filterGroups: [{
-              filters: [{
-                propertyName: 'dealname',
-                operator: 'CONTAINS_TOKEN',
-                value: firstName
-              }]
-            }],
-            limit: 1
-          })
-        });
-        const dealSearchData = await dealSearchRes.json();
-
-        if (dealSearchData.results?.length > 0) {
-          // Update existing deal
-          dealId = dealSearchData.results[0].id;
-          await fetch(`https://api.hubapi.com/crm/v3/objects/deals/${dealId}`, {
-            method: 'PATCH',
-            headers,
-            body: JSON.stringify({
-              properties: {
-                description: `Deal Score: ${dealScore}/100\n\n${meeting.summary || ''}`,
-                hs_priority: dealScore >= 70 ? 'high' : dealScore >= 50 ? 'medium' : 'low',
-              }
-            })
-          });
-          results.deal = { id: dealId, action: 'updated' };
-        } else {
+        // Always create a NEW deal for each meeting sync
+        // Each call is its own deal — don't overwrite previous ones
+        {
           // Create new deal
           const stageMap = {
             90: 'closedwon',
@@ -235,7 +199,7 @@ Powered by Callforge · callforge.to`;
             headers,
             body: JSON.stringify({
               properties: {
-                dealname:    `${contactName} — Callforge Deal`,
+                dealname:    `${meeting.title || contactName} — ${new Date(meeting.created_at || Date.now()).toLocaleDateString()}`,
                 dealstage:   stage,
                 description: `Deal Score: ${dealScore}/100\n\n${meeting.summary || ''}`,
                 hs_priority: dealScore >= 70 ? 'high' : dealScore >= 50 ? 'medium' : 'low',
@@ -255,12 +219,69 @@ Powered by Callforge · callforge.to`;
           results.deal = { id: dealId, action: 'created' };
         }
 
+        // STEP 4: Create a task for each action item
+        const actionItemsArray = Array.isArray(meeting.action_items)
+          ? meeting.action_items
+          : typeof meeting.action_items === 'string'
+            ? meeting.action_items.split('\n').filter(i => i.trim())
+            : [];
+
+        const taskResults = [];
+        const dueDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // due tomorrow
+
+        for (const item of actionItemsArray.slice(0, 10)) { // max 10 tasks
+          if (!item.trim()) continue;
+          try {
+            // Task payload built below using engagements API
+
+            // Use engagements API for tasks
+            const taskPayload = {
+              engagement: {
+                active:    true,
+                type:      'TASK',
+                timestamp: dueDate.getTime(),
+              },
+              associations: {
+                contactIds: contactId ? [parseInt(contactId)] : [],
+                companyIds: [],
+                dealIds:    dealId ? [parseInt(dealId)] : [],
+                ownerIds:   [],
+              },
+              metadata: {
+                body:      `Action item from: ${meeting.title || 'Sales Call'}\n\nPowered by Callforge · callforge.to`,
+                subject:   item.trim(),
+                status:    'NOT_STARTED',
+                forObjectType: 'CONTACT',
+              }
+            };
+
+            const taskRes = await fetch('https://api.hubapi.com/engagements/v1/engagements', {
+              method: 'POST',
+              headers,
+              body: JSON.stringify(taskPayload),
+            });
+
+            if (taskRes.ok) {
+              const taskData = await taskRes.json();
+              taskResults.push({ id: taskData.engagement?.id, subject: item.trim() });
+            } else {
+              const taskErr = await taskRes.json();
+              console.error('Task creation failed:', taskErr.message);
+            }
+          } catch(taskErr) {
+            console.error('Task error:', taskErr);
+          }
+        }
+
+        results.tasks = taskResults;
+
         return res.status(200).json({
           success: true,
           message: 'Meeting synced to HubSpot',
           results,
           hubspot_contact_id: contactId,
           hubspot_deal_id:    dealId,
+          tasks_created:      taskResults.length,
           hubspot_url: `https://app.hubspot.com/contacts/${contactId}`,
         });
       }
